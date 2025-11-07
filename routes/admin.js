@@ -1,5 +1,5 @@
 const router=require('express').Router();
-const {adminLogin,adminRegister,getDashboardStats,updateFile,deleteFile,getUsers,getFiles,deleteUser,updateUser,resetPassword}=require('../controller/admin')
+const {adminLogin,sendPassCode,adminRegister,getDashboardStats,updateFile,deleteFile,getUsers,getFiles,deleteUser,updateUser,resetPassword}=require('../controller/admin')
 
 router.post('/adminLogin',adminLogin)
 router.post('/adminRegister',adminRegister)
@@ -11,6 +11,7 @@ router.get('/getFiles',getFiles)
 router.patch('/updateFile/:id',updateFile)
 router.delete('/deleteFile/:id',deleteFile)
 router.get('/dashboard/stats', getDashboardStats);
+router.post('/sendPasscode',sendPassCode)
 
 
 
