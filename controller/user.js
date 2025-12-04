@@ -11,7 +11,7 @@ return res.status(400).json({
     error:"user not found"
 })
 }
-let password=await userModel.findOne({password:data.password})
+let password=await userModel.findOne({email:data.email,password:data.password})
 if(!password){
     return res.status(400).json({
         error:"Invalid password"
@@ -100,6 +100,21 @@ return res.status(200).json({
         console.log(e.message)
         return res.status(400).json({
             error:"Error occured while fetching files"
+        })
+    }
+}
+
+
+module.exports.getCurrentCredits=async(req,res)=>{
+    try{
+let user=await userModel.findOne({_id:req.user._id},{credits:1,_id:-1})
+return res.status(200).json({
+    user
+})
+    }catch(e){
+        console.log(e.message)
+        return res.status(400).json({
+            error:"Error occured while trying to get credits"
         })
     }
 }

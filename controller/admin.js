@@ -3,7 +3,8 @@ const jwt=require('jsonwebtoken');
 const usermodel = require("../user");
 const filemodel = require("../filemodel");
 const { default: mongoose } = require("mongoose");
-const nodemailer=require('nodemailer')
+const nodemailer=require('nodemailer');
+const invoiceModel = require("../invoice");
 
 module.exports.adminLogin=async(req,res)=>{
     let {...data}=req.body;
@@ -14,7 +15,7 @@ return res.status(400).json({
     error:"Admin not found"
 })
 }
-let password=await adminModel.findOne({password:data.password})
+let password=await adminModel.findOne({email:data.email,password:data.password})
 if(!password){
     return res.status(400).json({
         error:"Invalid password"
@@ -492,3 +493,169 @@ module.exports.getDashboardStats = async (req, res) => {
       });
     }
   };
+
+
+  module.exports.sendInvoice = async (req, res) => {
+    let { userId, price, description } = req.body;
+    try {
+      // Get user email
+      const user = await usermodel.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      // Create invoice
+      const invoice = await invoiceModel.create({
+        user: userId,
+        price,
+        description
+      });
+  
+      const mailOptions = {
+        from: 'orders@enrichifydata.com',
+        to: user.email,
+        subject: `New Invoice - Payment Required`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+            <!-- Header -->
+            <div style="background-color: #3b82f6; padding: 30px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 28px;">Invoice Notification</h1>
+              <p style="color: #dbeafe; margin-top: 10px; font-size: 16px;">Payment Request</p>
+            </div>
+  
+            <!-- Timestamp -->
+            <div style="padding: 20px; background-color: #f9fafb; border-bottom: 2px solid #e5e7eb;">
+              <p style="margin: 0; color: #6b7280; font-size: 14px;">Invoice generated on</p>
+              <h2 style="margin: 5px 0 0 0; color: #1f2937; font-size: 20px;">${new Date().toLocaleString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              })}</h2>
+            </div>
+  
+            <!-- Invoice Information -->
+            <div style="padding: 30px;">
+              <h3 style="color: #1f2937; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; margin-top: 0;">
+                Invoice Details
+              </h3>
+  
+              <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <tr>
+                  <td style="padding: 12px; background-color: #f9fafb; width: 35%; font-weight: 600; color: #1f2937;">Invoice ID</td>
+                  <td style="padding: 12px; border: 1px solid #e5e7eb; color: #4b5563; font-family: monospace;">#${invoice._id.toString().slice(-8).toUpperCase()}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; background-color: #f9fafb; font-weight: 600; color: #1f2937;">Customer Email</td>
+                  <td style="padding: 12px; border: 1px solid #e5e7eb; color: #4b5563;">${user.email}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px; background-color: #f9fafb; font-weight: 600; color: #1f2937;">Payment Status</td>
+                  <td style="padding: 12px; border: 1px solid #e5e7eb; color: #f59e0b; font-weight: 600;">⏳ Unpaid</td>
+                </tr>
+              </table>
+  
+              <!-- Amount Section -->
+              <h3 style="color: #1f2937; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; margin-top: 35px;">
+                Amount Due
+              </h3>
+  
+              <div style="margin-top: 20px; padding: 25px; background-color: #f9fafb; border: 2px solid #3b82f6; border-radius: 8px; text-align: center;">
+                <p style="margin: 0 0 15px 0; color: #1f2937; font-size: 16px; font-weight: 600;">Total Amount:</p>
+                <div style="background-color: #3b82f6; color: #ffffff; padding: 15px; border-radius: 6px; font-size: 32px; font-weight: bold; font-family: Arial, sans-serif;">
+                  $${price.toFixed(2)}
+                </div>
+                <p style="margin: 15px 0 0 0; color: #6b7280; font-size: 14px;">Please process this payment at your earliest convenience</p>
+              </div>
+  
+              ${description ? `
+              <!-- Description Section -->
+              <div style="margin-top: 25px; padding: 20px; background-color: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 4px;">
+                <h4 style="margin: 0 0 10px 0; color: #1f2937; font-size: 16px;">Invoice Description:</h4>
+                <p style="margin: 0; color: #4b5563; line-height: 1.6;">${description}</p>
+              </div>
+              ` : ''}
+  
+              <!-- Payment Instructions -->
+              <div style="margin-top: 30px; padding: 20px; background-color: #ecfdf5; border-left: 4px solid #10b981; border-radius: 4px;">
+                <h4 style="margin: 0 0 15px 0; color: #1f2937;">Payment Instructions:</h4>
+                <ol style="margin: 0; color: #1f2937; line-height: 1.8; padding-left: 20px;">
+                  <li>Log in to your account dashboard</li>
+                  <li>Navigate to the "Invoices" section</li>
+                  <li>Find this invoice and click "Pay Now"</li>
+                  <li>Complete the payment process</li>
+                </ol>
+              </div>
+  
+              <!-- Important Notes -->
+              <div style="margin-top: 25px; padding: 15px; background-color: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
+                <p style="margin: 0 0 10px 0; color: #92400e; font-weight: 600;">⚠️ Important Information</p>
+                <ul style="margin: 0; color: #92400e; font-size: 14px; line-height: 1.6; padding-left: 20px;">
+                  <li>This invoice is due for immediate payment</li>
+                  <li>Please keep this email for your records</li>
+                  <li>Contact support if you have any questions</li>
+                  <li>Payment confirmation will be sent once processed</li>
+                </ul>
+              </div>
+  
+              <!-- Support Section -->
+              <div style="margin-top: 25px; padding: 20px; background-color: #f9fafb; border-radius: 8px; text-align: center;">
+                <p style="margin: 0; color: #6b7280; font-size: 14px;">Need help with this invoice?</p>
+                <p style="margin: 10px 0 0 0; color: #3b82f6; font-weight: 600; font-size: 16px;">Contact our support team</p>
+              </div>
+            </div>
+  
+            <!-- Footer -->
+            <div style="background-color: #1f2937; padding: 25px; text-align: center;">
+              <p style="margin: 0; color: #e5e7eb; font-size: 14px;">
+                Thank you for your business! We appreciate your prompt payment.
+              </p>
+              <p style="margin: 15px 0 0 0; color: #9ca3af; font-size: 12px;">
+                © ${new Date().getFullYear()} Your Company Name. All rights reserved.
+              </p>
+              <p style="margin: 10px 0 0 0; color: #9ca3af; font-size: 11px;">
+                This is an automated notification. Please do not reply to this email.
+              </p>
+            </div>
+          </div>
+        `
+      };
+  
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'rentsimple159@gmail.com',
+          pass: 'upqbbmeobtztqxyg'
+        }
+      });
+  
+      await transporter.sendMail(mailOptions);
+      
+      return res.status(200).json({
+        message: "Invoice sent successfully",
+        invoice: invoice
+      });
+  
+    } catch (e) {
+      console.log(e.message);
+      return res.status(400).json({
+        error: "Error occurred while trying to send invoice"
+      });
+    }
+  };
+
+
+  module.exports.getAllInvoices=async(req,res)=>{
+    try{
+let invoices=await invoiceModel.find({}).populate('user')
+return res.status(200).json({
+  invoices
+})
+    }catch(e){
+      console.log(e.message)
+      return res.status(400).json({
+        error:"Error occured while trying to get invoices"
+      })
+    }
+  }

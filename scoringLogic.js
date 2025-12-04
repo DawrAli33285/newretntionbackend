@@ -387,7 +387,7 @@ results.push(employeeData);
   const fileEntry = await filemodel.create({
     file: inputFileName,
     user: user._id || user,
-    paid: false,
+    paid: true,
     passcode: passcode,
     output:outputPath
   });

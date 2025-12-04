@@ -11,7 +11,7 @@ user:{
 },
 paid:{
     type:Boolean,
-    default:false
+    default:true
 },
 passcode:{
     type:String,

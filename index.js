@@ -7,10 +7,13 @@ const scoring = require('./scoringLogic');
 const mongoose=require('mongoose')
 const adminRoutes=require('./routes/admin')
 const userRoutes=require('./routes/user')
+const paymentRoutes=require('./routes/payment')
+const invoiceRoutes=require('./routes/invoice')
 const {middleware}=require('./util/middleware')
 
 const xlsx = require('xlsx')
-const cors=require('cors')
+const cors=require('cors');
+const usermodel = require('./user');
 
 require('dotenv').config();
 const app = express();
@@ -20,7 +23,7 @@ app.use(express.json());
 app.use(cors())
 
 
-// mongoose.connect('mongodb://127.0.0.1/rentation');
+// mongoose.connect('mongodb://127.0.0.1/newrentation');
 
   mongoose.connect('mongodb+srv://user:user@cluster0.pfn059x.mongodb.net/Cluster0?retryWrites=true&w=majority&appName=Cluster0');
 
@@ -37,6 +40,8 @@ function cleanup(filePath) {
 
 app.use(adminRoutes)
 app.use(userRoutes)
+app.use(paymentRoutes)
+app.use(invoiceRoutes)
 app.post('/api/enrich', upload.single('employeeFile'),middleware, async (req, res) => {
  
   let filePath = req.file.path;
@@ -45,6 +50,24 @@ app.post('/api/enrich', upload.single('employeeFile'),middleware, async (req, re
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Get creditsUsed from request body
+    const { creditsUsed, paymentIntentId } = req.body;
+    console.log('Credits to deduct:', creditsUsed);
+
+    // Deduct credits if they were used
+    if (creditsUsed && parseFloat(creditsUsed) > 0) {
+      const updatedUser = await usermodel.findByIdAndUpdate(
+        req.user._id,
+        {
+          $inc: {
+            credits: -(parseFloat(creditsUsed))
+          }
+        },
+        { new: true } // Return updated document
+      );
+      console.log('Credits after deduction:', updatedUser.credits);
     }
 
     const inputFileName = req.file.originalname; 
