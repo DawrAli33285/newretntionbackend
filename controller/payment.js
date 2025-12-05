@@ -131,42 +131,29 @@ module.exports.getPassCode=async(req,res)=>{
 }
 
 
-module.exports.calculatePrice=async(req,res)=>{
-  try{
-    try {
-      const { recordCount } = req.body;
-      
-      if (!recordCount || recordCount <= 0) {
-        return res.status(400).json({ error: 'Invalid record count' });
-      }
-      
-      // Define your pricing model
-      const BASE_FEE = 500; // $5.00 in cents
-      const PER_RECORD_FEE = 50; // $0.50 per record in cents
-      
-      // Calculate total amount
-      const totalAmount = BASE_FEE + (recordCount * PER_RECORD_FEE);
-      
-     return res.json({ 
-        totalAmount,
-        recordCount,
-        baseFee: BASE_FEE,
-        perRecordFee: PER_RECORD_FEE
-      });
-    } catch (error) {
-      console.error('Error calculating price:', error);
-      res.status(500).json({ error: 'Failed to calculate price' });
+module.exports.calculatePrice = async (req, res) => {
+  try {
+    const { recordCount } = req.body;
+    console.log(recordCount)
+    
+    if (!recordCount || recordCount <= 0) {
+      return res.status(400).json({ error: 'Invalid record count' });
     }
-  
-  }catch(e){
-    console.log(e.message)
-    return res.status(400).json({
-      error:"Error occured while trying to calculate price"
-    })
+    
+    const PER_RECORD_FEE = 295; // $2.95 per record in cents
+    
+    const totalAmount = recordCount * PER_RECORD_FEE;
+    
+    return res.json({ 
+      totalAmount,
+      recordCount,
+      perRecordFee: PER_RECORD_FEE
+    });
+  } catch (error) {
+    console.error('Error calculating price:', error);
+    return res.status(500).json({ error: 'Failed to calculate price' });
   }
 }
-
-
 
 module.exports.payForUpload=async(req,res)=>{
   try {

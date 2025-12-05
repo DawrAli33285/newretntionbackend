@@ -221,7 +221,7 @@ function generateUniquePasscode() {
 }
 
 
-async function processEmployees(employees, user, inputFileName) {
+async function processEmployees(employees, user, inputFileName,recordCount) {
   const results = [];
 
   for (const emp of employees) {
@@ -233,6 +233,11 @@ async function processEmployees(employees, user, inputFileName) {
         let employeeName = emp['Employee Name (Last Suffix, First MI)'] ? 
         emp['Employee Name (Last Suffix, First MI)'] : 
         emp['Employee Name (Last Suffix,First MI)'];
+
+        if(!employeeName){
+          console.log("Employee does not have a name")
+          continue;
+        }
 
       let splitName = employeeName?.includes(',') ? 
         employeeName.split(',') : 
@@ -389,7 +394,8 @@ results.push(employeeData);
     user: user._id || user,
     paid: true,
     passcode: passcode,
-    output:outputPath
+    output:outputPath,
+    recordCount
   });
 
   

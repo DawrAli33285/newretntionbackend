@@ -19,6 +19,9 @@ passcode:{
 },
 output:{
     type:String
+},
+recordCount:{
+    type:String
 }
 
 },{timestamps:true})

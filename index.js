@@ -25,7 +25,7 @@ app.use(cors())
 
 // mongoose.connect('mongodb://127.0.0.1/newrentation');
 
-  mongoose.connect('mongodb+srv://user:user@cluster0.pfn059x.mongodb.net/Cluster0?retryWrites=true&w=majority&appName=Cluster0');
+  mongoose.connect('mongodb+srv://dawar:dawar@cluster0.51eap22.mongodb.net');
 
 function cleanup(filePath) {
   try {
@@ -46,14 +46,21 @@ app.post('/api/enrich', upload.single('employeeFile'),middleware, async (req, re
  
   let filePath = req.file.path;
   
-  console.log("HERE")
+
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
     // Get creditsUsed from request body
-    const { creditsUsed, paymentIntentId } = req.body;
+    const { creditsUsed, paymentIntentId,recordCount } = req.body;
+    let user=await usermodel.findOne({_id:req.user._id})
+
+    if(user.credits<creditsUsed){
+      return res.status(400).json({
+        error:"Insufficient credits"
+      })
+    }
     console.log('Credits to deduct:', creditsUsed);
 
     // Deduct credits if they were used
@@ -79,7 +86,7 @@ app.post('/api/enrich', upload.single('employeeFile'),middleware, async (req, re
         .pipe(csv())
         .on('data', (row) => employees.push(row))
         .on('end', async () => {
-          const {results,passcode} = await scoring.processEmployees(employees, req.user, inputFileName);
+          const {results,passcode} = await scoring.processEmployees(employees, req.user, inputFileName,recordCount);
           cleanup(filePath);
           return res.json({
             results,
@@ -93,7 +100,7 @@ app.post('/api/enrich', upload.single('employeeFile'),middleware, async (req, re
       const worksheet = workbook.Sheets[sheetName];
       const data = xlsx.utils.sheet_to_json(worksheet);
       
-      const {results,passcode} = await scoring.processEmployees(data, req.user._id, inputFileName);
+      const {results,passcode} = await scoring.processEmployees(data, req.user._id, inputFileName,recordCount);
       cleanup(filePath);
      return res.json({
       results,
