@@ -244,3 +244,27 @@ module.exports.payForCredits = async (req, res) => {
     return res.status(500).json({ error: 'Failed to create payment intent' });
   }
 }
+
+
+module.exports.deductCredits = async (req, res) => {
+  const { creditsToDeduct } = req.body;
+
+  try {
+    await usermodel.findByIdAndUpdate(
+      req.user._id,
+      {
+        $inc: { credits: -creditsToDeduct }
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      message: "Credits deducted successfully"
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(400).json({
+      error: "Error occurred while trying to deduct credits"
+    });
+  }
+};
