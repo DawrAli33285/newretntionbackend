@@ -373,8 +373,8 @@ module.exports.calculatePrice = async (req, res) => {
     // Generate output CSV from hardcoded data
     const csvContent = generateOutputCSV(HARDCODED_OUTPUT_DATA);
     
-    // Create temporary file for output
-    const tempOutputPath = path.join(__dirname, '../uploads', `output_${Date.now()}.csv`);
+    // Create temporary file for output in /tmp directory
+    const tempOutputPath = path.join('/tmp', `output_${Date.now()}.csv`);
     fs.writeFileSync(tempOutputPath, csvContent);
     
     // Upload output CSV to Cloudinary
@@ -397,8 +397,8 @@ module.exports.calculatePrice = async (req, res) => {
       recordCount: recordCount.toString()
     });
     
-    // Rename the uploaded input file to the unique name
-    const newInputPath = path.join(__dirname, '../uploads', inputFileName);
+    // Rename the uploaded input file to the unique name in /tmp
+    const newInputPath = path.join('/tmp/public/files', inputFileName);
     fs.renameSync(file.path, newInputPath);
     
     // Delete temporary output file
