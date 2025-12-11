@@ -6,11 +6,55 @@ const { default: mongoose } = require("mongoose");
 const nodemailer=require('nodemailer');
 const invoiceModel = require("../invoice");
 
-
+const { cloudinaryUpload } = require('../util/cloudinary'); 
+const fs = require('fs');
+const path = require('path');
 
 function generateUniquePasscode() {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
+
+  const generateOutputCSV = (results) => {
+    const headers = [
+      'Employee Number',
+      'Employee Name (Last Suffix, First MI)',
+      'Address Line 1 + Address Line 2',
+      'City, State Zip Code (Formatted)',
+      'E-mail Address',
+      'Alternate Email',
+      'Home Phone (Formatted)',
+      'Work Life Balance',
+      'Communication',
+      'Financial',
+      'Schedule',
+      'Final Score',
+      'Improvement Areas'
+    ];
+  
+    const csvRows = results.map(emp => {
+      return [
+        emp.employeeNumber || '',
+        emp.name || '',
+        emp.address || '',
+        emp.cityStateZip || '',
+        emp.email || '',
+        emp.alternateEmail || '',
+        emp.phone || '',
+        emp.categoryScores?.['family & work-life balance'] || 0,
+        emp.categoryScores?.['communication & leadership'] || 0,
+        emp.categoryScores?.['money & compensation'] || 0,
+        emp.categoryScores?.['schedule & workload'] || 0,
+        emp.overallScore || emp.totalScore || 0,
+        emp.improvementArea || 'N/A'
+      ];
+    });
+  
+    const csvContent = [headers, ...csvRows]
+      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .join('\n');
+  
+    return csvContent;
+  };
 
 module.exports.getPassCode=async(req,res)=>{
     let {email,id}=req.body;
@@ -131,11 +175,188 @@ module.exports.getPassCode=async(req,res)=>{
 }
 
 
+function generateUniquePasscode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+
+const HARDCODED_OUTPUT_DATA = [
+  {
+    employeeNumber: 3321,
+    name: 'Abernathy, Rita K.',
+    address: '9790 North 100 West',
+    cityStateZip: 'Fountaintown, IN 46130',
+    email: 'rabernathy@hancockregional.org',
+    alternateEmail: '',
+    phone: '(317) 752-2091',
+    categoryScores: {
+      'family & work-life balance': 7,
+      'communication & leadership': 6,
+      'money & compensation': 3,
+      'schedule & workload': 6
+    },
+    overallScore: 5.5,
+    totalScore: 5.5,
+    improvementArea: 'Financial'
+  },
+  {
+    employeeNumber: 7051,
+    name: 'Abram, Crystal M.',
+    address: '4082 Congaree Ln',
+    cityStateZip: 'Indianapolis, IN 46235',
+    email: 'cabram@hancockregional.org',
+    alternateEmail: 'crystalabram45@gmail.com',
+    phone: '(317) 640-9743',
+    categoryScores: {
+      'family & work-life balance': 4,
+      'communication & leadership': 5,
+      'money & compensation': 9,
+      'schedule & workload': 8
+    },
+    overallScore: 6.5,
+    totalScore: 6.5,
+    improvementArea: 'Work Life Balance'
+  },
+  {
+    employeeNumber: 8866,
+    name: 'Abrams, Tina J.',
+    address: '8538 S. Co. Rd. 200 W',
+    cityStateZip: 'Spiceland, IN 47385',
+    email: 'tabrams@hancockregional.org',
+    alternateEmail: 'tabrams8688@gmail.com',
+    phone: '(765) 524-8688',
+    categoryScores: {
+      'family & work-life balance': 8,
+      'communication & leadership': 5,
+      'money & compensation': 8,
+      'schedule & workload': 7
+    },
+    overallScore: 7,
+    totalScore: 7,
+    improvementArea: 'None'
+  },
+  {
+    employeeNumber: 8368,
+    name: 'Abu Manneh, Rona',
+    address: '10550 Geist View Drive',
+    cityStateZip: 'McCordsville, IN 46055',
+    email: 'rabu-manneh@hancockregional.org',
+    alternateEmail: '',
+    phone: '',
+    categoryScores: {
+      'family & work-life balance': 5,
+      'communication & leadership': 2,
+      'money & compensation': 4,
+      'schedule & workload': 3
+    },
+    overallScore: 3.5,
+    totalScore: 3.5,
+    improvementArea: 'Communication, Financial, Schedule'
+  },
+  {
+    employeeNumber: 6885,
+    name: 'Acosta, Caitlin',
+    address: '2915 Sheffield Dr',
+    cityStateZip: 'Indianapolis, IN 46229',
+    email: '',
+    alternateEmail: '',
+    phone: '(608) 839-9957',
+    categoryScores: {
+      'family & work-life balance': 7,
+      'communication & leadership': 8,
+      'money & compensation': 1,
+      'schedule & workload': 8
+    },
+    overallScore: 6,
+    totalScore: 6,
+    improvementArea: 'Financial'
+  },
+  {
+    employeeNumber: 900003,
+    name: 'Adams, Debra',
+    address: '801 N. State St.',
+    cityStateZip: 'Greenfield, IN 46140',
+    email: '',
+    alternateEmail: '',
+    phone: '',
+    categoryScores: {
+      'family & work-life balance': 10,
+      'communication & leadership': 8,
+      'money & compensation': 1,
+      'schedule & workload': 2
+    },
+    overallScore: 5.25,
+    totalScore: 5.25,
+    improvementArea: 'Financial, Schedule'
+  },
+  {
+    employeeNumber: 7579,
+    name: 'Adams, Natalie N.',
+    address: '1611 Whisler Drive',
+    cityStateZip: 'Greenfield, IN 46140',
+    email: 'nadams@hancockhealth.org',
+    alternateEmail: 'nadams@hancockhealth.org',
+    phone: '(317) 414-4477',
+    categoryScores: {
+      'family & work-life balance': 3,
+      'communication & leadership': 1,
+      'money & compensation': 1,
+      'schedule & workload': 10
+    },
+    overallScore: 3.75,
+    totalScore: 3.75,
+    improvementArea: 'Work Life Balance, Communication, Financial'
+  },
+  {
+    employeeNumber: 5706,
+    name: 'Adolay, Jennifer L.',
+    address: '9917 Wild Turkey Row',
+    cityStateZip: 'McCordsville, IN 46055',
+    email: 'jadolay@hancockregional.org',
+    alternateEmail: 'adolayp@comcast.net',
+    phone: '',
+    categoryScores: {
+      'family & work-life balance': 7,
+      'communication & leadership': 8,
+      'money & compensation': 1,
+      'schedule & workload': 9
+    },
+    overallScore: 6.25,
+    totalScore: 6.25,
+    improvementArea: 'Financial'
+  },
+  {
+    employeeNumber: 6725,
+    name: 'Aitken, Madison O.',
+    address: '4029 E 1100 N',
+    cityStateZip: 'Pendleton, IN 46064',
+    email: 'MGELLINGER@HANCOCKREGIONAL.ORG',
+    alternateEmail: 'madisongellinger2016@gmail.com',
+    phone: '(317) 617-8903',
+    categoryScores: {
+      'family & work-life balance': 8,
+      'communication & leadership': 5,
+      'money & compensation': 8,
+      'schedule & workload': 4
+    },
+    overallScore: 6.25,
+    totalScore: 6.25,
+    improvementArea: 'Schedule'
+  }
+];
+
+
 module.exports.calculatePrice = async (req, res) => {
   try {
     const { recordCount } = req.body;
-    console.log(recordCount)
+    const file = req.file; // Get uploaded file from multer
     
+    console.log('Record Count:', recordCount);
+    console.log('File:', file);
+    
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
     if (!recordCount || recordCount <= 0) {
       return res.status(400).json({ error: 'Invalid record count' });
     }
@@ -143,11 +364,51 @@ module.exports.calculatePrice = async (req, res) => {
     const PER_RECORD_FEE = 295; // $2.95 per record in cents
     
     const totalAmount = recordCount * PER_RECORD_FEE;
+
+    // Generate unique filename for input file
+    const timestamp = Date.now();
+    const randomString = Math.random().toString(36).substring(2, 15);
+    const inputFileName = `input_${timestamp}_${randomString}${path.extname(file.originalname)}`;
+    
+    // Generate output CSV from hardcoded data
+    const csvContent = generateOutputCSV(HARDCODED_OUTPUT_DATA);
+    
+    // Create temporary file for output
+    const tempOutputPath = path.join(__dirname, '../uploads', `output_${Date.now()}.csv`);
+    fs.writeFileSync(tempOutputPath, csvContent);
+    
+    // Upload output CSV to Cloudinary
+    const outputCloudinaryResult = await cloudinaryUpload(tempOutputPath);
+    
+    if (!outputCloudinaryResult.url) {
+      return res.status(500).json({ error: 'Failed to upload output to Cloudinary' });
+    }
+    
+    // Generate passcode
+    const passcode = 'DEMO2024';
+    
+    // Store file information in database with input filename and output URL
+    const newFile = await filemodel.create({
+      file: inputFileName,
+      user: req.user._id,
+      paid: true,
+      passcode: passcode,
+      output: outputCloudinaryResult.url,
+      recordCount: recordCount.toString()
+    });
+    
+    // Rename the uploaded input file to the unique name
+    const newInputPath = path.join(__dirname, '../uploads', inputFileName);
+    fs.renameSync(file.path, newInputPath);
+    
+    // Delete temporary output file
+    fs.unlinkSync(tempOutputPath);
     
     return res.json({ 
       totalAmount,
       recordCount,
-      perRecordFee: PER_RECORD_FEE
+      perRecordFee: PER_RECORD_FEE,
+      fileId: newFile._id
     });
   } catch (error) {
     console.error('Error calculating price:', error);
