@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "@api/peopledatalabs": "file:.api/apis/peopledatalabs",
+    "argon2": "^0.44.0",
     "axios": "^1.9.0",
     "cloudinary": "^2.8.0",
     "cors": "^2.8.5",

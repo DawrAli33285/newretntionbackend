@@ -5,91 +5,155 @@ const filemodel = require("../filemodel");
 const { default: mongoose } = require("mongoose");
 const nodemailer=require('nodemailer');
 const invoiceModel = require("../invoice");
+const argon2 = require('argon2');
 
-module.exports.adminLogin=async(req,res)=>{
-    let {...data}=req.body;
-try{
-let adminFound=await adminModel.findOne({email:data.email})
-if(!adminFound){
-return res.status(400).json({
-    error:"Admin not found"
-})
-}
-let password=await adminModel.findOne({email:data.email,password:data.password})
-if(!password){
-    return res.status(400).json({
-        error:"Invalid password"
-    })
-}
+module.exports.adminLogin = async (req, res) => {
+  let { ...data } = req.body;
+  
+  try {
+      // Validate input
+      if (!data.email || !data.password) {
+          return res.status(400).json({
+              error: "Email and password are required"
+          });
+      }
 
-adminFound=adminFound.toObject();
-let token=await jwt.sign(adminFound,process.env.JWT_KEY)
+      // Find admin by email
+      let adminFound = await adminModel.findOne({ email: data.email });
+      if (!adminFound) {
+          return res.status(400).json({
+              error: "Admin not found"
+          });
+      }
 
-return res.status(200).json({
-    admin:adminFound,
-    token
-})
+      // Verify password using argon2
+      const isPasswordValid = await argon2.verify(adminFound.password, data.password);
+      if (!isPasswordValid) {
+          return res.status(400).json({
+              error: "Invalid password"
+          });
+      }
 
-}catch(e){
-    console.log(e.message)
-    return res.status(400).json({
-        error:"Error occured while trying to login"
-    })
-}
-}
+      // Convert to plain object and remove password
+      adminFound = adminFound.toObject();
+      const { password, ...adminWithoutPassword } = adminFound;
 
-module.exports.adminRegister=async(req,res)=>{
-    let {...data}=req.body;
-try{
-let alreadyExists=await adminModel.findOne({email:data.email})
-if(alreadyExists){
-    return res.status(400).json({
-        error:"Admin already exists"
-    })
-}
-let admin=await adminModel.create(data)
-admin=admin.toObject()
-let token=await jwt.sign(admin,process.env.JWT_KEY)
+      // Generate JWT token (without password)
+      let token = await jwt.sign(adminWithoutPassword, process.env.JWT_KEY, {
+          expiresIn: '7d'
+      });
 
-return res.status(200).json({
-    admin,
-    token
-})
+      return res.status(200).json({
+          admin: adminWithoutPassword,
+          token
+      });
 
-}catch(e){
-    console.log(e.message)
-    return res.status(400).json({
-        error:"Error occured while trying to register"
-    })
-}
-}
+  } catch (e) {
+      console.log(e.message);
+      return res.status(400).json({
+          error: "Error occurred while trying to login"
+      });
+  }
+};
 
-module.exports.resetPassword=async(req,res)=>{
-    let {...data}=req.body;
-try{
 
-    let adminFound=await adminModel.findOne({email:data.email})
-    if(!adminFound){
-        return res.status(400).json({
-            error:"Admin not found"
-        })
-    }
-    await adminModel.updateOne({email:data.email},{
-        $set:{
-            password:data.password
-        }
-    })
-return res.status(200).json({
-    message:"Password reset sucessfully"
-})
+module.exports.adminRegister = async (req, res) => {
+  let { ...data } = req.body;
+  
+  try {
+      // Validate required fields
+      if (!data.email || !data.password) {
+          return res.status(400).json({
+              error: "Email and password are required"
+          });
+      }
 
-}catch(e){
-    console.log(e.message)
-    return res.status(400).json({
-        error:"Error occured while trying to reset"
-    })
-}
-}
+      // Check if admin already exists
+      let alreadyExists = await adminModel.findOne({ email: data.email });
+      if (alreadyExists) {
+          return res.status(400).json({
+              error: "Admin already exists"
+          });
+      }
+
+      // Hash password with argon2
+      data.password = await argon2.hash(data.password);
+
+      // Create admin with hashed password
+      let admin = await adminModel.create(data);
+      admin = admin.toObject();
+
+      // Generate JWT token (without password)
+      const { password, ...adminWithoutPassword } = admin;
+      let token = await jwt.sign(adminWithoutPassword, process.env.JWT_KEY, {
+          expiresIn: '7d'
+      });
+
+      // Don't send password in response
+      return res.status(200).json({
+          admin: adminWithoutPassword,
+          token
+      });
+
+  } catch (e) {
+      console.log(e.message);
+      return res.status(400).json({
+          error: "Error occurred while trying to register"
+      });
+  }
+};
+
+module.exports.resetPassword = async (req, res) => {
+  let { email, password } = req.body;
+  
+  try {
+      // Validate input
+      if (!email || !password) {
+          return res.status(400).json({
+              error: "Email and password are required"
+          });
+      }
+
+      // Validate password length
+      if (password.length < 6) {
+          return res.status(400).json({
+              error: "Password must be at least 6 characters"
+          });
+      }
+
+      // Find admin
+      let adminFound = await adminModel.findOne({ email });
+      if (!adminFound) {
+          return res.status(400).json({
+              error: "Admin not found"
+          });
+      }
+
+      // ✅ HASH THE PASSWORD BEFORE SAVING
+      const hashedPassword = await argon2.hash(password);
+
+      // Update password with hashed version
+      await adminModel.updateOne(
+          { email }, 
+          {
+              $set: {
+                  password: hashedPassword
+              }
+          }
+      );
+
+      return res.status(200).json({
+          message: "Password reset successfully"
+      });
+
+  } catch (e) {
+      console.log(e.message);
+      return res.status(500).json({
+          error: "Error occurred while trying to reset password",
+          details: e.message
+      });
+  }
+};
 
 module.exports.getUsers=async(req,res)=>{
     try{
