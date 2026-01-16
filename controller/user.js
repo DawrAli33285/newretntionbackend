@@ -22,9 +22,9 @@ module.exports.userLogin = async (req, res) => {
             });
         }
 
-        // Verify password using argon2
-        const isPasswordValid = await argon2.verify(userFound.password, data.password);
-        if (!isPasswordValid) {
+        // Verify password (plain text comparison since argon2 is removed)
+        // IMPORTANT: This assumes passwords are stored as plain text in the database
+        if (userFound.password !== data.password) {
             return res.status(400).json({
                 error: "Invalid password"
             });
@@ -52,7 +52,6 @@ module.exports.userLogin = async (req, res) => {
     }
 };
 
-
 module.exports.userRegister = async (req, res) => {
     let { ...data } = req.body;
     
@@ -72,10 +71,7 @@ module.exports.userRegister = async (req, res) => {
             });
         }
 
-        // Hash password with argon2
-        data.password = await argon2.hash(data.password);
-
-        // Create user with hashed password
+        // Create user (password will be stored as plain text)
         let user = await userModel.create(data);
         user = user.toObject();
 
@@ -98,6 +94,7 @@ module.exports.userRegister = async (req, res) => {
         });
     }
 };
+
 
 
 module.exports.resetPassword = async (req, res) => {
