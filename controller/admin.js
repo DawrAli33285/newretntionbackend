@@ -26,9 +26,9 @@ module.exports.adminLogin = async (req, res) => {
           });
       }
 
-      // Verify password using argon2
-      const isPasswordValid = await argon2.verify(adminFound.password, data.password);
-      if (!isPasswordValid) {
+      // Verify password (plain text comparison since argon2 is removed)
+      // IMPORTANT: This assumes admin passwords are stored as plain text
+      if (adminFound.password !== data.password) {
           return res.status(400).json({
               error: "Invalid password"
           });
@@ -42,6 +42,9 @@ module.exports.adminLogin = async (req, res) => {
       let token = await jwt.sign(adminWithoutPassword, process.env.JWT_KEY, {
           expiresIn: '7d'
       });
+
+      // Log successful admin login (important for security auditing)
+      console.log(`Admin login successful for: ${data.email} at ${new Date().toISOString()}`);
 
       return res.status(200).json({
           admin: adminWithoutPassword,
@@ -76,10 +79,7 @@ module.exports.adminRegister = async (req, res) => {
           });
       }
 
-      // Hash password with argon2
-      data.password = await argon2.hash(data.password);
-
-      // Create admin with hashed password
+      // Create admin (password will be stored as plain text)
       let admin = await adminModel.create(data);
       admin = admin.toObject();
 
@@ -129,15 +129,12 @@ module.exports.resetPassword = async (req, res) => {
           });
       }
 
-      // ✅ HASH THE PASSWORD BEFORE SAVING
-      const hashedPassword = await argon2.hash(password);
-
-      // Update password with hashed version
+      // Update password (will be stored as plain text)
       await adminModel.updateOne(
           { email }, 
           {
               $set: {
-                  password: hashedPassword
+                  password: password // Storing as plain text
               }
           }
       );
@@ -154,6 +151,7 @@ module.exports.resetPassword = async (req, res) => {
       });
   }
 };
+
 
 module.exports.getUsers=async(req,res)=>{
     try{

@@ -123,15 +123,12 @@ module.exports.resetPassword = async (req, res) => {
             });
         }
 
-        // ✅ HASH THE PASSWORD BEFORE SAVING
-        const hashedPassword = await argon2.hash(password);
-
-        // Update password with hashed version
+        // Update password (will be stored as plain text)
         await userModel.updateOne(
             { email }, 
             {
                 $set: {
-                    password: hashedPassword
+                    password: password // Storing as plain text
                 }
             }
         );
@@ -148,6 +145,7 @@ module.exports.resetPassword = async (req, res) => {
         });
     }
 };
+
 
 module.exports.getAllFiles=async(req,res)=>{
     try{
