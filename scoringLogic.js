@@ -377,8 +377,13 @@ results.push(employeeData);
 
     } catch (e) {
       console.log(`Error processing employee: ${e.message}`);
-      results.push(createDefaultResult(emp));
-  
+      const defaultResult = createDefaultResult(emp);
+      results.push(defaultResult);
+      try {
+        await RetentionData.create(defaultResult);
+      } catch (dbError) {
+        console.log(`Error saving default result to database: ${dbError.message}`);
+      }
     }
   }
 

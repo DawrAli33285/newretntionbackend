@@ -9,6 +9,7 @@ const adminRoutes=require('./routes/admin')
 const userRoutes=require('./routes/user')
 const paymentRoutes=require('./routes/payment')
 const invoiceRoutes=require('./routes/invoice')
+const bulkuploadRoutes=require('./routes/bulkUpload')
 const {middleware}=require('./util/middleware')
 
 const xlsx = require('xlsx')
@@ -21,7 +22,6 @@ const upload = multer({ dest: '/tmp/public/files/uploads' });
 
 app.use(express.json());
 app.use(cors())
-
 
 mongoose.connect('mongodb+srv://dawar:dawar@cluster0.rdpbsle.mongodb.net');
 
@@ -41,7 +41,8 @@ function cleanup(filePath) {
 app.use(adminRoutes)
 app.use(userRoutes)
 app.use(paymentRoutes)
-app.use(invoiceRoutes)
+app.use(invoiceRoutes)    
+app.use(bulkuploadRoutes)
 app.post('/api/enrich', upload.single('employeeFile'),middleware, async (req, res) => {
  
   let filePath = req.file.path;
@@ -72,7 +73,7 @@ app.post('/api/enrich', upload.single('employeeFile'),middleware, async (req, re
             credits: -(parseFloat(creditsUsed))
           }
         },
-        { new: true } // Return updated document
+        { new: true } 
       );
       console.log('Credits after deduction:', updatedUser.credits);
     }
