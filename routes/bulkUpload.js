@@ -38,6 +38,36 @@ router.post('/bulk-upload', middleware, upload.single('employeeFile'), async (re
             error: 'No data found in file' 
           });
         }
+
+        // Validate required columns
+        const requiredColumns = [
+          'Employee Name (Last Suffix, First MI)',
+          'Address Line 1 + Address Line 2',
+          'City, State Zip Code (Formatted)',
+          'E-mail Address',
+          'Hire Date',
+          'Term Date',
+          'Organization',
+          'Division',
+          'Department',
+          'Job Class'
+        ];
+
+        const firstRow = data[0];
+        const fileColumns = Object.keys(firstRow);
+        const missingColumns = requiredColumns.filter(col => !fileColumns.includes(col));
+
+        if (missingColumns.length > 0) {
+          console.log('❌ Missing required columns:', missingColumns);
+          return res.status(400).json({
+            success: false,
+            error: 'Missing required columns in the uploaded file',
+            missingColumns: missingColumns,
+            message: `The following required columns are missing: ${missingColumns.join(', ')}`
+          });
+        }
+
+        console.log('✓ All required columns present');
     
         const successfulRecords = [];
         const failedRecords = [];
@@ -234,7 +264,5 @@ router.post('/bulk-upload', middleware, upload.single('employeeFile'), async (re
         });
       }
 });
-
-module.exports = router;
 
 module.exports = router;
