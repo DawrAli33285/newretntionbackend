@@ -61,9 +61,10 @@ router.post('/bulk-upload', middleware, upload.single('employeeFile'), async (re
           console.log('❌ Missing required columns:', missingColumns);
           return res.status(400).json({
             success: false,
-            error: 'Missing required columns in the uploaded file',
+            error: `Missing ${missingColumns.length} required column${missingColumns.length > 1 ? 's' : ''} in the uploaded file`,
             missingColumns: missingColumns,
-            message: `The following required columns are missing: ${missingColumns.join(', ')}`
+            foundColumns: fileColumns,
+            message: `The following required columns are missing:\n\n${missingColumns.map(col => `• ${col}`).join('\n')}\n\nPlease add these columns to your file and try again.`
           });
         }
 
