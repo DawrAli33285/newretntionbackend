@@ -5,6 +5,9 @@ const filemodel = require("../filemodel");
 const { default: mongoose } = require("mongoose");
 const nodemailer=require('nodemailer');
 const invoiceModel = require("../invoice");
+const csv = require('csv-parser');
+const XLSX = require('xlsx');
+const { Readable } = require('stream');
 
 const { cloudinaryUpload } = require('../util/cloudinary'); 
 const fs = require('fs');
@@ -349,7 +352,7 @@ const HARDCODED_OUTPUT_DATA = [
 module.exports.calculatePrice = async (req, res) => {
   try {
     const { recordCount } = req.body;
-    const file = req.file; // Get uploaded file from multer
+    const file = req.file; 
     
     console.log('Record Count:', recordCount);
     console.log('File:', file);
@@ -361,33 +364,33 @@ module.exports.calculatePrice = async (req, res) => {
       return res.status(400).json({ error: 'Invalid record count' });
     }
     
-    const PER_RECORD_FEE = 295; // $2.95 per record in cents
+    const PER_RECORD_FEE = 295; 
     
     const totalAmount = recordCount * PER_RECORD_FEE;
 
-    // Generate unique filename for input file
+   
     const timestamp = Date.now();
     const randomString = Math.random().toString(36).substring(2, 15);
     const inputFileName = `input_${timestamp}_${randomString}${path.extname(file.originalname)}`;
     
-    // Generate output CSV from hardcoded data
+   
     const csvContent = generateOutputCSV(HARDCODED_OUTPUT_DATA);
     
-    // Create temporary file for output in /tmp directory
+   
     const tempOutputPath = path.join('/tmp', `output_${Date.now()}.csv`);
     fs.writeFileSync(tempOutputPath, csvContent);
     
-    // Upload output CSV to Cloudinary
+
     const outputCloudinaryResult = await cloudinaryUpload(tempOutputPath);
     
     if (!outputCloudinaryResult.url) {
       return res.status(500).json({ error: 'Failed to upload output to Cloudinary' });
     }
     
-    // Generate passcode
+  
     const passcode = 'DEMO2024';
     
-    // Store file information in database with input filename and output URL
+    
     const newFile = await filemodel.create({
       file: inputFileName,
       user: req.user._id,
@@ -397,11 +400,11 @@ module.exports.calculatePrice = async (req, res) => {
       recordCount: recordCount.toString()
     });
     
-    // Rename the uploaded input file to the unique name in /tmp
+  
     const newInputPath = path.join('/tmp/public/files', inputFileName);
     fs.renameSync(file.path, newInputPath);
     
-    // Delete temporary output file
+    
     fs.unlinkSync(tempOutputPath);
     
     return res.json({ 
@@ -426,13 +429,13 @@ module.exports.payForUpload=async(req,res)=>{
       return res.status(400).json({ error: 'Invalid amount' });
     }
 
-    // Create a PaymentIntent with Stripe
+   
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount,
       currency: 'usd',
       metadata: {
         recordCount: recordCount,
-        userId: req.user.id // Assuming you have user info from auth middleware
+        userId: req.user.id 
       }
     });
 
@@ -455,21 +458,21 @@ module.exports.payForCredits = async (req, res) => {
       return res.status(400).json({ error: 'Invalid amount' });
     }
 
-    // Get user's current credits
+   
     const user = await usermodel.findById(req.user._id);
     const userCredits = user.credits || 0;
     
-    // Calculate original amount from invoice
+  
     const invoice = await invoiceModel.findById(invoiceId);
-    const originalAmount = invoice.price * 100; // Convert to cents
+    const originalAmount = invoice.price * 100; 
     
-    // Calculate credits used
+    
     let creditsUsed = 0;
     if (userCredits > 0) {
       creditsUsed = Math.min(userCredits, originalAmount / 100);
     }
 
-    // Use Promise.all to execute all operations together
+    
     const [paymentIntent, invoiceUpdate, userUpdate] = await Promise.all([
       amount > 0 ? stripe.paymentIntents.create({
         amount: amount,
@@ -489,7 +492,7 @@ module.exports.payForCredits = async (req, res) => {
       }),
       usermodel.findByIdAndUpdate(req.user._id, {
         $inc: {
-          credits: -(creditsUsed) // Deduct credits used
+          credits: -(creditsUsed) 
         }
       })
     ]);
@@ -529,3 +532,138 @@ module.exports.deductCredits = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+//heere
+
+
+const parseCSV = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    const stream = Readable.from(buffer.toString());
+    
+    stream
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', () => resolve(results))
+      .on('error', (error) => reject(error));
+  });
+};
+
+
+const parseExcel = (buffer) => {
+  const workbook = XLSX.read(buffer, { type: 'buffer' });
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  return XLSX.utils.sheet_to_json(worksheet);
+};
+
+
+const filterEmployees = (employees, filters) => {
+  let filtered = [...employees];
+
+  if (filters.department && filters.department !== 'all') {
+    filtered = filtered.filter(emp => emp.Department === filters.department);
+  }
+
+  if (filters.jobClass && filters.jobClass !== 'all') {
+    filtered = filtered.filter(emp => emp['Job Class'] === filters.jobClass);
+  }
+
+  if (filters.organization && filters.organization !== 'all') {
+    filtered = filtered.filter(emp => emp.Organization === filters.organization);
+  }
+
+  if (filters.division && filters.division !== 'all') {
+    filtered = filtered.filter(emp => emp.Division === filters.division);
+  }
+
+  if (filters.hireDate && filters.hireDate !== 'all') {
+    filtered = filtered.filter(emp => emp['Hire Date'] === filters.hireDate);
+  }
+
+  if (filters.termDate && filters.termDate !== 'all') {
+    filtered = filtered.filter(emp => emp['Term Date'] === filters.termDate);
+  }
+
+  if (filters.salaryRange && filters.salaryRange !== 'all') {
+    filtered = filtered.filter(emp => emp['Salary Range'] === filters.salaryRange);
+  }
+
+  return filtered;
+};
+
+module.exports.filterAndCount = async (req, res) => {
+  try {
+    const file = req.file;
+    const filters = req.body.filters ? JSON.parse(req.body.filters) : {};
+    
+    console.log('File:', file);
+    console.log('Filters:', filters);
+    
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    if (!file.buffer) {
+      return res.status(400).json({ error: 'File buffer not found' });
+    }
+
+    let employees = [];
+    
+    
+    if (file.mimetype === 'text/csv') {
+      employees = await parseCSV(file.buffer);
+    } else if (file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || 
+               file.mimetype === 'application/vnd.ms-excel') {
+      employees = parseExcel(file.buffer);
+    } else {
+      return res.status(400).json({ error: 'Invalid file type. Please upload CSV or Excel file.' });
+    }
+
+    console.log('Total employees in file:', employees.length);
+
+   
+    const filteredEmployees = filterEmployees(employees, filters);
+    
+    console.log('Filtered employees:', filteredEmployees.length);
+
+   
+    const validRecords = filteredEmployees.filter(emp => {
+      const employeeName = emp['Employee Name (Last Suffix, First MI)'];
+      return employeeName && employeeName.trim().length > 0;
+    });
+
+    const recordCount = validRecords.length;
+    const PER_RECORD_FEE = 295; 
+    const totalAmount = recordCount * PER_RECORD_FEE;
+
+    const tempId = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+    
+   
+    global.tempFilteredData = global.tempFilteredData || {};
+    global.tempFilteredData[tempId] = {
+      data: filteredEmployees,
+      expiresAt: Date.now() + 3600000 
+    };
+
+    res.json({
+      recordCount,
+      totalAmount,
+      perRecordFee: PER_RECORD_FEE,
+      originalCount: employees.length,
+      filteredCount: filteredEmployees.length,
+      validRecordCount: recordCount,
+      tempId,
+      appliedFilters: filters,
+      filteredEmployees: validRecords  // ADD THIS LINE - return the actual filtered employees
+    });
+  } catch (error) {
+    console.error('Error filtering and counting:', error);
+    res.status(500).json({ error: 'Error processing file: ' + error.message });
+  }
+};
+
