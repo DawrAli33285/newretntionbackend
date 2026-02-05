@@ -1,17 +1,19 @@
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
-  cloud_name:"dbjwbveqn",
-  api_key: "774241215571685",
-  api_secret: "ysIyik3gF03KPDecu-lOHtBYLf8"
+  cloud_name:"dbtbj5lrg",
+  api_key: "899853691398938",
+  api_secret: "S8OIwyqO_frClTPt7SYHb3r4XHI"
 });
+
 
 
 module.exports.cloudinaryUpload=async(filetoUpload)=>{
   try{
     console.log(filetoUpload)
    const data=await cloudinary.uploader.upload(filetoUpload,{
-       resource_type:'auto'
+       resource_type:'auto',
+       type: 'upload'
    })
    
     return {

@@ -659,7 +659,7 @@ module.exports.filterAndCount = async (req, res) => {
       validRecordCount: recordCount,
       tempId,
       appliedFilters: filters,
-      filteredEmployees: validRecords  // ADD THIS LINE - return the actual filtered employees
+      filteredEmployees: validRecords 
     });
   } catch (error) {
     console.error('Error filtering and counting:', error);
