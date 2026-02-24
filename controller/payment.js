@@ -565,6 +565,13 @@ const parseExcel = (buffer) => {
 const filterEmployees = (employees, filters) => {
   let filtered = [...employees];
 
+
+  console.log('First employee keys:', Object.keys(employees[0] || {}));
+  console.log('First employee Department:', JSON.stringify(employees[0]?.Department));
+  console.log('First employee Job Class:', JSON.stringify(employees[0]?.['Job Class']));
+  console.log('Filters received:', JSON.stringify(filters));
+  
+
   if (filters.department && filters.department !== 'all') {
     filtered = filtered.filter(emp => emp.Department === filters.department);
   }

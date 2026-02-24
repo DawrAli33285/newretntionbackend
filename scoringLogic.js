@@ -249,15 +249,12 @@ async function processEmployees(employees, user, inputFileName,recordCount) {
       let phone = emp['Home Phone (Formatted)'];
       const refinedPhone = "+" + phone.replace(/\D/g, "");
       let companyName = emp['Company Name'] ? emp['Company Name'] : emp['Company '];
-let birth_date=emp['Date of Birth']
-     console.log("HELLO")
-      console.log(employeeName)
-     console.log(phone)
-     console.log(firstName)
-     console.log(lastName)
-     console.log(email)
-     console.log(companyName)
-     console.log(birth_date)
+      let birth_date = emp['Date of Birth'];
+      let financeScore = parseFloat(emp['Finance Score (1-10)']) || 0;
+      let scheduleScore = parseFloat(emp['Schedule Score (1-10)']) || 0;
+      let wlbScore = parseFloat(emp['Work Life Balance Score (1-10)']) || 0;
+      let familyScore = parseFloat(emp['Family Score (1-10)']) || 0;
+
       const options = {
         method: 'GET',
         url: `https://api.peopledatalabs.com/v5/person/identify?name=${employeeName}&first_name=${firstName}&phone=${phone}&last_name=${lastName}&email=${email}&company=${companyName}&birth_date=${birth_date}&pretty=false&titlecase=false&include_if_matched=false`,
@@ -287,6 +284,15 @@ let birth_date=emp['Date of Birth']
         facebookUsername = data?.data?.matches[0]?.data?.facebook_username;
       }
 
+      if (!birth_date) {
+        console.log(`Skipping ${employeeName} - missing Date of Birth`);
+        continue;
+      }
+      if (!financeScore && !scheduleScore && !wlbScore && !familyScore) {
+        console.log(`Skipping ${employeeName} - missing all social scores`);
+        continue;
+      }
+      
       if (!data?.data?.matches[0]?.data?.profiles) {
         continue;
       }
@@ -362,8 +368,13 @@ let employeeData = {
   facility: (emp['Facility'] || emp['Entity'] || emp['Subsidiary'] || 'N/A'),
   categoryScores: categoryScores || {},
   overallScore: overallScore || 0,
-  phone: phone || 'N/A'
+  phone: phone || 'N/A',
+  financeScore: financeScore,
+  scheduleScore: scheduleScore,
+  wlbScore: wlbScore,
+  familyScore: familyScore
 };
+
 
 if (startDateKey) {
   employeeData[startDateKey] = startDateValue;
