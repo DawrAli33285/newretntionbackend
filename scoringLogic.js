@@ -89,38 +89,50 @@ async function generateOutputFile(results, outputFileName) {
 
 // Optimized function to fetch all posts once per employee
 async function fetchAllSocialMediaPosts(socialMedia) {
+  console.log(`\n  [SCRAPER] Starting social media fetch...`);
+  console.log(`  [SCRAPER] LinkedIn URL: ${socialMedia.linkedin_url || 'NONE'}`);
+  console.log(`  [SCRAPER] Twitter username: ${socialMedia.twitter_username || 'NONE'}`);
+  console.log(`  [SCRAPER] Facebook username: ${socialMedia.facebook_username || 'NONE'}`);
+
   try {
-    
     const allPosts = [];
-    
+
     // LinkedIn posts
     if (socialMedia.linkedin_url) {
+      console.log(`  [SCRAPER] 🔵 Fetching LinkedIn posts for: ${socialMedia.linkedin_url}`);
       try {
-       
         const linkedinOptions = {
           method: 'GET',
-          url: `https://linkedin-api8.p.rapidapi.com/get-profile-posts?username=${socialMedia.linkedin_username}`,
+          url: `https://fresh-linkedin-profile-data.p.rapidapi.com/get-profile-posts`,
+          params: {
+            linkedin_url: socialMedia.linkedin_url,
+            type: 'posts'
+          },
           headers: {
-            'x-rapidapi-key': '423577dcd1msh3e31e9d469ec9a7p154656jsneec34d2c7ecd',
-            'x-rapidapi-host': 'linkedin-api8.p.rapidapi.com'
+            'Content-Type': 'application/json',
+            'x-rapidapi-key': '0b3e816b4bmsh5fb872b56e6e57cp1bfa08jsn3b9970e67894',
+            'x-rapidapi-host': 'fresh-linkedin-profile-data.p.rapidapi.com'
           }
         };
-
+    
         const linkedinResponse = await axios.request(linkedinOptions);
         console.log('LinkedIn response:', linkedinResponse.data);
-        
+    
         const linkedinPosts = linkedinResponse.data.data
           ?.filter(post => post?.text || post?.resharedPost?.text)
           .map(post => ({
-            text: post.text || post.resharedPost.text,
+            text: post.text || post.resharedPost?.text,
             network: 'linkedin'
           })) || [];
-        
+    
+        console.log(`  [SCRAPER] ✅ LinkedIn posts fetched: ${linkedinPosts.length}`);
+    
         allPosts.push(...linkedinPosts);
       } catch (error) {
         console.error('LinkedIn API Error:', error.message);
       }
     }
+
 
     // Twitter posts
     if (socialMedia.twitter_username) {
@@ -159,6 +171,7 @@ async function fetchAllSocialMediaPosts(socialMedia) {
           
           console.log("twitterposts")
           console.log(twitterPosts)
+          console.log(`  [SCRAPER] ✅ Twitter posts fetched: ${twitterPosts.length}`);
         allPosts.push(...twitterPosts);
       } catch (error) {
         console.error('Twitter API Error:', error.message);
@@ -201,6 +214,8 @@ async function fetchAllSocialMediaPosts(socialMedia) {
             text: post.message,
             network: 'facebook'
           })) || [];
+
+          console.log(`  [SCRAPER] ✅ Facebook posts fetched: ${facebookPosts.length}`);
         
         allPosts.push(...facebookPosts);
       } catch (error) {
@@ -216,100 +231,271 @@ async function fetchAllSocialMediaPosts(socialMedia) {
 }
 
 
+function calculateAgePoints(dateOfBirth) {
+  if (!dateOfBirth) return 0;
+  const dob = new Date(dateOfBirth);
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const m = today.getMonth() - dob.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+  if (isNaN(age)) return 0;
+
+  if (age >= 20 && age <= 24) return 10;
+  if (age >= 25 && age <= 34) return 7;
+  if (age >= 35 && age <= 44) return 5;
+  if (age >= 45 && age <= 54) return 3;
+  if (age >= 55 && age <= 64) return 1;
+  return 0; // 65+
+}
+
+function calculateTenurePoints(hireDate) {
+  if (!hireDate) return 0;
+  const hire = new Date(hireDate);
+  const today = new Date();
+  const months = (today.getFullYear() - hire.getFullYear()) * 12 + (today.getMonth() - hire.getMonth());
+
+  if (months <= 3)  return 15;
+  if (months <= 6)  return 10;
+  if (months <= 12) return 7;
+  if (months <= 24) return 5;
+  if (months <= 36) return 3;
+  if (months <= 60) return -1;
+  return -1; // 5+ years
+}
+
+function calculateFinancePoints(score) {
+  if (score <= 2) return 3;
+  if (score <= 4) return 2;
+  if (score <= 5) return 1;
+  if (score <= 6) return 0;
+  if (score <= 7) return -1;
+  if (score <= 8) return -3;
+  return -7; // 9-10
+}
+
+function calculateSchedulePoints(score) {
+  if (score <= 1) return 7;
+  if (score <= 3) return 2;
+  if (score <= 5) return 0;
+  if (score <= 6) return -1;
+  if (score <= 8) return -3;  // ← was -5
+  return -5;                   // 9-10
+}
+
+
+function calculateWLBPoints(score) {
+  if (score <= 1) return 7;
+  if (score <= 3) return 3;
+  if (score <= 5) return 1;
+  if (score <= 6) return 0;
+  if (score <= 8) return -3;
+  return -5; // 9-10
+}
+
+function calculateFamilyPoints(score) {
+  if (score <= 2) return 5;
+  if (score <= 4) return 3;
+  if (score <= 6) return 0;
+  if (score <= 7) return -1;
+  if (score <= 8) return -3;
+  return -5; // 9-10
+}
+
+function calculateTurnoverPoints(termDate) {
+  // If employee has a term date, higher turnover risk
+  if (termDate && termDate !== 'N/A' && termDate !== '') return 9;
+  return 6;
+}
+
+function calculateRightFit(retentionScore) {
+  return retentionScore >= 20;
+}
+
+
+
 function generateUniquePasscode() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
 
-async function processEmployees(employees, user, inputFileName,recordCount) {
+
+function calculateDistancePoints(miles) {
+  if (!miles || miles === 0) return 7;
+  if (miles <= 5)   return 15;
+  if (miles <= 10)  return 10;
+  if (miles <= 20)  return 7;
+  if (miles <= 30)  return 5;
+  if (miles <= 50)  return 3;
+  if (miles <= 100) return -5;
+  return -10;
+}
+
+
+async function processEmployees(employees, user, inputFileName, recordCount) {
+  console.log('\n' + '='.repeat(60));
+  console.log(`[PROCESS START] Total employees to process: ${employees.length}`);
+  console.log(`[PROCESS START] Input file: ${inputFileName}`);
+  console.log(`[PROCESS START] Record count: ${recordCount}`);
+  console.log('='.repeat(60));
+
   const results = [];
 
-  for (const emp of employees) {
+  for (const [empIndex, emp] of employees.entries()) {
+    console.log('\n' + '-'.repeat(50));
+    console.log(`[EMP ${empIndex + 1}/${employees.length}] Starting processing...`);
+
     try {
-     
       let totalCategoryScore = 0;
       let validCategories = 0;
-  
-        let employeeName = emp['Employee Name (Last Suffix, First MI)'] ? 
-        emp['Employee Name (Last Suffix, First MI)'] : 
+
+      let employeeName = emp['Employee Name (Last Suffix, First MI)'] ?
+        emp['Employee Name (Last Suffix, First MI)'] :
         emp['Employee Name (Last Suffix,First MI)'];
 
-        if(!employeeName){
-          console.log("Employee does not have a name")
-          continue;
-        }
+      if (!employeeName) {
+        console.log(`[EMP ${empIndex + 1}] ❌ SKIP - No employee name found`);
+        console.log(`[EMP ${empIndex + 1}] Raw row keys:`, Object.keys(emp));
+        continue;
+      }
 
-      let splitName = employeeName?.includes(',') ? 
-        employeeName.split(',') : 
-        employeeName.split(' ');
- 
-      let firstName = splitName[0].trim();
-      let lastName = splitName[1].trim();
+      console.log(`[EMP ${empIndex + 1}] 👤 Name: ${employeeName}`);
+
+      let splitName = employeeName?.includes(',') ?
+      employeeName.split(',') :
+      employeeName.split(' ');
+    
+    // "Abernathy, Rita K." → splitName[0]=Last, splitName[1]=First
+    let lastName, firstName;
+    if (employeeName.includes(',')) {
+      lastName = splitName[0].trim();
+      firstName = splitName[1]?.trim() || '';
+    } else {
+      firstName = splitName[0].trim();
+      lastName = splitName[1]?.trim() || '';
+    }
+
       let email = emp['E-mail Address'] ? emp['E-mail Address'] : emp['Alternate Email'];
-      let phone = emp['Home Phone (Formatted)'];
-      const refinedPhone = "+" + phone.replace(/\D/g, "");
-      let companyName = emp['Company Name'] ? emp['Company Name'] : emp['Company '];
+      let phone = emp['Home Phone (Formatted)'] || emp['Phone'] || emp['Mobile'] || '';
+      let companyName = emp['Company Name'] || emp['Company'] || emp['Organization'] || emp['Entity'] || '';
+
       let birth_date = emp['Date of Birth'];
       let financeScore = parseFloat(emp['Finance Score (1-10)']) || 0;
       let scheduleScore = parseFloat(emp['Schedule Score (1-10)']) || 0;
       let wlbScore = parseFloat(emp['Work Life Balance Score (1-10)']) || 0;
       let familyScore = parseFloat(emp['Family Score (1-10)']) || 0;
 
+      console.log(`[EMP ${empIndex + 1}] 📋 Data extracted:`);
+      console.log(`  - firstName: "${firstName}", lastName: "${lastName}"`);
+      console.log(`  - email: "${email}"`);
+      console.log(`  - phone: "${phone}"`);
+      console.log(`  - birth_date: "${birth_date}"`);
+      console.log(`  - company: "${companyName}"`);
+      console.log(`  - scores → finance:${financeScore} schedule:${scheduleScore} wlb:${wlbScore} family:${familyScore}`);
+
+      if (!birth_date) {
+        console.log(`[EMP ${empIndex + 1}] ❌ SKIP - Missing Date of Birth`);
+        continue;
+      }
+      if (!financeScore && !scheduleScore && !wlbScore && !familyScore) {
+        console.log(`[EMP ${empIndex + 1}] ❌ SKIP - All social scores are 0/missing`);
+        continue;
+      }
+
+      // PDL API call
+      console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
+      const pdlUrl = `https://api.peopledatalabs.com/v5/person/identify?name=${encodeURIComponent(employeeName)}&first_name=${encodeURIComponent(firstName)}&phone=${encodeURIComponent(phone || '')}&last_name=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email || '')}&company=${encodeURIComponent(companyName || '')}&birth_date=${encodeURIComponent(birth_date)}&pretty=false&titlecase=false&include_if_matched=false`;
+      console.log(`[EMP ${empIndex + 1}] PDL URL: ${pdlUrl}`);
+
+      const refinedPhone = phone ? "+" + phone.replace(/\D/g, "") : '';
+
       const options = {
         method: 'GET',
-        url: `https://api.peopledatalabs.com/v5/person/identify?name=${employeeName}&first_name=${firstName}&phone=${phone}&last_name=${lastName}&email=${email}&company=${companyName}&birth_date=${birth_date}&pretty=false&titlecase=false&include_if_matched=false`,
+        url: pdlUrl,
         headers: {
           accept: 'application/json',
           'Content-Type': 'application/json',
           'X-API-Key': '96daa17b289fb6f8c7bce95a15303c8d29b3e8cf4415e8247a8753008de5331b'
         }
       };
+
+      console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
+
+      let data;
+      try {
+        data = await axios.request(options);
+        console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
+        console.log(`[EMP ${empIndex + 1}] PDL matches count: ${data?.data?.matches?.length || 0}`);
+      } catch (pdlError) {
+        const status = pdlError.response?.status;
+        const message = pdlError.response?.data?.error?.message || pdlError.message;
       
-      const data = await axios.request(options);
+        console.log(`[EMP ${empIndex + 1}] ❌ PDL API error — status: ${status}, message: ${message}`);
+      
+       
+        if (status === 402 || status === 429) {
+         
+          console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota/rate limit hit. Aborting further processing.`);
+          break;
+        }
+      
+       
+        const defaultResult = createDefaultResult(emp);
+        results.push(defaultResult);
+        try {
+          await RetentionData.create(defaultResult);
+        } catch (dbError) {
+          console.log(`Error saving default result: ${dbError.message}`);
+        }
+        continue;
+      }
+
+      console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
+      console.log(`[EMP ${empIndex + 1}] PDL matches count: ${data?.data?.matches?.length || 0}`);
+
+      const matchData = data?.data?.matches[0]?.data;
+      if (matchData) {
+        console.log(`[EMP ${empIndex + 1}] PDL match found:`);
+        console.log(`  - linkedin_url: ${matchData.linkedin_url || 'NOT FOUND'}`);
+        console.log(`  - linkedin_username: ${matchData.linkedin_username || 'NOT FOUND'}`);
+        console.log(`  - twitter_url: ${matchData.twitter_url || 'NOT FOUND'}`);
+        console.log(`  - twitter_username: ${matchData.twitter_username || 'NOT FOUND'}`);
+        console.log(`  - facebook_url: ${matchData.facebook_url || 'NOT FOUND'}`);
+        console.log(`  - facebook_username: ${matchData.facebook_username || 'NOT FOUND'}`);
+        console.log(`  - profiles: ${matchData.profiles ? JSON.stringify(matchData.profiles) : 'NONE'}`);
+      } else {
+        console.log(`[EMP ${empIndex + 1}] ⚠️  PDL - No match data found`);
+      }
 
       let twitterUsername = null;
       let linkedinUsername = null;
       let facebookUsername = null;
 
-      console.log("PDL DATA")
-      console.log(data?.data?.matches[0]?.data)
+      if (matchData?.linkedin_username) linkedinUsername = matchData.linkedin_username;
+      if (matchData?.twitter_username) twitterUsername = matchData.twitter_username;
+      if (matchData?.facebook_username) facebookUsername = matchData.facebook_username;
 
-      if (data?.data?.matches[0]?.data?.linkedin_username) {
-        linkedinUsername = data?.data?.matches[0]?.data?.linkedin_username;
-      }
-      if (data?.data?.matches[0]?.data?.twitter_username) {
-        twitterUsername = data?.data?.matches[0]?.data?.twitter_username;
-      }
-      if (data?.data?.matches[0]?.data?.facebook_username) {
-        facebookUsername = data?.data?.matches[0]?.data?.facebook_username;
-      }
-
-      if (!birth_date) {
-        console.log(`Skipping ${employeeName} - missing Date of Birth`);
-        continue;
-      }
-      if (!financeScore && !scheduleScore && !wlbScore && !familyScore) {
-        console.log(`Skipping ${employeeName} - missing all social scores`);
-        continue;
-      }
-      
-      if (!data?.data?.matches[0]?.data?.profiles) {
+      if (!matchData?.profiles) {
+        console.log(`[EMP ${empIndex + 1}] ❌ SKIP - PDL found no social profiles`);
         continue;
       }
 
-
-         const socialMedia = {
-        linkedin_url: data?.data?.matches[0]?.data?.linkedin_url || null,
-        linkedin_username: linkedinUsername || null,
-        twitter_url: data?.data?.matches[0]?.data?.twitter_url || null,
+      const socialMedia = {
+        linkedin_url: matchData?.linkedin_url || null,
+        linkedin_username: matchData?.linkedin_username || null,
+        twitter_url: matchData?.twitter_url || null,
         twitter_username: twitterUsername || null,
-        facebook_url: data?.data?.matches[0]?.data?.facebook_url || null,
+        facebook_url: matchData?.facebook_url || null,
         facebook_username: facebookUsername || null
       };
 
+      console.log(`[EMP ${empIndex + 1}] 📡 Social media to scrape:`, JSON.stringify(socialMedia, null, 2));
 
       const allPosts = await fetchAllSocialMediaPosts(socialMedia);
- 
+      console.log(`[EMP ${empIndex + 1}] 📝 Total posts to analyze: ${allPosts.length}`);
+
+      if (allPosts.length === 0) {
+        console.log(`[EMP ${empIndex + 1}] ⚠️  WARNING - No posts found, scores will all be 0`);
+      }
       const categoryScores = {};
       let categoriesCount = 0;
     
@@ -337,9 +523,12 @@ async function processEmployees(employees, user, inputFileName,recordCount) {
     }
     
  
-    const overallScore = validCategories > 0 
-        ? parseFloat(((totalCategoryScore / (validCategories * 100)) * 100).toFixed(2))
+    const nonZeroScores = Object.values(categoryScores).filter(s => s > 0);
+
+    const overallScore = nonZeroScores.length > 0
+        ? parseFloat((nonZeroScores.reduce((a, b) => a + b, 0) / nonZeroScores.length).toFixed(2))
         : 0;
+
 
 console.log("data")
 console.log(categoryScores)
@@ -354,26 +543,55 @@ if (emp['Original Hire']) {
     startDateKey = 'seniority_date';
     startDateValue = emp['Seniority Date'];
 }
+
+
+const hireDate = emp['Hire Date'] || emp['Last Hire Date'] || '';
+const termDate = emp['Term Date'] || emp['Termination Date'] || '';
+
+const agePoints      = calculateAgePoints(birth_date);
+const tenurePoints   = calculateTenurePoints(hireDate);
+const turnoverPoints = calculateTurnoverPoints(termDate);
+
+
+const distanceMiles = parseFloat(emp['Distance (Miles)']) || 0;
+const distancePoints = calculateDistancePoints(distanceMiles);
+const financePoints  = calculateFinancePoints(financeScore);
+const schedulePoints = calculateSchedulePoints(scheduleScore);
+const wlbPoints      = calculateWLBPoints(wlbScore);
+const familyPoints   = calculateFamilyPoints(familyScore);
+
+const retentionScore = agePoints + distancePoints + tenurePoints + turnoverPoints + financePoints + schedulePoints + wlbPoints + familyPoints;
+const rightFitCandidate = calculateRightFit(retentionScore);
+
 let employeeData = {
   name: emp['Employee Name (Last Suffix, First MI)'] || 'N/A',
   email: emp['E-mail Address'] || 'N/A',
-  last_hire_date: emp['Last Hire Date'] || 'N/A',
+  last_hire_date: emp['Last Hire Date'] || emp['Hire Date'] || 'N/A',
   job_start: emp['Job Start'] || 'N/A',
-  termination_date: emp['Termination Date'] || 'N/A',
+  termination_date: termDate || 'N/A',
   termination_reason: emp['Termination Reason'] || 'N/A',
   employement_status: emp['Employment Status'] || 'N/A',
-  date_of_birth: emp['Date of Birth'] || 'N/A',
-  job_title: emp['Job Title'] || 'N/A',
+  date_of_birth: birth_date || 'N/A',
+  job_title: emp['Job Title'] || emp['Job Class'] || 'N/A',
   department: emp['Department'] || 'N/A',
   facility: (emp['Facility'] || emp['Entity'] || emp['Subsidiary'] || 'N/A'),
+  organization: emp['Organization'] || 'N/A',
+  division: emp['Division'] || 'N/A',
+  hireDate: hireDate || 'N/A',
+  termDate: termDate || '',
+  salaryRange: emp['Salary Range'] || 'N/A',
   categoryScores: categoryScores || {},
   overallScore: overallScore || 0,
   phone: phone || 'N/A',
-  financeScore: financeScore,
-  scheduleScore: scheduleScore,
-  wlbScore: wlbScore,
-  familyScore: familyScore
+  financeScore, scheduleScore, wlbScore, familyScore,
+  // Points breakdown
+  agePoints, distancePoints, tenurePoints, turnoverPoints,
+  financePoints, schedulePoints, wlbPoints, familyPoints,
+  // Computed
+  retentionScore,
+  rightFitCandidate,
 };
+
 
 
 if (startDateKey) {
@@ -431,7 +649,7 @@ function createDefaultResult(emp) {
     job_title: emp['Job Title'] || 'N/A',
     department: emp['Department'] || 'N/A',
     facility: (emp['Facility'] || emp['Entity'] || emp['Subsidiary'] || 'N/A'),
-    phone: emp['Home Phone (Formatted)'] || 'N/A',
+    phone: emp['Home Phone (Formatted)'] || emp['Phone'] || emp['Mobile'] || 'N/A',
     
     // Engagement scores (flat structure)
     'schedule & workload': 0,
@@ -478,4 +696,4 @@ function getLast90Days() {
 function cleanText(text) {
   return text.toLowerCase().replace(/[^\w\s]/gi, '');
 }
-module.exports = { processEmployees };
+module.exports = { processEmployees, fetchAllSocialMediaPosts, keywordData, cleanText };

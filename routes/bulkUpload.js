@@ -413,16 +413,15 @@ router.post('/bulk-upload', middleware, async (req, res) => {
             email:           record.email,
             phone:           record.phone,
             address:         record.addressLine,
-            city_state_zip:  record.cityStateZip,
+            cityStateZip:    record.cityStateZip,
             organization:    record.rawRow['Organization'] || '',
             division:        record.rawRow['Division'] || '',
             department:      record.rawRow['Department'] || '',
-            job_class:       record.jobClass,
+            jobClass:        record.jobClass,           // ✅ fixed key
             hireDate:        record.rawRow['Hire Date'] || '',
             termDate:        record.rawRow['Term Date'] || '',
             salaryRange:     record.rawRow['Salary Range'] || '',
             dateOfBirth:     record.rawRow['Date of Birth'] || '',
-            // All scoring fields from scoreEmployee()
             agePoints:       scores.agePoints,
             distancePoints:  scores.distancePoints,
             tenurePoints:    scores.tenurePoints,
@@ -436,8 +435,9 @@ router.post('/bulk-upload', middleware, async (req, res) => {
             tenureMonths:    scores.tenureMonths,
             categoryScores:  scores.categoryScores,
             overallScore:    scores.overallScore,
+            totalScore:      scores.overallScore,       // ✅ added
             improvementArea: scores.improvementArea,
-            rightFitCandidate: false, // set your logic here if needed
+            rightFitCandidate: scores.retentionScore >= 20, // ✅ real logic instead of always false
           });
           processedCount++;
   

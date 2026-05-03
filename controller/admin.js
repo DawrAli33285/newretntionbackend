@@ -11,14 +11,14 @@ module.exports.adminLogin = async (req, res) => {
   let { ...data } = req.body;
   
   try {
-      // Validate input
+      
       if (!data.email || !data.password) {
           return res.status(400).json({
               error: "Email and password are required"
           });
       }
 
-      // Find admin by email
+     
       let adminFound = await adminModel.findOne({ email: data.email });
       if (!adminFound) {
           return res.status(400).json({
@@ -26,24 +26,23 @@ module.exports.adminLogin = async (req, res) => {
           });
       }
 
-      // Verify password (plain text comparison since argon2 is removed)
-      // IMPORTANT: This assumes admin passwords are stored as plain text
+   
       if (adminFound.password !== data.password) {
           return res.status(400).json({
               error: "Invalid password"
           });
       }
 
-      // Convert to plain object and remove password
+   
       adminFound = adminFound.toObject();
       const { password, ...adminWithoutPassword } = adminFound;
 
-      // Generate JWT token (without password)
+   
       let token = await jwt.sign(adminWithoutPassword, process.env.JWT_KEY, {
           expiresIn: '7d'
       });
 
-      // Log successful admin login (important for security auditing)
+     
       console.log(`Admin login successful for: ${data.email} at ${new Date().toISOString()}`);
 
       return res.status(200).json({
@@ -64,14 +63,14 @@ module.exports.adminRegister = async (req, res) => {
   let { ...data } = req.body;
   
   try {
-      // Validate required fields
+     
       if (!data.email || !data.password) {
           return res.status(400).json({
               error: "Email and password are required"
           });
       }
 
-      // Check if admin already exists
+    
       let alreadyExists = await adminModel.findOne({ email: data.email });
       if (alreadyExists) {
           return res.status(400).json({
@@ -79,17 +78,16 @@ module.exports.adminRegister = async (req, res) => {
           });
       }
 
-      // Create admin (password will be stored as plain text)
       let admin = await adminModel.create(data);
       admin = admin.toObject();
 
-      // Generate JWT token (without password)
+      
       const { password, ...adminWithoutPassword } = admin;
       let token = await jwt.sign(adminWithoutPassword, process.env.JWT_KEY, {
           expiresIn: '7d'
       });
 
-      // Don't send password in response
+     
       return res.status(200).json({
           admin: adminWithoutPassword,
           token
@@ -107,21 +105,20 @@ module.exports.resetPassword = async (req, res) => {
   let { email, password } = req.body;
   
   try {
-      // Validate input
+    
       if (!email || !password) {
           return res.status(400).json({
               error: "Email and password are required"
           });
       }
-
-      // Validate password length
+     
       if (password.length < 6) {
           return res.status(400).json({
               error: "Password must be at least 6 characters"
           });
       }
 
-      // Find admin
+    
       let adminFound = await adminModel.findOne({ email });
       if (!adminFound) {
           return res.status(400).json({
@@ -129,12 +126,12 @@ module.exports.resetPassword = async (req, res) => {
           });
       }
 
-      // Update password (will be stored as plain text)
+    
       await adminModel.updateOne(
           { email }, 
           {
               $set: {
-                  password: password // Storing as plain text
+                  password: password 
               }
           }
       );
@@ -410,12 +407,12 @@ await filemodel.findByIdAndUpdate(id,{
 
 module.exports.getDashboardStats = async (req, res) => {
     try {
-      // Get current date and previous month date
+     
       const now = new Date();
       const firstDayOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       const firstDayOfPreviousMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   
-      // ===== TOTAL USERS =====
+     
       const totalUsers = await usermodel.countDocuments();
       const usersLastMonth = await usermodel.countDocuments({
         createdAt: { $lt: firstDayOfCurrentMonth }
@@ -425,7 +422,7 @@ module.exports.getDashboardStats = async (req, res) => {
         ? Math.round((usersThisMonth / usersLastMonth) * 100) 
         : 0;
   
-      // ===== ACTIVE USERS (users who uploaded files in last 30 days) =====
+     
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
       const activeUserFiles = await filemodel.find({
         createdAt: { $gte: thirtyDaysAgo }
@@ -441,7 +438,7 @@ module.exports.getDashboardStats = async (req, res) => {
         ? Math.round(((activeUsers - previousActiveUsers) / previousActiveUsers) * 100)
         : 0;
   
-      // ===== TOTAL FILES =====
+     
       const totalFiles = await filemodel.countDocuments();
       const filesLastMonth = await filemodel.countDocuments({
         createdAt: { $lt: firstDayOfCurrentMonth }
@@ -451,13 +448,12 @@ module.exports.getDashboardStats = async (req, res) => {
         ? Math.round((filesThisMonth / filesLastMonth) * 100)
         : 0;
   
-      // ===== STORAGE USED (mock calculation - you may need to implement actual file size tracking) =====
-      // Since you don't have file size in schema, we'll estimate or you can add it
-      const averageFileSize = 2.5; // MB - adjust based on your files
+     
+   
+      const averageFileSize = 2.5; 
       const storageUsed = (totalFiles * averageFileSize).toFixed(2);
-      const storageGrowthPercentage = 0; // You can calculate this if you track sizes
-  
-      // ===== MONTHLY GROWTH DATA (last 6 months) =====
+      const storageGrowthPercentage = 0; 
+    
       const monthlyData = [];
       const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       
@@ -480,7 +476,7 @@ module.exports.getDashboardStats = async (req, res) => {
         });
       }
   
-      // ===== RECENT ACTIVITY (last 10 activities) =====
+     
       const recentFiles = await filemodel.find()
         .populate('user', 'email')
         .sort({ createdAt: -1 })
@@ -490,10 +486,10 @@ module.exports.getDashboardStats = async (req, res) => {
         .sort({ createdAt: -1 })
         .limit(5);
   
-      // Combine and sort activities
+     
       const activities = [];
   
-      // Add file uploads
+     
       recentFiles.forEach(file => {
         activities.push({
           email: file.user?.email || 'Unknown user',
@@ -503,7 +499,7 @@ module.exports.getDashboardStats = async (req, res) => {
         });
       });
   
-      // Add new user registrations
+  
       recentUsers.forEach(user => {
         activities.push({
           email: user.email,
@@ -513,7 +509,7 @@ module.exports.getDashboardStats = async (req, res) => {
         });
       });
   
-      // Sort by time and limit to 10
+     
       activities.sort((a, b) => new Date(b.time) - new Date(a.time));
       const recentActivity = activities.slice(0, 10).map(activity => ({
         email: activity.email,
@@ -521,7 +517,6 @@ module.exports.getDashboardStats = async (req, res) => {
         time: activity.time
       }));
   
-      // ===== RESPONSE =====
       res.status(200).json({
         success: true,
         stats: {
@@ -560,13 +555,13 @@ module.exports.getDashboardStats = async (req, res) => {
   module.exports.sendInvoice = async (req, res) => {
     let { userId, price, description } = req.body;
     try {
-      // Get user email
+  
       const user = await usermodel.findById(userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
   
-      // Create invoice
+     
       const invoice = await invoiceModel.create({
         user: userId,
         price,
