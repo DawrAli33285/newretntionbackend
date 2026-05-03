@@ -39,12 +39,12 @@ function cleanup(filePath) {
   }
 }
 
-app.use('/api',adminRoutes)
-app.use('/api',userRoutes)
-app.use('/api',paymentRoutes)
-app.use('/api',invoiceRoutes)    
-app.use('/api',bulkuploadRoutes)
-app.post('/api/enrich', upload.single('employeeFile'), middleware, async (req, res) => {
+app.use(adminRoutes)
+app.use(userRoutes)
+app.use(paymentRoutes)
+app.use(invoiceRoutes)    
+app.use(bulkuploadRoutes)
+app.post('/enrich', upload.single('employeeFile'), middleware, async (req, res) => {
   let filePath = req.file.path;
 
   try {
