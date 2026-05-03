@@ -23,10 +23,10 @@ const upload = multer({ dest: '/tmp/public/files/uploads' });
 app.use(express.json());
 app.use(cors())
 
-// mongoose.connect('mongodb+srv://dawar:dawar@cluster0.rdpbsle.mongodb.net');
+mongoose.connect('mongodb+srv://dawar:dawar@cluster0.rdpbsle.mongodb.net');
 // mongoose.connect('mongodb://127.0.0.1/ret');
 
-  mongoose.connect('mongodb+srv://dawar:dawar@cluster0.51eap22.mongodb.net');
+  // mongoose.connect('mongodb+srv://dawar:dawar@cluster0.51eap22.mongodb.net');
 
 function cleanup(filePath) {
   try {
