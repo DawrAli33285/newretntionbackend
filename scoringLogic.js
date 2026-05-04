@@ -59,10 +59,10 @@ async function generateOutputFile(results, outputFileName) {
   const outputData = results.map((emp, index) => ({
     'Employee Number': index + 1,
     'Employee Name': emp.name,
-    'Work Life Balance': emp.categoryScores['family & work-life balance'] || 0,
-    'Communication': emp.categoryScores['communication & leadership'] || 0,
-    'Financial': emp.categoryScores['money & compensation'] || 0,
-    'Schedule': emp.categoryScores['schedule & workload'] || 0,
+   'Work Life Balance': emp.categoryScores['work life'] || 0,
+'Communication': emp.categoryScores['family'] || 0,
+'Financial': emp.categoryScores['finances'] || 0,
+'Schedule': emp.categoryScores['schedule'] || 0,
     'Final Score': emp.overallScore || 0,
     'Improvement Area': '',
     'Risk Level': determineRiskLevel(emp.overallScore),
@@ -116,7 +116,7 @@ async function fetchAllSocialMediaPosts(socialMedia) {
         };
     
         const linkedinResponse = await axios.request(linkedinOptions);
-        console.log('LinkedIn response:', linkedinResponse.data);
+       
     
         const linkedinPosts = linkedinResponse.data.data
           ?.filter(post => post?.text || post?.resharedPost?.text)
@@ -125,8 +125,7 @@ async function fetchAllSocialMediaPosts(socialMedia) {
             network: 'linkedin'
           })) || [];
     
-        console.log(`  [SCRAPER] ✅ LinkedIn posts fetched: ${linkedinPosts.length}`);
-    
+   
         allPosts.push(...linkedinPosts);
       } catch (error) {
         console.error('LinkedIn API Error:', error.message);
@@ -142,7 +141,7 @@ async function fetchAllSocialMediaPosts(socialMedia) {
           url: 'https://twitter241.p.rapidapi.com/user',
           params: { username: socialMedia.twitter_username },
           headers: {
-            'x-rapidapi-key': '074cf77d1amsh7dcb0779569cf53p13dfc9jsn48c665c8ed27',
+            'x-rapidapi-key': '21be0fdbd5mshf654a48f4e51715p1e08cajsnc4a7345c330b',
             'x-rapidapi-host': 'twitter241.p.rapidapi.com'
           }
         };
@@ -186,7 +185,7 @@ async function fetchAllSocialMediaPosts(socialMedia) {
           url: 'https://facebook-scraper3.p.rapidapi.com/profile/details_url',
           params: { url: socialMedia.facebook_url || `https://facebook.com/${socialMedia.facebook_username}` },
           headers: {
-            'x-rapidapi-key': '074cf77d1amsh7dcb0779569cf53p13dfc9jsn48c665c8ed27',
+            'x-rapidapi-key': '0b3e816b4bmsh5fb872b56e6e57cp1bfa08jsn3b9970e67894',
             'x-rapidapi-host': 'facebook-scraper3.p.rapidapi.com'
           }
         };
@@ -423,8 +422,9 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
       let data;
       try {
         data = await axios.request(options);
+        console.log("pdl DATA")
+        console.log(JSON.stringify(data.data))  // only the response body, not the full Axios object
         console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
-        console.log(`[EMP ${empIndex + 1}] PDL matches count: ${data?.data?.matches?.length || 0}`);
       } catch (pdlError) {
         const status = pdlError.response?.status;
         const message = pdlError.response?.data?.error?.message || pdlError.message;
@@ -479,6 +479,9 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
         continue;
       }
 
+      
+    
+
       const socialMedia = {
         linkedin_url: matchData?.linkedin_url || null,
         linkedin_username: matchData?.linkedin_username || null,
@@ -504,22 +507,45 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
         let categoryScore = 0;
     
       
+        let keywordsMatched = 0;
+        let weightedSum = 0;
+        
         for (const [phrase, weight] of Object.entries(keywordMap)) {
-           
             let totalCount = 0;
             for (const post of allPosts) {
+              // Only skip if it's a reshare FROM a company page, not the employee's own post
+              const isCompanyReshare = post.reshared === true && 
+                                       (post.text?.toLowerCase().includes('prognosticare') &&
+                                        post.poster_linkedin_url?.includes('/company/'));
+              if (isCompanyReshare) continue;
                 const cleanedText = cleanText(post.text);
-                const matches = (cleanedText.match(new RegExp(phrase, 'g')) || []).length;
+                const escapedPhrase = phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const matches = (cleanedText.match(new RegExp(`\\b${escapedPhrase}\\b`, 'gi')) || []).length;
+
                 totalCount += matches;
             }
-            
-            
-            categoryScore += totalCount * weight;
+            if (totalCount > 0) {
+                weightedSum += totalCount * weight;
+                keywordsMatched += totalCount;
+            }
         }
-    
-        categoryScores[category] = categoryScore;
-        totalCategoryScore += categoryScore;
+        
+        // Normalize to 0-10 scale
+        const rawScore = keywordsMatched > 0 ? weightedSum / keywordsMatched : 0;
+        const normalizedScore = Math.min(parseFloat(rawScore.toFixed(2)), 10);
+        
+        const keyMap = {
+          'WorkLifeBalance': 'work life',
+          'Communication':   'family',
+          'Financial':       'finances',
+          'Schedule':        'schedule'
+        };
+        
+        const frontendKey = keyMap[category] || category.toLowerCase();
+        categoryScores[frontendKey] = normalizedScore;
+        totalCategoryScore += normalizedScore;
         validCategories++;
+
     }
     
  
@@ -569,10 +595,12 @@ let employeeData = {
   last_hire_date: emp['Last Hire Date'] || emp['Hire Date'] || 'N/A',
   job_start: emp['Job Start'] || 'N/A',
   termination_date: termDate || 'N/A',
+  retentionScore,        
+  rightFitCandidate,     
   termination_reason: emp['Termination Reason'] || 'N/A',
   employement_status: emp['Employment Status'] || 'N/A',
   date_of_birth: birth_date || 'N/A',
-  job_title: emp['Job Title'] || emp['Job Class'] || 'N/A',
+  job_title: matchData?.job_title || emp['Job Title'] || emp['Job Class'] || 'N/A',
   department: emp['Department'] || 'N/A',
   facility: (emp['Facility'] || emp['Entity'] || emp['Subsidiary'] || 'N/A'),
   organization: emp['Organization'] || 'N/A',

@@ -1,0 +1,8 @@
+ Social media to scrape: {
+  "linkedin_url": "linkedin.com/in/kylejblack-illinois",
+  "linkedin_username": "kylejblack-illinois",
+  "twitter_url": "twitter.com/mr_kblack",
+  "twitter_username": "mr_kblack",
+  "facebook_url": "facebook.com/kyle.j.black",
+  "facebook_username": "kyle.j.black"
+}

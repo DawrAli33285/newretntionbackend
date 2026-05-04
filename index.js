@@ -39,12 +39,12 @@ function cleanup(filePath) {
   }
 }
 
-app.use(adminRoutes)
-app.use(userRoutes)
-app.use(paymentRoutes)
-app.use(invoiceRoutes)    
-app.use(bulkuploadRoutes)
-app.post('/enrich', upload.single('employeeFile'), middleware, async (req, res) => {
+app.use('/api',adminRoutes)
+app.use('/api',userRoutes)
+app.use('/api',paymentRoutes)
+app.use('/api',invoiceRoutes)    
+app.use('/api',bulkuploadRoutes)
+app.post('/api/enrich', upload.single('employeeFile'), middleware, async (req, res) => {
   let filePath = req.file.path;
 
   try {
@@ -74,18 +74,18 @@ app.post('/enrich', upload.single('employeeFile'), middleware, async (req, res) 
       ...emp,
       employeeNumber: emp.employeeNumber || emp['Employee Number'] || (startIndex + index + 1),
       categoryScores: {
-        'finances': emp.categoryScores?.Financial || 0,
-        'work life': emp.categoryScores?.WorkLifeBalance || 0,
-        'schedule': emp.categoryScores?.Schedule || 0,
-        'family': emp.categoryScores?.Communication || 0,
+        'finances': emp.categoryScores?.['finances'] || 0,
+        'work life': emp.categoryScores?.['work life'] || 0,
+        'schedule': emp.categoryScores?.['schedule'] || 0,
+        'family': emp.categoryScores?.['family'] || 0,
       },
       totalScore: emp.overallScore || 0,
-      jobClass: emp.job_title || 'N/A',
+      jobClass: emp.job_title || emp['Job Class'] || 'N/A',
       department: emp.department || 'N/A',
       hireDate: emp.hireDate || emp.last_hire_date || 'N/A',
       termDate: emp.termDate || emp.termination_date || '',
       retentionScore: emp.retentionScore || 0,
-      rightFitCandidate: emp.rightFitCandidate || (emp.overallScore || 0) >= 4,
+      rightFitCandidate: emp.rightFitCandidate ?? (emp.retentionScore || 0) >= 20,
     }));
 
     const inputFileName = req.file.originalname;
