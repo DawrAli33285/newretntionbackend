@@ -10,6 +10,7 @@ const userRoutes=require('./routes/user')
 const paymentRoutes=require('./routes/payment')
 const invoiceRoutes=require('./routes/invoice')
 const bulkuploadRoutes=require('./routes/bulkUpload')
+const prehireRoutes=require('./routes/prehire')
 const {middleware}=require('./util/middleware')
 
 const xlsx = require('xlsx')
@@ -41,6 +42,7 @@ function cleanup(filePath) {
 
 app.use('/api',adminRoutes)
 app.use('/api',userRoutes)
+app.use('/api',prehireRoutes)
 app.use('/api',paymentRoutes)
 app.use('/api',invoiceRoutes)    
 app.use('/api',bulkuploadRoutes)
