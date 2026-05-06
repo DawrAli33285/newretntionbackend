@@ -4,26 +4,17 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
+const { cloudinaryUpload } = require('../util/cloudinary');
 const nodemailer = require('nodemailer');
 const PreHireFile = require('../prehiremodel');
 const authMiddleware = require('../middleware/auth'); // your existing JWT middleware
 
 // ─── Storage config ────────────────────────────────────────────────────────────
 // Files land in /uploads/prehire/<jobId>/<originalname>
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const jobId = req.jobId; // set in middleware below
-    const dir = path.join(__dirname, '..', 'uploads', 'prehire', jobId);
-    fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const safeName = `prehire_${Date.now()}${ext}`;
-    cb(null, safeName);
-  },
-});
+const TMP_DIR = '/tmp/public/files';
+fs.mkdirSync(TMP_DIR, { recursive: true });
 
+const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
   const allowed = [
     'text/csv',
@@ -160,66 +151,68 @@ router.post(
       return res.status(400).json({ error: 'No file uploaded.' });
     }
 
-
     const jobId = req.jobId;
     const ext = path.extname(req.file.originalname).toLowerCase();
-    const recordCount = countRecords(req.file.path, ext);
     const userEmail = req.user?.email || '';
 
     try {
-      // 1. Store file record in DB with status "Received"
+      // 1. Upload buffer to Cloudinary
+// 1. Save buffer to /tmp/public/files, then upload to Cloudinary
+const cloudinary = require('cloudinary').v2;
+const tmpFileName = `prehire_${Date.now()}${ext}`;
+const tmpFilePath = path.join(TMP_DIR, tmpFileName);
+fs.writeFileSync(tmpFilePath, req.file.buffer);
+
+const fileUrl = await new Promise((resolve, reject) => {
+  cloudinary.uploader.upload(
+    tmpFilePath,
+    { resource_type: 'auto', folder: 'prehire' },
+    (error, result) => {
+      // Clean up tmp file regardless of outcome
+      fs.unlink(tmpFilePath, () => {});
+      if (error) reject(error);
+      else resolve(result.secure_url);
+    }
+  );
+});
+
+      // 2. Store file record in DB with Cloudinary URL
       const preHireRecord = await PreHireFile.create({
         jobId,
         originalFileName: req.file.originalname,
-        storedFileName: req.file.filename,
-        filePath: req.file.path,
+        storedFileName: `prehire_${Date.now()}${ext}`,
+        filePath: fileUrl,                // ← Cloudinary URL
         user: req.user._id,
         status: 'Received',
-        recordCount,
+        recordCount: 0,
         statusHistory: [{ status: 'Received', changedAt: new Date(), note: 'File uploaded by user' }],
       });
 
-      // 2. Send admin notification (non-blocking — don't fail upload if email fails)
-    //   notifyAdmin(jobId, req.file.originalname, userEmail, recordCount)
-    //     .then(() => PreHireFile.findOneAndUpdate({ jobId }, { adminNotified: true }))
-    //     .catch((err) => console.error('Admin notification failed:', err.message));
-
-    //   // 3. Send user confirmation (non-blocking)
-    //   if (userEmail) {
-    //     notifyUser(jobId, req.file.originalname, userEmail)
-    //       .then(() => PreHireFile.findOneAndUpdate({ jobId }, { userNotified: true }))
-    //       .catch((err) => console.error('User notification failed:', err.message));
-    //   }
-
-      // 4. Respond immediately — file is stored and status is "Received"
+      // 3. Respond immediately
       res.status(200).json({
         success: true,
         jobId,
         status: 'Received',
         fileName: req.file.originalname,
-        recordCount,
+        recordCount: 0,
         message: 'File received successfully. The PrognostiCare team will begin processing shortly.',
       });
 
-      // 5. Kick off processing workflow asynchronously (after response is sent)
-      processPrehireFile(jobId, req.file.path, req.user._id).catch((err) =>
+      // 4. Kick off processing workflow asynchronously
+      processPrehireFile(jobId, fileUrl, req.user._id).catch((err) =>
         console.error(`Processing failed for job ${jobId}:`, err.message)
       );
     } catch (error) {
       console.error('Pre-hire upload error:', error);
-      // Clean up uploaded file if DB save failed
-      try { fs.unlinkSync(req.file.path); } catch {}
       res.status(500).json({ error: 'Failed to save file record. Please try again.' });
     }
   }
 );
 
 // ─── Async processing workflow ─────────────────────────────────────────────────
-async function processPrehireFile(jobId, filePath, userId) {
+async function processPrehireFile(jobId, fileUrl, userId) {
   try {
-    // Status → Processing
     await updateStatus(jobId, 'Processing', 'Automated processing started');
-
     // ── Put your actual analysis logic here ──────────────────────────────────
     // e.g. call your PDL enrichment, scoring engine, etc.
     // const results = await runScoringEngine(filePath);
@@ -231,7 +224,7 @@ async function processPrehireFile(jobId, filePath, userId) {
 
     // Status → Ready for Review
     await updateStatus(jobId, 'Ready for Review', 'Results available for user');
-s
+
     // Optional: notify user that results are ready
     // const record = await PreHireFile.findOne({ jobId }).populate('user', 'email');
     // if (record?.user?.email) {
@@ -341,13 +334,9 @@ router.get('/admin/prehire-files', authMiddleware, async (req, res) => {
       const record = await PreHireFile.findOneAndDelete({ jobId: req.params.jobId });
       if (!record) return res.status(404).json({ error: 'Job not found.' });
   
-      try {
-        if (record.filePath && fs.existsSync(record.filePath)) {
-          fs.unlinkSync(record.filePath);
-        }
-      } catch (fsErr) {
-        console.warn('Could not delete file from disk:', fsErr.message);
-      }
+      // File is on Cloudinary — optionally delete it there too:
+      // const publicId = record.filePath.split('/').pop().split('.')[0];
+      // await require('cloudinary').v2.uploader.destroy(`prehire/${publicId}`, { resource_type: 'raw' });
   
       res.json({ success: true, jobId: req.params.jobId });
     } catch (error) {
