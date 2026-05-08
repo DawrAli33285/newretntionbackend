@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const csv = require('csv-parser');
@@ -17,7 +18,7 @@ const xlsx = require('xlsx')
 const cors=require('cors');
 const usermodel = require('./user');
 
-require('dotenv').config();
+
 const app = express();
 const upload = multer({ dest: '/tmp/public/files/uploads' });
 

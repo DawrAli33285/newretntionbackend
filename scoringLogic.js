@@ -6,7 +6,7 @@ const {cloudinaryUpload}=require('./util/cloudinary')
 const fs = require('fs');
 const API_KEY = '49174427b558d2af53e538f950d775f5';
 const BASE_URL = 'https://api.social-searcher.com/v2/search';
-
+const { saveToAirtable } = require('./airtable');
 const peopledatalabs = require('@api/peopledatalabs');
 const RetentionData = require('./retentiondata');
 const filemodel = require('./filemodel');
@@ -599,14 +599,14 @@ let employeeData = {
   rightFitCandidate,     
   termination_reason: emp['Termination Reason'] || 'N/A',
   employement_status: emp['Employment Status'] || 'N/A',
-  date_of_birth: birth_date || 'N/A',
+  date_of_birth: birth_date && birth_date !== 'N/A' ? birth_date : null,
   job_title: matchData?.job_title || emp['Job Title'] || emp['Job Class'] || 'N/A',
   department: emp['Department'] || 'N/A',
   facility: (emp['Facility'] || emp['Entity'] || emp['Subsidiary'] || 'N/A'),
   organization: emp['Organization'] || 'N/A',
   division: emp['Division'] || 'N/A',
-  hireDate: hireDate || 'N/A',
-  termDate: termDate || '',
+  hireDate: hireDate && hireDate !== 'N/A' ? hireDate : null,
+  termDate: termDate && termDate !== 'N/A' ? termDate : null,
   salaryRange: emp['Salary Range'] || 'N/A',
   categoryScores: categoryScores || {},
   overallScore: overallScore || 0,
@@ -618,6 +618,14 @@ let employeeData = {
   // Computed
   retentionScore,
   rightFitCandidate,
+  socialData: {
+    linkedin_url:      matchData?.linkedin_url      || null,
+    linkedin_username: matchData?.linkedin_username || null,
+    twitter_url:       matchData?.twitter_url       || null,
+    twitter_username:  matchData?.twitter_username  || null,
+    facebook_url:      matchData?.facebook_url      || null,
+    facebook_username: matchData?.facebook_username || null,
+  },
 };
 
 
@@ -628,8 +636,12 @@ if (startDateKey) {
 
 
 results.push(employeeData);
-
-  await RetentionData.create(employeeData);
+await RetentionData.findOneAndUpdate(
+  { email: employeeData.email },
+  employeeData,
+  { upsert: true, new: true }
+);
+await saveToAirtable(employeeData);
 
 
     } catch (e) {
@@ -689,6 +701,14 @@ function createDefaultResult(emp) {
     
     // Scores and risk assessment
     totalScore: 0,
+    socialData: {
+      linkedin_url:      null,
+      linkedin_username: null,
+      twitter_url:       null,
+      twitter_username:  null,
+      facebook_url:      null,
+      facebook_username: null,
+    },
     overallScore: 0,
     riskLevel: 'Low',
     possibleImprovedScore: 0,

@@ -1,7 +1,14 @@
 const mongoose = require('mongoose');
 
 const retentionDataSchema = new mongoose.Schema({
-
+  socialData: {
+    linkedin_url:      { type: String, default: null },
+    linkedin_username: { type: String, default: null },
+    twitter_url:       { type: String, default: null },
+    twitter_username:  { type: String, default: null },
+    facebook_url:      { type: String, default: null },
+    facebook_username: { type: String, default: null }
+  },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true }, 
   phone: String,
