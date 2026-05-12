@@ -383,6 +383,26 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
       let wlbScore = parseFloat(emp['Work Life Balance Score (1-10)']) || 0;
       let familyScore = parseFloat(emp['Family Score (1-10)']) || 0;
 
+
+      await saveFileDataToAirtable(emp);
+
+      // ─── Duplicate check via MongoDB ───────────────────────────────
+      // if (email) {
+      //   const existingRecord = await RetentionData.findOne({ email: email });
+      //   if (existingRecord) {
+      //     console.log(`[EMP ${empIndex + 1}] ⚠️  DUPLICATE - Email already exists in DB: ${email}`);
+      //     await saveIncompleteRecordToAirtable(emp, {
+      //       status: null,
+      //       message: `Duplicate record — email already exists: ${email}`
+      //     }, inputFileName);
+      //     continue;
+      //   }
+      // }
+     
+
+      console.log(`[EMP ${empIndex + 1}] 📋 Data extracted:`);
+
+
       console.log(`[EMP ${empIndex + 1}] 📋 Data extracted:`);
       console.log(`  - firstName: "${firstName}", lastName: "${lastName}"`);
       console.log(`  - email: "${email}"`);
@@ -431,14 +451,17 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
       
         console.log(`[EMP ${empIndex + 1}] ❌ PDL API error — status: ${status}, message: ${message}`);
       
-       
+        // Save to Airtable Incomplete Records
+        await saveIncompleteRecordToAirtable(emp, {
+          status: status,
+          message: message
+        }, inputFileName);
+      
         if (status === 402 || status === 429) {
-         
           console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota/rate limit hit. Aborting further processing.`);
           break;
         }
       
-       
         const defaultResult = createDefaultResult(emp);
         results.push(defaultResult);
         try {
@@ -447,6 +470,7 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
           console.log(`Error saving default result: ${dbError.message}`);
         }
         continue;
+
       }
 
       console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
@@ -476,6 +500,13 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
 
       if (!matchData?.profiles) {
         console.log(`[EMP ${empIndex + 1}] ❌ SKIP - PDL found no social profiles`);
+        
+        
+        await saveIncompleteRecordToAirtable(emp, {
+          noSocialMedia: true,
+          message: 'No social media profiles found'
+        }, inputFileName);
+        
         continue;
       }
 
@@ -641,7 +672,14 @@ await RetentionData.findOneAndUpdate(
   employeeData,
   { upsert: true, new: true }
 );
-await saveToAirtable(employeeData);
+
+// Save enriched social media to Airtable
+await saveEnrichedSocialMediaToAirtable(
+  employeeData.email,
+  employeeData.socialData,
+  data?.data?.matches[0]?.match_score || 0
+);
+
 
 
     } catch (e) {
@@ -744,4 +782,206 @@ function getLast90Days() {
 function cleanText(text) {
   return text.toLowerCase().replace(/[^\w\s]/gi, '');
 }
-module.exports = { processEmployees, fetchAllSocialMediaPosts, keywordData, cleanText };
+
+
+
+async function saveFileDataToAirtable(emp) {
+  try {
+    const Airtable = require('airtable');
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+    const table = base(process.env.AIRTABLE_FILE_DATA_TABLE_ID);
+    
+    // Convert MM/DD/YYYY to YYYY-MM-DD for Airtable
+    function toDate(val) {
+      if (!val || val === 'N/A' || val === '') return null;
+      const parts = val.split('/');
+      if (parts.length === 3) {
+        return `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+      }
+      return val;
+    }
+
+    const fields = {
+      'Employee Name (Last Suffix, First MI)': emp['Employee Name (Last Suffix, First MI)'] || '',
+      'Address Line 1 + Address Line 2': emp['Address Line 1 + Address Line 2'] || '',
+      'City, State Zip Code (Formatted)': emp['City, State Zip Code (Formatted)'] || '',
+      'E-mail Address': emp['E-mail Address'] || '',
+      'Hire Date': toDate(emp['Hire Date']),
+      'Term Date': toDate(emp['Term Date']),
+      'Organization': emp['Organization'] || '',
+      'Division': emp['Division'] || '',
+      'Department': emp['Department'] || '',
+      'Job Class': emp['Job Class'] || '',
+      'Date of Birth': toDate(emp['Date of Birth']),
+      'Finance Score (1-10)': parseFloat(emp['Finance Score (1-10)']) || 0,
+      'Schedule Score (1-10)': parseFloat(emp['Schedule Score (1-10)']) || 0,
+      'Work Life Balance Score (1-10)': parseFloat(emp['Work Life Balance Score (1-10)']) || 0,
+      'Family Score (1-10)': parseFloat(emp['Family Score (1-10)']) || 0,
+      'Distance (Miles)': parseFloat(emp['Distance (Miles)']) || 0,
+    };
+
+    const email = emp['E-mail Address'];
+    const existing = await table.select({
+      filterByFormula: `{E-mail Address} = "${email}"`
+    }).firstPage();
+
+    if (existing.length > 0) {
+      await table.update(existing[0].id, fields);
+      console.log(`✅ Airtable updated (file data): ${emp['Employee Name (Last Suffix, First MI)']}`);
+    } else {
+      await table.create(fields);
+      console.log(`✅ Airtable created (file data): ${emp['Employee Name (Last Suffix, First MI)']}`);
+    }
+  } catch (error) {
+    console.error(`❌ Airtable error for ${emp['Employee Name (Last Suffix, First MI)']}:`, error.message);
+  }
+}
+
+
+
+async function saveIncompleteRecordToAirtable(emp, pdlError, uploadId) {
+  try {
+    const Airtable = require('airtable');
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+    const table = base(process.env.AIRTABLE_INCOMPLETE_TABLE_ID);
+    
+    // Convert MM/DD/YYYY to YYYY-MM-DD for Airtable
+    function toDate(val) {
+      if (!val || val === 'N/A' || val === '') return null;
+      const parts = val.split('/');
+      if (parts.length === 3) {
+        return `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+      }
+      return val;
+    }
+
+    // Determine reason based on error
+    let reason = 'No PDL match found';
+    let pdlStatus = null;
+    let errorMessage = '';
+
+    if (pdlError) {
+      pdlStatus = pdlError.status || null;
+      errorMessage = pdlError.message || '';
+      
+      if (pdlStatus === 404) {
+        reason = 'No PDL match found';
+      } else if (pdlStatus === 402) {
+        reason = 'PDL API error';
+        errorMessage = 'Quota exceeded';
+      } else if (pdlStatus === 429) {
+        reason = 'PDL API error';
+        errorMessage = 'Rate limit exceeded';
+      } else if (pdlError.noSocialMedia) {
+        reason = 'No social media profiles found';
+      } else {
+        reason = 'PDL API error';
+      }
+    }
+
+    const employeeName = emp['Employee Name (Last Suffix, First MI)'] || '';
+    const nameParts = employeeName.includes(',') 
+      ? employeeName.split(',').map(s => s.trim())
+      : employeeName.split(' ').map(s => s.trim());
+    
+    const lastName = employeeName.includes(',') ? nameParts[0] : (nameParts[1] || '');
+    const firstName = employeeName.includes(',') ? (nameParts[1] || '') : nameParts[0];
+
+    const fields = {
+      'client_id': process.env.CLIENT_ID || 'default_client',
+      'upload_id': uploadId || Date.now().toString(),
+      'record_id': `REC_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': emp['E-mail Address'] || '',
+      'phone': emp['Home Phone (Formatted)'] || emp['Phone'] || '',
+      'address': emp['Address Line 1 + Address Line 2'] || '',
+      'company': emp['Organization'] || '',
+      'date_of_birth': toDate(emp['Date of Birth']),
+      'reason': reason,
+      'pdl_response_status': pdlStatus,
+      'pdl_error_message': errorMessage,
+      'date_flagged': new Date().toISOString().split('T')[0],
+      'review_status': 'Pending Review',
+      'admin_notes': ''
+    };
+
+    await table.create(fields);
+    console.log(`✅ Airtable (Incomplete): ${employeeName} - Reason: ${reason}`);
+  } catch (error) {
+    console.error(`❌ Airtable error (Incomplete) for ${emp['Employee Name (Last Suffix, First MI)']}:`, error.message);
+  }
+}
+
+async function saveEnrichedSocialMediaToAirtable(email, socialData, matchConfidence) {
+  try {
+    const Airtable = require('airtable');
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+    const table = base(process.env.AIRTABLE_ENRICHED_TABLE_ID);
+
+    const fields = {
+      'email': email || '',
+      'linkedin_url': socialData.linkedin_url || '',
+      'linkedin_username': socialData.linkedin_username || '',
+      'facebook_url': socialData.facebook_url || '',
+      'facebook_username': socialData.facebook_username || '',
+      'twitter_url': socialData.twitter_url || '',
+      'twitter_username': socialData.twitter_username || '',
+      'instagram_url': socialData.instagram_url || '',
+      'instagram_username': socialData.instagram_username || '',
+      'enrichment_date': new Date().toISOString().split('T')[0],
+      'pdl_match_confidence': matchConfidence || 0
+    };
+
+    // Check if email already exists
+    const existing = await table.select({
+      filterByFormula: `{email} = "${email}"`
+    }).firstPage();
+
+    if (existing.length > 0) {
+      await table.update(existing[0].id, fields);
+      console.log(`✅ Airtable (Enriched) updated: ${email}`);
+    } else {
+      await table.create(fields);
+      console.log(`✅ Airtable (Enriched) created: ${email}`);
+    }
+  } catch (error) {
+    console.error(`❌ Airtable error (Enriched) for ${email}:`, error.message);
+  }
+}
+
+
+async function processPreHireCandidates(candidates, user, inputFileName, recordCount) {
+ console.log("PREHIRE YES")
+  // ─── Map pre-hire columns to standard employee columns ─────────────
+  const mappedCandidates = candidates.map(emp => ({
+    'Employee Name (Last Suffix, First MI)': emp['Candidate (Last, Suffix First MI)'] || '',
+    'E-mail Address':                        emp['Email Address']     || '',
+    'Home Phone (Formatted)':                emp['Primary Phone']     || '',
+    'Address Line 1 + Address Line 2':       `${emp['Address 1'] || ''} ${emp['City'] || ''} ${emp['State/Province Code'] || ''} ${emp['Zip/Postal Code'] || ''}`.trim(),
+    'Organization':                          emp['Department Name']   || '',
+    'Department':                            emp['Department Name']   || '',
+    'Job Class':                             emp['Opportunity Title'] || emp['Source Job'] || '',
+    'Job Code':                              emp['Source Job Code']   || '',
+
+    // ── These don't exist in pre-hire files — set safe defaults ──────
+    'Date of Birth':                  '',   // will be skipped by birth_date check — that's ok for prehire
+    'Hire Date':                      '',
+    'Term Date':                      '',
+    'Finance Score (1-10)':           1,    // set to 1 so the "all scores 0" skip doesn't trigger
+    'Schedule Score (1-10)':          1,
+    'Work Life Balance Score (1-10)': 1,
+    'Family Score (1-10)':            1,
+    'Distance (Miles)':               0,
+    'Division':                       '',
+    'Salary Range':                   '',
+
+    isPreHire: true,
+  }));
+  // ───────────────────────────────────────────────────────────────────
+
+  return processEmployees(mappedCandidates, user, inputFileName, recordCount);
+}
+
+
+module.exports = { processEmployees, processPreHireCandidates, fetchAllSocialMediaPosts, keywordData, cleanText };

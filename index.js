@@ -41,6 +41,17 @@ function cleanup(filePath) {
   }
 }
 
+const refundCreditsIfAllDuplicates = async () => {
+  if (creditsUsed && parseFloat(creditsUsed) > 0) {
+    await usermodel.findByIdAndUpdate(
+      req.user._id,
+      { $inc: { credits: parseFloat(creditsUsed) } }
+    );
+    console.log('Credits refunded — all records were duplicates');
+  }
+};
+
+
 app.use('/api',adminRoutes)
 app.use('/api',userRoutes)
 app.use('/api',prehireRoutes)
@@ -94,14 +105,20 @@ app.post('/api/enrich', upload.single('employeeFile'), middleware, async (req, r
     const inputFileName = req.file.originalname;
     const fileExt = req.file.originalname.split('.').pop().toLowerCase();
     const employees = [];
+    const isPreHire = req.body.isPreHire === 'true';
 
     if (fileExt === 'csv') {
       fs.createReadStream(filePath)
         .pipe(csv())
         .on('data', (row) => employees.push(row))
         .on('end', async () => {
-          const { results, passcode } = await scoring.processEmployees(employees, req.user, inputFileName, recordCount);
+          const { results, passcode } = isPreHire
+            ? await scoring.processPreHireCandidates(employees, req.user, inputFileName, recordCount)
+            : await scoring.processEmployees(employees, req.user, inputFileName, recordCount);
           cleanup(filePath);
+          if (results.length === 0) {
+            return res.status(400).json({ error: 'All records in this file are duplicates. No new records were processed.' });
+          }
           return res.json({ results: mapResults(results), passcode });
         });
     } else if (fileExt === 'xlsx') {
@@ -110,13 +127,19 @@ app.post('/api/enrich', upload.single('employeeFile'), middleware, async (req, r
       const worksheet = workbook.Sheets[sheetName];
       const data = xlsx.utils.sheet_to_json(worksheet);
 
-      const { results, passcode } = await scoring.processEmployees(data, req.user._id, inputFileName, recordCount);
+      const { results, passcode } = isPreHire
+        ? await scoring.processPreHireCandidates(data, req.user._id, inputFileName, recordCount)
+        : await scoring.processEmployees(data, req.user._id, inputFileName, recordCount);
       cleanup(filePath);
+      if (results.length === 0) {
+        return res.status(400).json({ error: 'All records in this file are duplicates. No new records were processed.' });
+      }
       return res.json({ results: mapResults(results), passcode });
     } else {
       cleanup(filePath);
       res.status(400).json({ error: 'Unsupported file type' });
     }
+    
   } catch (error) {
     cleanup(filePath);
     console.error('Error processing file:', error);
