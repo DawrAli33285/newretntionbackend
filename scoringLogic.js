@@ -411,18 +411,19 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
       console.log(`  - company: "${companyName}"`);
       console.log(`  - scores → finance:${financeScore} schedule:${scheduleScore} wlb:${wlbScore} family:${familyScore}`);
 
-      if (!birth_date) {
+      if (!birth_date && !emp.isPreHire) {
         console.log(`[EMP ${empIndex + 1}] ❌ SKIP - Missing Date of Birth`);
         continue;
       }
-      if (!financeScore && !scheduleScore && !wlbScore && !familyScore) {
+      if (!emp.isPreHire && !financeScore && !scheduleScore && !wlbScore && !familyScore) {
         console.log(`[EMP ${empIndex + 1}] ❌ SKIP - All social scores are 0/missing`);
         continue;
       }
 
       // PDL API call
       console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
-      const pdlUrl = `https://api.peopledatalabs.com/v5/person/identify?name=${encodeURIComponent(employeeName)}&first_name=${encodeURIComponent(firstName)}&phone=${encodeURIComponent(phone || '')}&last_name=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email || '')}&company=${encodeURIComponent(companyName || '')}&birth_date=${encodeURIComponent(birth_date)}&pretty=false&titlecase=false&include_if_matched=false`;
+      const pdlUrl = `https://api.peopledatalabs.com/v5/person/identify?name=${encodeURIComponent(employeeName)}&first_name=${encodeURIComponent(firstName)}&phone=${encodeURIComponent(phone || '')}&last_name=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email || '')}&company=${encodeURIComponent(companyName || '')}${birth_date ? `&birth_date=${encodeURIComponent(birth_date)}` : ''}&pretty=false&titlecase=false&include_if_matched=false`;
+      
       console.log(`[EMP ${empIndex + 1}] PDL URL: ${pdlUrl}`);
 
       const refinedPhone = phone ? "+" + phone.replace(/\D/g, "") : '';
