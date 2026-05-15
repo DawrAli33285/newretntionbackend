@@ -388,7 +388,10 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
   console.log(`[PROCESS START] Input file: ${inputFileName}`);
   console.log(`[PROCESS START] Record count: ${recordCount}`);
   console.log('='.repeat(60));
-  
+  const isPreHireUpload = employees.length > 0 && employees[0].isPreHire;
+if (!isPreHireUpload) {
+  await saveFileDataToAirtableInBatch(employees); // ✅ runs once before loop
+}
   const results = [];
 
   for (const [empIndex, emp] of employees.entries()) {
@@ -436,10 +439,7 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
       let familyScore = parseFloat(emp['Family Score (1-10)']) || 0;
 
 
-      if(!emp.isPreHire){
-
-        await saveFileDataToAirtableInBatch(employees);
-      }
+     
 
       // ─── Duplicate check via MongoDB ───────────s────────────────────
       // if (email) {
