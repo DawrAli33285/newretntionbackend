@@ -316,6 +316,52 @@ function calculateRightFit(retentionScore) {
   return retentionScore >= 20;
 }
 
+async function saveFileDataToAirtableInBatch(employees) {
+  try {
+    const Airtable = require('airtable');
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+    const table = base(process.env.AIRTABLE_FILE_DATA_TABLE_ID);
+
+    function toDate(val) {
+      if (!val || val === 'N/A' || val === '') return null;
+      const parts = val.split('/');
+      if (parts.length === 3) {
+        return `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+      }
+      return val;
+    }
+
+    const records = employees.map(emp => ({
+      fields: {
+        'Employee Name (Last Suffix, First MI)': emp['Employee Name (Last Suffix, First MI)'] || '',
+        'Address Line 1 + Address Line 2': emp['Address Line 1 + Address Line 2'] || '',
+        'City, State Zip Code (Formatted)': emp['City, State Zip Code (Formatted)'] || '',
+        'E-mail Address': emp['E-mail Address'] || '',
+        'Hire Date': toDate(emp['Hire Date']),
+        'Term Date': toDate(emp['Term Date']),
+        'Organization': emp['Organization'] || '',
+        'Division': emp['Division'] || '',
+        'Department': emp['Department'] || '',
+        'Job Class': emp['Job Class'] || '',
+        'Date of Birth': toDate(emp['Date of Birth']),
+        'Finance Score (1-10)': parseFloat(emp['Finance Score (1-10)']) || 0,
+        'Schedule Score (1-10)': parseFloat(emp['Schedule Score (1-10)']) || 0,
+        'Work Life Balance Score (1-10)': parseFloat(emp['Work Life Balance Score (1-10)']) || 0,
+        'Family Score (1-10)': parseFloat(emp['Family Score (1-10)']) || 0,
+        'Distance (Miles)': parseFloat(emp['Distance (Miles)']) || 0,
+      }
+    }));
+
+    for (let i = 0; i < records.length; i += 10) {
+      const chunk = records.slice(i, i + 10);
+      await table.create(chunk);
+      console.log(`✅ Airtable (FileData) batch ${i + 1}–${i + chunk.length}`);
+    }
+  } catch (error) {
+    console.error(`❌ Airtable (FileData) batch error:`, error.message);
+  }
+}
+
 
 
 function generateUniquePasscode() {
@@ -390,7 +436,7 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
       let familyScore = parseFloat(emp['Family Score (1-10)']) || 0;
 
 
-      await saveFileDataToAirtable(emp);
+      await saveFileDataToAirtableInBatch(employees);
 
       // ─── Duplicate check via MongoDB ───────────────────────────────
       // if (email) {
@@ -463,7 +509,10 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
           status: status,
           message: message
         }, inputFileName, emp.isPreHire);
-      
+        console.log(`[ENRICHED] isPreHire: ${emp.isPreHire}, status: ${status}, email: ${emp['E-mail Address']}`);
+        console.log(`[ENRICHED] Will save enriched? ${emp.isPreHire ? 'YES - pre-hire path' : 'NO - not pre-hire'}`);
+
+        
         if (status === 402) {
           console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota exceeded. Aborting.`);
           break;
@@ -883,6 +932,39 @@ async function saveFileDataToAirtable(emp) {
 }
 
 
+async function savePreHireFileDataToAirtableInBatch(employees) {
+  try {
+    const Airtable = require('airtable');
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+    const table = base(process.env.AIRTABLE_PREHIRE_EMPLOYEE);
+
+    const records = employees.map(emp => ({
+      fields: {
+        'Candidate (Last, Suffix First MI)': emp['Candidate (Last, Suffix First MI)'] || '',
+        'Source Job':                         emp['Source Job'] || '',
+        'Opportunity Title':                  emp['Opportunity Title'] || '',
+        'Source Job Code':                    emp['Source Job Code'] || '',
+        'Department Name':                    emp['Department Name'] || '',
+        'Email Address':                      emp['Email Address'] || '',
+        'Primary Phone':                      emp['Primary Phone'] || '',
+        'Address 1':                          emp['Address 1'] || '',
+        'City':                               emp['City'] || '',
+        'State/Province Code':                emp['State/Province Code'] || '',
+        'Zip/Postal Code':                    emp['Zip/Postal Code'] || '',
+      }
+    }));
+
+    for (let i = 0; i < records.length; i += 10) {
+      const chunk = records.slice(i, i + 10);
+      await table.create(chunk);
+      console.log(`✅ Airtable (PreHire) batch ${i + 1}–${i + chunk.length}`);
+    }
+  } catch (error) {
+    console.error(`❌ Airtable (PreHire) batch error:`, error.message);
+  }
+}
+
+
 async function savePreHireFileDataToAirtable(emp) {
   try {
     const Airtable = require('airtable');
@@ -1087,7 +1169,7 @@ async function processPreHireCandidates(candidates, user, inputFileName, recordC
 
   // ─── Save original pre-hire data to Airtable BEFORE mapping ───────
   for (const emp of candidates) {
-    await savePreHireFileDataToAirtable(emp);
+    await savePreHireFileDataToAirtableInBatch(candidates);
   }
 
   const mappedCandidates = candidates.map(emp => ({
