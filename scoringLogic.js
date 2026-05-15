@@ -388,7 +388,7 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
   console.log(`[PROCESS START] Input file: ${inputFileName}`);
   console.log(`[PROCESS START] Record count: ${recordCount}`);
   console.log('='.repeat(60));
-  await saveFileDataToAirtableInBatch(employees);
+  
   const results = [];
 
   for (const [empIndex, emp] of employees.entries()) {
@@ -441,7 +441,7 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
         await saveFileDataToAirtableInBatch(employees);
       }
 
-      // ─── Duplicate check via MongoDB ───────────────────────────────
+      // ─── Duplicate check via MongoDB ───────────s────────────────────
       // if (email) {
       //   const existingRecord = await RetentionData.findOne({ email: email });
       //   if (existingRecord) {
