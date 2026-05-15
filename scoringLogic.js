@@ -436,7 +436,10 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
       let familyScore = parseFloat(emp['Family Score (1-10)']) || 0;
 
 
-    
+      if(!emp.isPreHire){
+
+        await saveFileDataToAirtableInBatch(employees);
+      }
 
       // ─── Duplicate check via MongoDB ───────────────────────────────
       // if (email) {
