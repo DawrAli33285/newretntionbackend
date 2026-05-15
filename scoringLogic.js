@@ -31,6 +31,10 @@ function determineRiskLevel(overallScore) {
   return 'Low';
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function calculatePossibleImprovement(categoryScores) {
   const scores = Object.values(categoryScores);
   if (scores.length === 0) return 0;
@@ -441,7 +445,7 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
       };
 
       console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
-
+      await sleep(1200); 
       let data;
       try {
         data = await axios.request(options);
@@ -460,9 +464,15 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
           message: message
         }, inputFileName, emp.isPreHire);
       
-        if (status === 402 || status === 429) {
-          console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota/rate limit hit. Aborting further processing.`);
+        if (status === 402) {
+          console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota exceeded. Aborting.`);
           break;
+        }
+        if (status === 429) {
+          console.log(`[EMP ${empIndex + 1}] ⏳ Rate limit — skipping and continuing.`);
+          const defaultResult = createDefaultResult(emp);
+          results.push(defaultResult);
+          continue;
         }
         const defaultResult = createDefaultResult(emp);
         results.push(defaultResult);
