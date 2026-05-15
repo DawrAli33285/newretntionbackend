@@ -388,7 +388,7 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
   console.log(`[PROCESS START] Input file: ${inputFileName}`);
   console.log(`[PROCESS START] Record count: ${recordCount}`);
   console.log('='.repeat(60));
-
+  await saveFileDataToAirtableInBatch(employees);
   const results = [];
 
   for (const [empIndex, emp] of employees.entries()) {
@@ -1168,9 +1168,7 @@ async function processPreHireCandidates(candidates, user, inputFileName, recordC
   console.log("PREHIRE YES");
 
   // ─── Save original pre-hire data to Airtable BEFORE mapping ───────
-  for (const emp of candidates) {
-    await savePreHireFileDataToAirtableInBatch(candidates);
-  }
+  await savePreHireFileDataToAirtableInBatch(candidates);
 
   const mappedCandidates = candidates.map(emp => ({
     'Employee Name (Last Suffix, First MI)': emp['Candidate (Last, Suffix First MI)'] || '',
