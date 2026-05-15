@@ -9,6 +9,8 @@ const BASE_URL = 'https://api.social-searcher.com/v2/search';
 const { saveToAirtable } = require('./airtable');
 const peopledatalabs = require('@api/peopledatalabs');
 const RetentionData = require('./retentiondata');
+const PreHireRetentionData = require('./prehireretentiondata');
+
 const filemodel = require('./filemodel');
 
 peopledatalabs.auth('30d80327aac2828dd4df86eaf9ec379dd5bae8d495490b2c41f4f313ca34adea');
@@ -456,21 +458,30 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
         await saveIncompleteRecordToAirtable(emp, {
           status: status,
           message: message
-        }, inputFileName);
+        }, inputFileName, emp.isPreHire);
       
         if (status === 402 || status === 429) {
           console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota/rate limit hit. Aborting further processing.`);
           break;
         }
-      
         const defaultResult = createDefaultResult(emp);
         results.push(defaultResult);
         try {
-          await RetentionData.create(defaultResult);
+          if (emp.isPreHire) {
+            await PreHireRetentionData.create(defaultResult);
+          } else {
+            await RetentionData.create(defaultResult);
+          }
         } catch (dbError) {
-          console.log(`Error saving default result: ${dbError.message}`);
+          if (dbError.code === 11000) {
+            console.log(`Duplicate email skipped: ${dbError.message}`);
+          } else {
+            console.log(`Error saving default result: ${dbError.message}`);
+          }
+
         }
         continue;
+
 
       }
 
@@ -506,7 +517,7 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
         await saveIncompleteRecordToAirtable(emp, {
           noSocialMedia: true,
           message: 'No social media profiles found'
-        }, inputFileName);
+        }, inputFileName, emp.isPreHire);
         
         continue;
       }
@@ -668,18 +679,37 @@ if (startDateKey) {
 
 
 results.push(employeeData);
-await RetentionData.findOneAndUpdate(
-  { email: employeeData.email },
-  employeeData,
-  { upsert: true, new: true }
-);
+
+if (emp.isPreHire) {
+  await PreHireRetentionData.findOneAndUpdate(
+    { email: employeeData.email },
+    employeeData,
+    { upsert: true, new: true }
+  );
+} else {
+  await RetentionData.findOneAndUpdate(
+    { email: employeeData.email },
+    employeeData,
+    { upsert: true, new: true }
+  );
+}
 
 // Save enriched social media to Airtable
-await saveEnrichedSocialMediaToAirtable(
-  employeeData.email,
-  employeeData.socialData,
-  data?.data?.matches[0]?.match_score || 0
-);
+if (emp.isPreHire) {
+  await saveEnrichedSocialMediaToAirtable(
+    employeeData.email,
+    employeeData.socialData,
+    data?.data?.matches[0]?.match_score || 0,
+    true  // isPreHire flag
+  );
+} else {
+  await saveEnrichedSocialMediaToAirtable(
+    employeeData.email,
+    employeeData.socialData,
+    data?.data?.matches[0]?.match_score || 0
+  );
+}
+
 
 
 
@@ -688,7 +718,11 @@ await saveEnrichedSocialMediaToAirtable(
       const defaultResult = createDefaultResult(emp);
       results.push(defaultResult);
       try {
-        await RetentionData.create(defaultResult);
+        if (emp.isPreHire) {
+          await PreHireRetentionData.create(defaultResult);
+        } else {
+          await RetentionData.create(defaultResult);
+        }
       } catch (dbError) {
         console.log(`Error saving default result to database: ${dbError.message}`);
       }
@@ -839,14 +873,71 @@ async function saveFileDataToAirtable(emp) {
 }
 
 
-
-async function saveIncompleteRecordToAirtable(emp, pdlError, uploadId) {
+async function savePreHireFileDataToAirtable(emp) {
   try {
     const Airtable = require('airtable');
     const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
-    const table = base(process.env.AIRTABLE_INCOMPLETE_TABLE_ID);
+    const table = base(process.env.AIRTABLE_PREHIRE_EMPLOYEE);
+
+    const fields = {
+      'Candidate (Last, Suffix First MI)': emp['Candidate (Last, Suffix First MI)'] || '',
+      'Source Job':                         emp['Source Job'] || '',
+      'Opportunity Title':                  emp['Opportunity Title'] || '',
+      'Source Job Code':                    emp['Source Job Code'] || '',
+      'Department Name':                    emp['Department Name'] || '',
+      'Email Address':                      emp['Email Address'] || '',
+      'Primary Phone':                      emp['Primary Phone'] || '',
+      'Address 1':                          emp['Address 1'] || '',
+      'City':                               emp['City'] || '',
+      'State/Province Code':                emp['State/Province Code'] || '',
+      'Zip/Postal Code':                    emp['Zip/Postal Code'] || '',
+    };
+
+    const email = emp['Email Address'];
+    const existing = await table.select({
+      filterByFormula: `{Email Address} = "${email}"`
+    }).firstPage();
+
+    if (existing.length > 0) {
+      await table.update(existing[0].id, fields);
+      console.log(`✅ Airtable updated (pre-hire): ${emp['Candidate (Last, Suffix First MI)']}`);
+    } else {
+      await table.create(fields);
+      console.log(`✅ Airtable created (pre-hire): ${emp['Candidate (Last, Suffix First MI)']}`);
+    }
+  } catch (error) {
+    console.error(`❌ Airtable error (pre-hire) for ${emp['Candidate (Last, Suffix First MI)']}:`, error.message);
+  }
+}
+
+
+async function saveIncompleteRecordToAirtable(emp, pdlError, uploadId, isPreHire = false) {
+  console.log(`\n[INCOMPLETE AIRTABLE] ========== START ==========`);
+  console.log(`[INCOMPLETE AIRTABLE] isPreHire: ${isPreHire}`);
+  console.log(`[INCOMPLETE AIRTABLE] uploadId: ${uploadId}`);
+  console.log(`[INCOMPLETE AIRTABLE] emp keys: ${JSON.stringify(Object.keys(emp))}`);
+  console.log(`[INCOMPLETE AIRTABLE] pdlError: ${JSON.stringify(pdlError)}`);
+
+  try {
+    const Airtable = require('airtable');
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
     
-    // Convert MM/DD/YYYY to YYYY-MM-DD for Airtable
+    const tableId = isPreHire 
+      ? process.env.AIRTABLE_PREHIRE_ERROR
+      : process.env.AIRTABLE_INCOMPLETE_TABLE_ID;
+
+    console.log(`[INCOMPLETE AIRTABLE] tableId resolved: "${tableId}"`);
+    console.log(`[INCOMPLETE AIRTABLE] AIRTABLE_PREHIRE_ERROR env: "${process.env.AIRTABLE_PREHIRE_ERROR}"`);
+    console.log(`[INCOMPLETE AIRTABLE] AIRTABLE_INCOMPLETE_TABLE_ID env: "${process.env.AIRTABLE_INCOMPLETE_TABLE_ID}"`);
+    console.log(`[INCOMPLETE AIRTABLE] AIRTABLE_BASE_ID env: "${process.env.AIRTABLE_BASE_ID}"`);
+
+    if (!tableId) {
+      console.error(`[INCOMPLETE AIRTABLE] ❌ tableId is undefined/empty — check your .env file`);
+      return;
+    }
+
+    const table = base(tableId);
+
     function toDate(val) {
       if (!val || val === 'N/A' || val === '') return null;
       const parts = val.split('/');
@@ -856,7 +947,6 @@ async function saveIncompleteRecordToAirtable(emp, pdlError, uploadId) {
       return val;
     }
 
-    // Determine reason based on error
     let reason = 'No PDL match found';
     let pdlStatus = null;
     let errorMessage = '';
@@ -880,45 +970,75 @@ async function saveIncompleteRecordToAirtable(emp, pdlError, uploadId) {
       }
     }
 
+    console.log(`[INCOMPLETE AIRTABLE] reason: "${reason}", pdlStatus: ${pdlStatus}`);
+
     const employeeName = emp['Employee Name (Last Suffix, First MI)'] || '';
+
+
+    console.log(`[INCOMPLETE AIRTABLE] employeeName resolved: "${employeeName}"`);
+    console.log(`[INCOMPLETE AIRTABLE] emp['Candidate (Last, Suffix First MI)']: "${emp['Candidate (Last, Suffix First MI)']}"`);
+    console.log(`[INCOMPLETE AIRTABLE] emp['Employee Name (Last Suffix, First MI)']: "${emp['Employee Name (Last Suffix, First MI)']}"`);
+
     const nameParts = employeeName.includes(',') 
       ? employeeName.split(',').map(s => s.trim())
       : employeeName.split(' ').map(s => s.trim());
     
-    const lastName = employeeName.includes(',') ? nameParts[0] : (nameParts[1] || '');
+    const lastName  = employeeName.includes(',') ? nameParts[0] : (nameParts[1] || '');
     const firstName = employeeName.includes(',') ? (nameParts[1] || '') : nameParts[0];
 
+    console.log(`[INCOMPLETE AIRTABLE] firstName: "${firstName}", lastName: "${lastName}"`);
+
+    const email   = emp['E-mail Address'] || '';
+    const phone   = emp['Home Phone (Formatted)'] || emp['Phone'] || '';
+    const address = emp['Address Line 1 + Address Line 2'] || '';
+
+    console.log(`[INCOMPLETE AIRTABLE] email: "${email}"`);
+    console.log(`[INCOMPLETE AIRTABLE] phone: "${phone}"`);
+    console.log(`[INCOMPLETE AIRTABLE] address: "${address}"`);
+    
+
     const fields = {
-      'client_id': process.env.CLIENT_ID || 'default_client',
-      'upload_id': uploadId || Date.now().toString(),
-      'record_id': `REC_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      'first_name': firstName,
-      'last_name': lastName,
-      'email': emp['E-mail Address'] || '',
-      'phone': emp['Home Phone (Formatted)'] || emp['Phone'] || '',
-      'address': emp['Address Line 1 + Address Line 2'] || '',
-      'company': emp['Organization'] || '',
-      'date_of_birth': toDate(emp['Date of Birth']),
-      'reason': reason,
+      'client_id':           process.env.CLIENT_ID || 'default_client',
+      'upload_id':           uploadId || Date.now().toString(),
+      'record_id':           `REC_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      'first_name':          firstName,
+      'last_name':           lastName,
+      'email':               email,
+      'phone':               phone,
+     'address':             address,
+      'date_of_birth':       toDate(emp['Date of Birth']) || '',
+      'reason':              reason,
       'pdl_response_status': pdlStatus,
-      'pdl_error_message': errorMessage,
-      'date_flagged': new Date().toISOString().split('T')[0],
-      'review_status': 'Pending Review',
-      'admin_notes': ''
+      'pdl_error_message':   errorMessage,
+      'date_flagged':        new Date().toISOString().split('T')[0],
+      'review_status':       'Pending Review',
+      'admin_notes':         ''
     };
 
+    if (isPreHire) {
+      delete fields['date_of_birth'];
+      delete fields['admin_notes'];
+    }
+    console.log(`[INCOMPLETE AIRTABLE] fields to save: ${JSON.stringify(fields)}`);
+    console.log(`[INCOMPLETE AIRTABLE] Calling table.create...`);
+
     await table.create(fields);
-    console.log(`✅ Airtable (Incomplete): ${employeeName} - Reason: ${reason}`);
+    console.log(`✅ [INCOMPLETE AIRTABLE] SUCCESS (${isPreHire ? 'PreHire' : 'Employee'}): ${employeeName} - Reason: ${reason}`);
   } catch (error) {
-    console.error(`❌ Airtable error (Incomplete) for ${emp['Employee Name (Last Suffix, First MI)']}:`, error.message);
+    const nameKey = isPreHire ? 'Candidate (Last, Suffix First MI)' : 'Employee Name (Last Suffix, First MI)';
+    console.error(`❌ [INCOMPLETE AIRTABLE] CATCH ERROR for ${emp[nameKey]}: ${error.message}`);
+    console.error(`❌ [INCOMPLETE AIRTABLE] Full error:`, error);
   }
+
+  console.log(`[INCOMPLETE AIRTABLE] ========== END ==========\n`);
 }
 
-async function saveEnrichedSocialMediaToAirtable(email, socialData, matchConfidence) {
+
+async function saveEnrichedSocialMediaToAirtable(email, socialData, matchConfidence, isPreHire = false) {
   try {
     const Airtable = require('airtable');
     const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
-    const table = base(process.env.AIRTABLE_ENRICHED_TABLE_ID);
+    const table = base(isPreHire ? process.env.AIRTABLE_PREHIRE_SOCIAL : process.env.AIRTABLE_ENRICHED_TABLE_ID);
 
     const fields = {
       'email': email || '',
@@ -953,8 +1073,13 @@ async function saveEnrichedSocialMediaToAirtable(email, socialData, matchConfide
 
 
 async function processPreHireCandidates(candidates, user, inputFileName, recordCount) {
- console.log("PREHIRE YES")
-  // ─── Map pre-hire columns to standard employee columns ─────────────
+  console.log("PREHIRE YES");
+
+  // ─── Save original pre-hire data to Airtable BEFORE mapping ───────
+  for (const emp of candidates) {
+    await savePreHireFileDataToAirtable(emp);
+  }
+
   const mappedCandidates = candidates.map(emp => ({
     'Employee Name (Last Suffix, First MI)': emp['Candidate (Last, Suffix First MI)'] || '',
     'E-mail Address':                        emp['Email Address']     || '',
@@ -964,25 +1089,22 @@ async function processPreHireCandidates(candidates, user, inputFileName, recordC
     'Department':                            emp['Department Name']   || '',
     'Job Class':                             emp['Opportunity Title'] || emp['Source Job'] || '',
     'Job Code':                              emp['Source Job Code']   || '',
-
-    // ── These don't exist in pre-hire files — set safe defaults ──────
-    'Date of Birth':                  '',   // will be skipped by birth_date check — that's ok for prehire
+    'Date of Birth':                  '',
     'Hire Date':                      '',
     'Term Date':                      '',
-    'Finance Score (1-10)':           1,    // set to 1 so the "all scores 0" skip doesn't trigger
+    'Finance Score (1-10)':           1,
     'Schedule Score (1-10)':          1,
     'Work Life Balance Score (1-10)': 1,
     'Family Score (1-10)':            1,
     'Distance (Miles)':               0,
     'Division':                       '',
     'Salary Range':                   '',
-
     isPreHire: true,
   }));
-  // ───────────────────────────────────────────────────────────────────
 
   return processEmployees(mappedCandidates, user, inputFileName, recordCount);
 }
+
 
 
 module.exports = { processEmployees, processPreHireCandidates, fetchAllSocialMediaPosts, keywordData, cleanText };
