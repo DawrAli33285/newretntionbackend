@@ -484,7 +484,7 @@ async function processEmployees(employees, user, inputFileName, recordCount) {
 
 
       }
-
+      await sleep(1000);
       console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
       console.log(`[EMP ${empIndex + 1}] PDL matches count: ${data?.data?.matches?.length || 0}`);
 
