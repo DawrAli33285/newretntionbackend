@@ -1053,59 +1053,59 @@ accept: 'application/json',
 }
 };
 
-// console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
-// await sleep(1200);
-// let data;
-// try {
-// data = await axios.request(options);
-// console.log("pdl DATA")
-// console.log(JSON.stringify(data.data)) // only the response body, not the full Axios object
-// console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
-// } catch (pdlError) {
-// const status = pdlError.response?.status;
-// const message = pdlError.response?.data?.error?.message || pdlError.message;
+console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
+await sleep(1200);
+let data;
+try {
+data = await axios.request(options);
+console.log("pdl DATA")
+console.log(JSON.stringify(data.data)) // only the response body, not the full Axios object
+console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
+} catch (pdlError) {
+const status = pdlError.response?.status;
+const message = pdlError.response?.data?.error?.message || pdlError.message;
 
-// console.log(`[EMP ${empIndex + 1}] ❌ PDL API error — status: ${status}, message: ${message}`);
+console.log(`[EMP ${empIndex + 1}] ❌ PDL API error — status: ${status}, message: ${message}`);
 
-// // Save to Airtable Incomplete Records
-// await saveIncompleteRecordToAirtable(emp, {
-// status: status,
-// message: message
-// }, inputFileName, emp.isPreHire);
-// console.log(`[ENRICHED] isPreHire: ${emp.isPreHire}, status: ${status}, email: ${emp['E-mail Address']}`);
-// console.log(`[ENRICHED] Will save enriched? ${emp.isPreHire ? 'YES - pre-hire path' : 'NO - not pre-hire'}`);
-
-
-// if (status === 402) {
-// console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota exceeded. Aborting.`);
-// break;
-// }
-// if (status === 429) {
-// console.log(`[EMP ${empIndex + 1}] ⏳ Rate limit — skipping and continuing.`);
-// const defaultResult = createDefaultResult(emp);
-// results.push(defaultResult);
-// continue;
-// }
-// const defaultResult = createDefaultResult(emp);
-// results.push(defaultResult);
-// try {
-// if (emp.isPreHire) {
-// await PreHireRetentionData.create(defaultResult);
-// } else {
-// await RetentionData.create(defaultResult);
-// }
-// } catch (dbError) {
-// if (dbError.code === 11000) {
-// console.log(`Duplicate email skipped: ${dbError.message}`);
-// } else {
-// console.log(`Error saving default result: ${dbError.message}`);
-// }
-
-// }
-// continue;
+// Save to Airtable Incomplete Records
+await saveIncompleteRecordToAirtable(emp, {
+status: status,
+message: message
+}, inputFileName, emp.isPreHire);
+console.log(`[ENRICHED] isPreHire: ${emp.isPreHire}, status: ${status}, email: ${emp['E-mail Address']}`);
+console.log(`[ENRICHED] Will save enriched? ${emp.isPreHire ? 'YES - pre-hire path' : 'NO - not pre-hire'}`);
 
 
-// }
+if (status === 402) {
+console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota exceeded. Aborting.`);
+break;
+}
+if (status === 429) {
+console.log(`[EMP ${empIndex + 1}] ⏳ Rate limit — skipping and continuing.`);
+const defaultResult = createDefaultResult(emp);
+results.push(defaultResult);
+continue;
+}
+const defaultResult = createDefaultResult(emp);
+results.push(defaultResult);
+try {
+if (emp.isPreHire) {
+await PreHireRetentionData.create(defaultResult);
+} else {
+await RetentionData.create(defaultResult);
+}
+} catch (dbError) {
+if (dbError.code === 11000) {
+console.log(`Duplicate email skipped: ${dbError.message}`);
+} else {
+console.log(`Error saving default result: ${dbError.message}`);
+}
+
+}
+continue;
+
+
+}
 // await sleep(1000);
 // console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
 // console.log(`[EMP ${empIndex + 1}] PDL matches count: ${data?.data?.matches?.length || 0}`);
