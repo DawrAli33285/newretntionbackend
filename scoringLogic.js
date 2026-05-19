@@ -1407,14 +1407,14 @@ const passcode = generateUniquePasscode();
 const outputFileName = `/tmp/public/files/output_${Date.now()}.xlsx`;
 const outputPath = await generateOutputFile(results, outputFileName);
 
-// const fileEntry = await filemodel.create({
-//   file: inputFileName,
-//   user: user._id || user,
-//   paid: true,
-//   passcode: passcode,
-//   output:outputPath,
-//   recordCount
-// });
+const fileEntry = await filemodel.create({
+  file: inputFileName,
+  user: user._id || user,
+  paid: true,
+  passcode: passcode,
+  output:outputPath,
+  recordCount
+});
 
 
 
