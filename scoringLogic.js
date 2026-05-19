@@ -416,10 +416,7 @@ return highest[0];
 
 
 async function generateOutputFile(results, outputFileName) {
-if (!results || results.length === 0) {
-console.log('[OUTPUT] No results to generate file from, skipping.');
-return null;
-}
+
 const outputData = results.map((emp, index) => ({
 'Employee Number': index + 1,
 'Employee Name': emp.name,
@@ -1421,14 +1418,14 @@ const passcode = generateUniquePasscode();
 const outputFileName = `/tmp/public/files/output_${Date.now()}.csv`;
 const outputPath = await generateOutputFile(results, outputFileName);
 
-const fileEntry = await filemodel.create({
-file: inputFileName,
-user: user._id || user,
-paid: true,
-passcode: passcode,
-output:outputPath,
-recordCount
-});
+// const fileEntry = await filemodel.create({
+// file: inputFileName,
+// user: user._id || user,
+// paid: true,
+// passcode: passcode,
+// output:outputPath,
+// recordCount
+// });
 
 
 return {results,passcode};
