@@ -416,6 +416,10 @@ return highest[0];
 
 
 async function generateOutputFile(results, outputFileName) {
+  if (!results || results.length === 0) {
+    console.log('[OUTPUT] No results to generate file from, skipping.');
+    return null;
+  }
 const outputData = results.map((emp, index) => ({
 'Employee Number': index + 1,
 'Employee Name': emp.name,
