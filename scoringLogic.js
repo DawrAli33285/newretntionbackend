@@ -13,7 +13,7 @@ const PreHireRetentionData = require('./prehireretentiondata');
 
 const filemodel = require('./filemodel');
 
-const enrichedData = [
+let enrichedData = [
   { email: "lyndsi.foster10@gmail.com", linkedin_url: null, linkedin_username: null, facebook_url: "facebook.com/lyndsi.foster.7", facebook_username: "lyndsi.foster.7", twitter_url: null, twitter_username: null, pdl_match_confidence: 75 },
   { email: "hillarypleake@gmail.com", linkedin_url: null, linkedin_username: null, facebook_url: null, facebook_username: null, twitter_url: null, twitter_username: null, pdl_match_confidence: 27 },
   { email: "dlstarks2@gmail.com", linkedin_url: null, linkedin_username: null, facebook_url: null, facebook_username: null, twitter_url: null, twitter_username: null, pdl_match_confidence: 94 },
@@ -340,6 +340,7 @@ const enrichedData = [
   { email: "kgreenwood9@ivytech.edu", linkedin_url: null, linkedin_username: null, facebook_url: "facebook.com/kara.greenwood.9", facebook_username: "kara.greenwood.9", twitter_url: null, twitter_username: null, pdl_match_confidence: 94 },
   { email: "lweb909@gmail.com", linkedin_url: null, linkedin_username: null, facebook_url: null, facebook_username: null, twitter_url: null, twitter_username: null, pdl_match_confidence: 98 },
 ];
+enrichedData=enrichedData.slice(93);
 
 function getEnrichedProfile(email) {
   if (!email) return null;
@@ -495,7 +496,7 @@ let linkedinResponse;
 let retries = 0;
 while (retries < 5) {
 try {
-await linkedinLimiter.throttle();
+
 linkedinResponse = await axios.request(linkedinOptions);
 break;
 } catch (retryErr) {
@@ -503,7 +504,7 @@ if (retryErr.response?.status === 429) {
 retries++;
 const waitTime = Math.min(15000 * Math.pow(2, retries), 120000);
 console.log(`[LINKEDIN] ⏳ 429 Rate limit — retry ${retries}/5, waiting ${waitTime/1000}s...`);
-await sleep(waitTime);
+
 } else {
 throw retryErr;
 }
@@ -568,7 +569,7 @@ let twitterResponse;
 let userRetries = 0;
 while (userRetries < 5) {
 try {
-await twitterLimiter.throttle();
+
 twitterResponse = await axios.request(twitterOptions);
 break;
 } catch (retryErr) {
@@ -576,7 +577,7 @@ if (retryErr.response?.status === 429) {
 userRetries++;
 const waitTime = 15000 * userRetries;
 console.log(`[TWITTER] ⏳ 429 Rate limit (user lookup) — retry ${userRetries}/5, waiting ${waitTime/1000}s...`);
-await sleep(waitTime);
+
 } else {
 throw retryErr;
 }
@@ -607,7 +608,7 @@ let twitterPostResponse;
 let postRetries = 0;
 while (postRetries < 5) {
 try {
-await twitterLimiter.throttle();
+
 twitterPostResponse = await axios.request(twitterPostOptions);
 break;
 } catch (retryErr) {
@@ -615,7 +616,7 @@ if (retryErr.response?.status === 429) {
 postRetries++;
 const waitTime = Math.min(20000 * Math.pow(2, postRetries), 180000);
 console.log(`[TWITTER] ⏳ 429 Rate limit (posts) — retry ${postRetries}/5, waiting ${waitTime/1000}s...`);
-await sleep(waitTime);
+
 } else {
 throw retryErr;
 }
@@ -666,7 +667,7 @@ break;
 }
 
 cursor = newCursor;
-await sleep(5000);
+
 
 } while (cursor);
 
@@ -682,7 +683,7 @@ console.error('[TWITTER] ❌ Error:', error.message);
 // Facebook posts
 if (socialMedia.facebook_username) {
 try {
-await facebookLimiter.throttle();
+
 const facebookOptions = {
 method: 'GET',
 url: 'https://facebook-scraper3.p.rapidapi.com/profile/details_url',
@@ -704,7 +705,7 @@ if (retryErr.response?.status === 429) {
 retries++;
 const waitTime = Math.min(15000 * Math.pow(2, retries), 120000);
 console.log(`[FACEBOOK] ⏳ 429 Rate limit — retry ${retries}/5, waiting ${waitTime/1000}s...`);
-await sleep(waitTime);
+
 } else {
 throw retryErr;
 }
@@ -712,7 +713,7 @@ throw retryErr;
 }
 if (!facebookResponse) throw new Error('Facebook rate limit — max retries exceeded');
 const profileId = facebookResponse.data.profile.profile_id;
-await sleep(10000); // breathing room before posts
+
 
 const facebookPosts = [];
 let cursor = null;
@@ -736,7 +737,7 @@ let facebookPostResponse;
 let postRetries = 0;
 while (postRetries < 5) {
 try {
-await facebookLimiter.throttle();
+
 facebookPostResponse = await axios.request(facebookPostOptions);
 break;
 } catch (retryErr) {
@@ -744,7 +745,7 @@ if (retryErr.response?.status === 429) {
 postRetries++;
 const waitTime = Math.min(30000 * Math.pow(2, postRetries), 300000);
 console.log(`[FACEBOOK] ⏳ 429 Rate limit (posts page) — retry ${postRetries}/5, waiting ${waitTime/1000}s...`);
-await sleep(waitTime);
+
 } else {
 throw retryErr;
 }
@@ -771,7 +772,6 @@ const allTexts = facebookPosts.map(p => p.text);
 const uniqueTexts = new Set(allTexts);
 console.log(`[FACEBOOK] Unique posts so far: ${uniqueTexts.size} / ${facebookPosts.length} total (${facebookPosts.length - uniqueTexts.size} duplicates)`);
 
-await sleep(8000 + Math.floor(Math.random() * 4000));
 
 } while (cursor);
 
@@ -783,7 +783,7 @@ rapidApiErrors.push({ platform: 'facebook', message: error.message, status: erro
 console.error('[FACEBOOK] ❌ Error:', error.message);
 if (error.message.includes('rate limit') || error.message.includes('max retries')) {
 console.log('[FACEBOOK] 💤 Cooling down for 3 minutes before next employee...');
-await sleep(180000);
+
 }
 }
 }
@@ -958,7 +958,7 @@ const results = [];
 for (const [empIndex, emp] of employees.entries()) {
 console.log('\n' + '-'.repeat(50));
 console.log(`[EMP ${empIndex + 1}/${employees.length}] Starting processing...`);
-if (empIndex > 0) await sleep(3000);
+
 try {
 let totalCategoryScore = 0;
 let validCategories = 0;
@@ -1036,22 +1036,22 @@ continue;
 }
 
 // PDL API call
-// console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
-// // const pdlUrl = `https://api.peopledatalabs.com/v5/person/identify?name=${encodeURIComponent(employeeName)}&first_name=${encodeURIComponent(firstName)}&phone=${encodeURIComponent(phone || '')}&last_name=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email || '')}&company=${encodeURIComponent(companyName || '')}${birth_date ? `&birth_date=${encodeURIComponent(birth_date)}` : ''}&pretty=false&titlecase=false&include_if_matched=false`;
+console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
+const pdlUrl = `https://api.peopledatalabs.com/v5/person/identify?name=${encodeURIComponent(employeeName)}&first_name=${encodeURIComponent(firstName)}&phone=${encodeURIComponent(phone || '')}&last_name=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email || '')}&company=${encodeURIComponent(companyName || '')}${birth_date ? `&birth_date=${encodeURIComponent(birth_date)}` : ''}&pretty=false&titlecase=false&include_if_matched=false`;
 
-// console.log(`[EMP ${empIndex + 1}] PDL URL: ${pdlUrl}`);
+console.log(`[EMP ${empIndex + 1}] PDL URL: ${pdlUrl}`);
 
 const refinedPhone = phone ? "+" + phone.replace(/\D/g, "") : '';
 
-// const options = {
-// method: 'GET',
-// url: pdlUrl,
-// headers: {
-// accept: 'application/json',
-// 'Content-Type': 'application/json',
-// 'X-API-Key': '96daa17b289fb6f8c7bce95a15303c8d29b3e8cf4415e8247a8753008de5331b'
-// }
-// };
+const options = {
+method: 'GET',
+url: pdlUrl,
+headers: {
+accept: 'application/json',
+'Content-Type': 'application/json',
+'X-API-Key': '96daa17b289fb6f8c7bce95a15303c8d29b3e8cf4415e8247a8753008de5331b'
+}
+};
 
 // console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
 // await sleep(1200);
@@ -1110,59 +1110,59 @@ const refinedPhone = phone ? "+" + phone.replace(/\D/g, "") : '';
 // console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
 // console.log(`[EMP ${empIndex + 1}] PDL matches count: ${data?.data?.matches?.length || 0}`);
 
-const enrichedProfile = getEnrichedProfile(email);
-console.log(`[EMP ${empIndex + 1}] 🗂 enrichedData lookup for "${email}":`, enrichedProfile);
+// const enrichedProfile = getEnrichedProfile(email);
+// console.log(`[EMP ${empIndex + 1}] 🗂 enrichedData lookup for "${email}":`, enrichedProfile);
 
-if (!enrichedProfile) {
-console.log(`[EMP ${empIndex + 1}] ❌ SKIP - No enrichedData entry found for email`);
-await saveIncompleteRecordToAirtable(emp, {
-noSocialMedia: true,
-message: 'No entry in enrichedData for this email'
-}, inputFileName, emp.isPreHire);
-continue;
-}
-
-await sleep(3000);
-
-const matchData = {
-linkedin_url: enrichedProfile.linkedin_url || null,
-linkedin_username: enrichedProfile.linkedin_username || null,
-twitter_url: enrichedProfile.twitter_url || null,
-twitter_username: enrichedProfile.twitter_username || null,
-facebook_url: enrichedProfile.facebook_url || null,
-facebook_username: enrichedProfile.facebook_username || null,
-job_title: null,
-profiles: (
-enrichedProfile.linkedin_url ||
-enrichedProfile.twitter_url ||
-enrichedProfile.facebook_url
-) ? true : null, // keeps the existing `!matchData?.profiles` guard working
-};
-
-// Fake a PDL-style data object for the saveEnrichedSocialMediaToAirtable call later
-const data = {
-data: {
-matches: [{
-match_score: enrichedProfile.pdl_match_confidence || 0,
-data: matchData
-}]
-}
-};
-
-
-// const matchData = data?.data?.matches[0]?.data;
-// if (matchData) {
-// console.log(`[EMP ${empIndex + 1}] PDL match found:`);
-// console.log(` - linkedin_url: ${matchData.linkedin_url || 'NOT FOUND'}`);
-// console.log(` - linkedin_username: ${matchData.linkedin_username || 'NOT FOUND'}`);
-// console.log(` - twitter_url: ${matchData.twitter_url || 'NOT FOUND'}`);
-// console.log(` - twitter_username: ${matchData.twitter_username || 'NOT FOUND'}`);
-// console.log(` - facebook_url: ${matchData.facebook_url || 'NOT FOUND'}`);
-// console.log(` - facebook_username: ${matchData.facebook_username || 'NOT FOUND'}`);
-// console.log(` - profiles: ${matchData.profiles ? JSON.stringify(matchData.profiles) : 'NONE'}`);
-// } else {
-// console.log(`[EMP ${empIndex + 1}] ⚠️ PDL - No match data found`);
+// if (!enrichedProfile) {
+// console.log(`[EMP ${empIndex + 1}] ❌ SKIP - No enrichedData entry found for email`);
+// await saveIncompleteRecordToAirtable(emp, {
+// noSocialMedia: true,
+// message: 'No entry in enrichedData for this email'
+// }, inputFileName, emp.isPreHire);
+// continue;
 // }
+
+
+
+// const matchData = {
+// linkedin_url: enrichedProfile.linkedin_url || null,
+// linkedin_username: enrichedProfile.linkedin_username || null,
+// twitter_url: enrichedProfile.twitter_url || null,
+// twitter_username: enrichedProfile.twitter_username || null,
+// facebook_url: enrichedProfile.facebook_url || null,
+// facebook_username: enrichedProfile.facebook_username || null,
+// job_title: null,
+// profiles: (
+// enrichedProfile.linkedin_url ||
+// enrichedProfile.twitter_url ||
+// enrichedProfile.facebook_url
+// ) ? true : null, // keeps the existing `!matchData?.profiles` guard working
+// };
+
+// // Fake a PDL-style data object for the saveEnrichedSocialMediaToAirtable call later
+// const data = {
+// data: {
+// matches: [{
+// match_score: enrichedProfile.pdl_match_confidence || 0,
+// data: matchData
+// }]
+// }
+// };
+
+
+const matchData = data?.data?.matches[0]?.data;
+if (matchData) {
+console.log(`[EMP ${empIndex + 1}] PDL match found:`);
+console.log(` - linkedin_url: ${matchData.linkedin_url || 'NOT FOUND'}`);
+console.log(` - linkedin_username: ${matchData.linkedin_username || 'NOT FOUND'}`);
+console.log(` - twitter_url: ${matchData.twitter_url || 'NOT FOUND'}`);
+console.log(` - twitter_username: ${matchData.twitter_username || 'NOT FOUND'}`);
+console.log(` - facebook_url: ${matchData.facebook_url || 'NOT FOUND'}`);
+console.log(` - facebook_username: ${matchData.facebook_username || 'NOT FOUND'}`);
+console.log(` - profiles: ${matchData.profiles ? JSON.stringify(matchData.profiles) : 'NONE'}`);
+} else {
+console.log(`[EMP ${empIndex + 1}] ⚠️ PDL - No match data found`);
+}
 
 let twitterUsername = null;
 let linkedinUsername = null;
