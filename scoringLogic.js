@@ -416,47 +416,36 @@ return highest[0];
 
 
 async function generateOutputFile(results, outputFileName) {
+  const outputData = results.map((emp, index) => ({
+    'Employee Number': index + 1,
+    'Employee Name': emp.name,
+    'Work Life Balance': emp.categoryScores['family & work-life balance'] || 0,
+    'Communication': emp.categoryScores['communication & leadership'] || 0,
+    'Financial': emp.categoryScores['money & compensation'] || 0,
+    'Schedule': emp.categoryScores['schedule & workload'] || 0,
+    'Final Score': emp.overallScore || 0,
+    'Improvement Area': '',
+    'Risk Level': determineRiskLevel(emp.overallScore),
+    'Possible Improvement': calculatePossibleImprovement(emp.categoryScores),
+    'Category of Concern': determineCategoryOfConcern(emp.categoryScores)
+  }));
 
-const outputData = results.map((emp, index) => ({
-'Employee Number': index + 1,
-'Employee Name': emp.name,
-'Work Life Balance': emp.categoryScores['work life'] || 0,
-'Communication': emp.categoryScores['family'] || 0,
-'Financial': emp.categoryScores['finances'] || 0,
-'Schedule': emp.categoryScores['schedule'] || 0,
-'Final Score': emp.overallScore || 0,
-'Improvement Area': '',
-'Risk Level': determineRiskLevel(emp.overallScore),
-'Possible Improvement': calculatePossibleImprovement(emp.categoryScores),
-'Category of Concern': determineCategoryOfConcern(emp.categoryScores)
-}));
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(outputData);
+  XLSX.utils.book_append_sheet(wb, ws, 'Employee Risk Analysis');
+  
+  // Use the full path that's passed in
+  const dir = path.dirname(outputFileName);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  
+  XLSX.writeFile(wb, outputFileName);
+  let cloudfile=await cloudinaryUpload(outputFileName)
 
-// ─── Build CSV string ───────────────────────────────────────────
-const headers = Object.keys(outputData[0]);
-const escapeCell = (val) => {
-const str = String(val ?? '');
-// wrap in quotes if value contains comma, quote, or newline
-return str.includes(',') || str.includes('"') || str.includes('\n')
-? `"${str.replace(/"/g, '""')}"`
-: str;
-};
-const csvRows = [
-headers.map(escapeCell).join(','),
-...outputData.map(row => headers.map(h => escapeCell(row[h])).join(','))
-];
-const csvString = csvRows.join('\n');
-
-// ─── Write CSV to disk ──────────────────────────────────────────
-const csvFileName = outputFileName.replace(/\.xlsx$/, '.csv');
-const dir = path.dirname(csvFileName);
-if (!fs.existsSync(dir)) {
-fs.mkdirSync(dir, { recursive: true });
+  return cloudfile.url
 }
-fs.writeFileSync(csvFileName, csvString, 'utf8');
 
-let cloudfile = await cloudinaryUpload(csvFileName);
-return cloudfile.url;
-}
 
 
 // Optimized function to fetch all posts once per employee
@@ -1415,17 +1404,18 @@ console.log("RESULTS AFTER FAILING")
 console.log(results)
 const passcode = generateUniquePasscode();
 
-const outputFileName = `/tmp/public/files/output_${Date.now()}.csv`;
+const outputFileName = `/tmp/public/files/output_${Date.now()}.xlsx`;
 const outputPath = await generateOutputFile(results, outputFileName);
 
-// const fileEntry = await filemodel.create({
-// file: inputFileName,
-// user: user._id || user,
-// paid: true,
-// passcode: passcode,
-// output:outputPath,
-// recordCount
-// });
+const fileEntry = await filemodel.create({
+  file: inputFileName,
+  user: user._id || user,
+  paid: true,
+  passcode: passcode,
+  output:outputPath,
+  recordCount
+});
+
 
 
 return {results,passcode};
