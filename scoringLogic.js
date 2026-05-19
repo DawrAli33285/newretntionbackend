@@ -1416,6 +1416,10 @@ console.log(`Error saving default result to database: ${dbError.message}`);
 
 console.log("RESULTS AFTER FAILING")
 console.log(results)
+if (!results || results.length === 0) {
+  console.log('[PROCESS] No results — all records were skipped/duplicates.');
+  throw new Error('All records in this file are duplicates. No new records were processed.');
+}
 const passcode = generateUniquePasscode();
 
 const outputFileName = `/tmp/public/files/output_${Date.now()}.csv`;
