@@ -1,0 +1,5519 @@
+{
+    "Schedule": {
+      "Another late night at the office": {
+        "risk_score": 1.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "Just got off a 12-hour shift": {
+        "risk_score": 3.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Can't keep up with the deadlines": {
+        "risk_score": 1.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Back-to-back meetings again": {
+        "risk_score": 5.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "No time to breathe lately": {
+        "risk_score": 2.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Overloaded with work": {
+        "risk_score": 2.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Drowning in tasks": {
+        "risk_score": 5.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "So much for lunch breaks": {
+        "risk_score": 1.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "Weekend plans = working again": {
+        "risk_score": 3.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Work never ends": {
+        "risk_score": 2.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Feeling exhausted from work": {
+        "risk_score": 4.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "Too much on my plate": {
+        "risk_score": 4.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "I need a break from this chaos": {
+        "risk_score": 3.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "Just pulled another all-nighter": {
+        "risk_score": 4.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Why do I have 3 jobs in 1?": {
+        "risk_score": 2.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "Burnout is real": {
+        "risk_score": 4.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "This workload is insane": {
+        "risk_score": 3.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Not enough hours in the day": {
+        "risk_score": 3.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Endless Zoom calls": {
+        "risk_score": 4.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "I'm not a robot": {
+        "risk_score": 3.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Overtime with no extra pay": {
+        "risk_score": 2.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "This isn't sustainable": {
+        "risk_score": 1.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "No downtime anymore": {
+        "risk_score": 1.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Feeling overwhelmed at work": {
+        "risk_score": 5.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Need better task management": {
+        "risk_score": 2.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "Too much micromanagement": {
+        "risk_score": 4.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Unrealistic expectations": {
+        "risk_score": 2.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "on time": {
+        "risk_score": 9.17,
+        "final_score": null,
+        "risk_level": null
+      },
+      "unpredictable schedule": {
+        "risk_score": 1.06,
+        "final_score": null,
+        "risk_level": null
+      }
+    },
+    "Financial": {
+      "Still waiting on that raise": {
+        "risk_score": 4.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "They underpay us here": {
+        "risk_score": 2.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Not worth the paycheck": {
+        "risk_score": 3.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Thinking about freelancing": {
+        "risk_score": 4.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Gotta start a side hustle": {
+        "risk_score": 2.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "This job doesn't pay the bills": {
+        "risk_score": 5.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Can't survive on this salary": {
+        "risk_score": 4.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "No bonuses this year": {
+        "risk_score": 4.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "They say 'budget cuts' again": {
+        "risk_score": 1.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Rent is more than my paycheck": {
+        "risk_score": 5.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "How do people live off this?": {
+        "risk_score": 3.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Financial stress is real": {
+        "risk_score": 3.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Time to look for a higher paying job": {
+        "risk_score": 1.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Tired of living paycheck to paycheck": {
+        "risk_score": 1.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "They expect more, pay less": {
+        "risk_score": 1.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "No cost of living adjustment": {
+        "risk_score": 3.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Tired of being undervalued": {
+        "risk_score": 4.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Can't afford to stay here": {
+        "risk_score": 4.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Benefits cut again": {
+        "risk_score": 3.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "No merit increase, again": {
+        "risk_score": 2.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "They said raises are frozen": {
+        "risk_score": 4.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Where's the appreciation?": {
+        "risk_score": 1.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "My side gig makes more": {
+        "risk_score": 2.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "Gotta pick up weekend work": {
+        "risk_score": 5.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "Not feeling compensated fairly": {
+        "risk_score": 2.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "New job, better pay?": {
+        "risk_score": 2.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "This raise is a joke": {
+        "risk_score": 5.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Why am I still here?": {
+        "risk_score": 1.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "paid well": {
+        "risk_score": 9.45,
+        "final_score": null,
+        "risk_level": null
+      },
+      "underpaid": {
+        "risk_score": 2.05,
+        "final_score": null,
+        "risk_level": null
+      }
+    },
+    "JobSatisfaction": {
+      "Hate Mondays": {
+        "risk_score": 2.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Just here for the check": {
+        "risk_score": 1.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Love what I do": {
+        "risk_score": 5.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Feeling stuck in my role": {
+        "risk_score": 1.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "Another pointless meeting": {
+        "risk_score": 5.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "This place is toxic": {
+        "risk_score": 1.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "No motivation to log in": {
+        "risk_score": 4.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Micromanaged to death": {
+        "risk_score": 1.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "My manager doesn't listen": {
+        "risk_score": 3.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "No growth opportunities": {
+        "risk_score": 1.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Nothing changes around here": {
+        "risk_score": 5.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Why do I even try?": {
+        "risk_score": 5.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Burnout setting in": {
+        "risk_score": 1.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Thinking about quitting": {
+        "risk_score": 4.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "I dread going in tomorrow": {
+        "risk_score": 4.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Feels like Groundhog Day": {
+        "risk_score": 1.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "I'm just a cog in the machine": {
+        "risk_score": 3.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "This isn't fulfilling anymore": {
+        "risk_score": 3.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Wasting my potential": {
+        "risk_score": 4.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "They don't value employees": {
+        "risk_score": 1.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Where's the innovation?": {
+        "risk_score": 4.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Wish I felt challenged": {
+        "risk_score": 5.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Lost my drive lately": {
+        "risk_score": 5.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Stuck in a dead-end job": {
+        "risk_score": 4.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Looking for purpose": {
+        "risk_score": 3.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "This culture is depressing": {
+        "risk_score": 2.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Lack of transparency": {
+        "risk_score": 2.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Not sure I belong here": {
+        "risk_score": 5.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      }
+    },
+    "WorkLifeBalance": {
+      "Missed another family dinner": {
+        "risk_score": 4.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Work took over my weekend": {
+        "risk_score": 4.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Wish I had more time with my kids": {
+        "risk_score": 1.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "No such thing as work-life balance": {
+        "risk_score": 2.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "Can't take a break without guilt": {
+        "risk_score": 1.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Always working, never living": {
+        "risk_score": 5.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Kids grow up so fast… and I'm not there": {
+        "risk_score": 2.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Need more family time": {
+        "risk_score": 2.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Work comes before everything, apparently": {
+        "risk_score": 4.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Skipped vacation again": {
+        "risk_score": 1.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Wish I had flexibility": {
+        "risk_score": 1.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Guilt-tripped for taking PTO": {
+        "risk_score": 3.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Remote work saved my sanity": {
+        "risk_score": 3.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Thankful for my flexible schedule": {
+        "risk_score": 1.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Tired of missing milestones": {
+        "risk_score": 1.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "My job is my life right now": {
+        "risk_score": 2.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "They expect us to be always on": {
+        "risk_score": 3.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "Just need a day off": {
+        "risk_score": 4.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Balance? What's that?": {
+        "risk_score": 5.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "Sick kid, still had to work": {
+        "risk_score": 2.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "No support for parents here": {
+        "risk_score": 2.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "Wish I could clock out mentally": {
+        "risk_score": 5.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Need a life outside of work": {
+        "risk_score": 1.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Can't be a parent and an employee": {
+        "risk_score": 3.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "They don't understand real life": {
+        "risk_score": 2.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Overworked and overstressed": {
+        "risk_score": 4.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Home feels like a second office": {
+        "risk_score": 3.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "flexible schedule": {
+        "risk_score": 8.55,
+        "final_score": null,
+        "risk_level": null
+      },
+      "work from home": {
+        "risk_score": 7.33,
+        "final_score": null,
+        "risk_level": null
+      },
+      "remote work": {
+        "risk_score": 7.02,
+        "final_score": null,
+        "risk_level": null
+      },
+      "supportive manager": {
+        "risk_score": 7.25,
+        "final_score": null,
+        "risk_level": null
+      },
+      "good balance": {
+        "risk_score": 8.95,
+        "final_score": null,
+        "risk_level": null
+      },
+      "healthy boundaries": {
+        "risk_score": 8.5,
+        "final_score": null,
+        "risk_level": null
+      },
+      "no overtime": {
+        "risk_score": 8.77,
+        "final_score": null,
+        "risk_level": null
+      },
+      "time off": {
+        "risk_score": 8.42,
+        "final_score": null,
+        "risk_level": null
+      },
+      "paid leave": {
+        "risk_score": 8.28,
+        "final_score": null,
+        "risk_level": null
+      },
+      "mental health support": {
+        "risk_score": 9.65,
+        "final_score": null,
+        "risk_level": null
+      },
+      "burned out": {
+        "risk_score": 2.83,
+        "final_score": null,
+        "risk_level": null
+      }
+    },
+    "Communication": {
+      "No one communicates here": {
+        "risk_score": 1.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "I found out from Slack… again": {
+        "risk_score": 2.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Leadership is out of touch": {
+        "risk_score": 3.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "No direction, just vibes": {
+        "risk_score": 2.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Wish we had better meetings": {
+        "risk_score": 2.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "No feedback, just criticism": {
+        "risk_score": 1.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Our manager is MIA": {
+        "risk_score": 2.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Tired of vague goals": {
+        "risk_score": 3.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "No one knows what's going on": {
+        "risk_score": 2.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Mixed messages from the top": {
+        "risk_score": 4.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "We need better communication": {
+        "risk_score": 2.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "No team alignment": {
+        "risk_score": 5.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Always in the dark": {
+        "risk_score": 1.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Nobody listens here": {
+        "risk_score": 5.0,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "Everything is last-minute": {
+        "risk_score": 1.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Leadership needs leadership": {
+        "risk_score": 4.0,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "Talked over again in the meeting": {
+        "risk_score": 3.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "We just wing it here": {
+        "risk_score": 3.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "No follow-up after meetings": {
+        "risk_score": 5.0,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "I don't feel heard": {
+        "risk_score": 3.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "They never ask for input": {
+        "risk_score": 3.0,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Too much red tape": {
+        "risk_score": 1.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "Communication is one-way": {
+        "risk_score": 1.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Poor onboarding experience": {
+        "risk_score": 2.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Tired of being left out": {
+        "risk_score": 3.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "We need transparency": {
+        "risk_score": 4.0,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "Can't get a straight answer": {
+        "risk_score": 1.0,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "Too many silos": {
+        "risk_score": 5.0,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "open dialogue": {
+        "risk_score": 8.16,
+        "final_score": null,
+        "risk_level": null
+      },
+      "poor communication": {
+        "risk_score": 3.04,
+        "final_score": null,
+        "risk_level": null
+      }
+    },
+    "General": {
+      "employee appreciation": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "feeling undervalued": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "burned out at work": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "exhausted after shift": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "overworked healthcare staff": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "toxic work culture": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "leadership support": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "lack of communication": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "staff morale": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "employee recognition": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "work stress": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "nurse burnout": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "employee wellness": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "career growth": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "promotion opportunities": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "unhappy at work": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "exhausted RN": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "staff retention": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "quiet quitting": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "disengaged employees": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "work frustration": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "toxic management": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "appreciation post": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "team culture": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "staffing shortage": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace conflict": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "employee support": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "work anxiety": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "poor scheduling": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "mandatory overtime": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "work life balance": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare burnout": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "management issues": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "underpaid employee": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "understaffed hospital": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "emotional exhaustion": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "employee fatigue": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "team appreciation": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "staff communication": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "employee empowerment": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "job dissatisfaction": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "shift exhaustion": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "leadership concerns": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "schedule frustration": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee loyalty": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "overwhelmed at work": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "no support at work": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "toxic coworkers": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "high workload": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "shift burnout": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "RN life": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "hospital shift": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "bedside nurse": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "patient care stress": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare staffing": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "medical assistant burnout": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "CNA burnout": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "clinical stress": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "nursing leadership": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare management": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "patient overload": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "difficult patients": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "charting frustration": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare scheduling": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "nursing support": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare retention": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "hospital staffing crisis": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "compassion fatigue": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "clinician burnout": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "exhausted healthcare worker": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare morale": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "nurse appreciation": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "frontline worker": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare teamwork": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "patient safety concerns": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "overworked nurse": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "staff scheduling issues": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "float pool frustration": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "long hospital shifts": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "burnout prevention": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "no days off": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "too many shifts": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "double shifts": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "overtime stress": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "rotating schedule": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "night shift struggle": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "weekend burnout": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "exhausted after work": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "no family time": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "missed holidays": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "shift swap": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "work schedule conflict": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "unpredictable hours": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "tired all the time": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "mental exhaustion": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "emotionally drained": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "struggling with schedule": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "time off denied": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "vacation denied": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "work stress overload": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "updating resume": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "job hunting": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "open to work": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "seeking new opportunities": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "interviewing elsewhere": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career transition": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "ready for change": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "leaving healthcare": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "considering resignation": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace frustration": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "resignation thoughts": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "exit interview": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "toxic employer": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "searching for better opportunities": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "burnout recovery": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "unhappy employee": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "career dissatisfaction": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "poor management support": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "no advancement opportunities": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee turnover": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "poor leadership": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "micromanagement": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "disconnected leadership": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "lack of transparency": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "unsupported staff": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "communication breakdown": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "favoritism at work": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "leadership burnout": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "ineffective manager": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "leadership development": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "management frustration": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "weak supervision": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "inconsistent leadership": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "hostile workplace": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "negative work environment": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "poor employee morale": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "accountability issues": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee feedback ignored": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "lack of recognition": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "workplace anxiety": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "emotional burnout": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "mental fatigue": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "stress management": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "mental wellness": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "overwhelmed employee": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "burnout symptoms": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare trauma": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "supportive team": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "positive culture": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "toxic environment": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "team bonding": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "workplace positivity": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "collaboration issues": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee engagement activities": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace motivation": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "team communication": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "workplace relationships": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "continuing education": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "certification goals": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career advancement": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "leadership training": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee mentorship": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "tuition reimbursement": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "professional growth": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "development opportunities": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "internal promotion": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "motivational workplace quotes": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee shoutout": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "stressful day at work": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "difficult shift": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "grateful for my team": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "exhausted but proud": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "healthcare heroes": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "another long shift": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "surviving night shift": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "tired healthcare worker": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "patient care excellence": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "workplace resilience": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career burnout": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "staffing support": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "retention strategy": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee advocacy": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "healthcare operations": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "shift scheduling": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "workplace wellbeing": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "staff engagement": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee experience": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare satisfaction": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "work exhaustion": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "emotional resilience": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee burnout recovery": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "toxic workplace": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "micromanaged": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee disengagement": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "overworked staff": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "understaffed team": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "team conflict": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "negative workplace culture": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career stagnation": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "limited advancement": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "promotion frustration": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "actively job hunting": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "open to new opportunities": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "work-life imbalance": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "poor management": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "hostile work environment": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee morale issues": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "feeling overwhelmed": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "stressful workplace": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "work overload": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "lack of support": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "professional frustration": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "workplace negativity": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "resentment at work": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "office politics": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee burnout": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "frustrated employee": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career uncertainty": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace stress": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee exhaustion": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "poor supervision": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "unfair treatment": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "long work hours": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "constant pressure": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "performance stress": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "leadership disconnect": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "lack of appreciation": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "team dysfunction": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "toxic boss": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "emotional stress": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "mental burnout": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "feeling stuck": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "job fatigue": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "employee conflict": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "employee wellness concerns": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "unmotivated employee": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "resentful employee": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career frustration": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "difficult manager": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "frustrated with leadership": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "stressful team environment": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "negative morale": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace resentment": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional burnout": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "workplace gossip": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee complaints": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "job insecurity": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "fear of layoffs": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "downsizing concerns": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "organizational instability": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "poor company culture": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "low engagement": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "employee withdrawal": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace isolation": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "lack of belonging": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "disengaged workforce": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "unhappy workplace": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career plateau": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "no growth opportunities": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "job stress overload": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "underappreciated employee": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "burned out professional": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "difficult work environment": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "high turnover workplace": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "lack of direction": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "confusing expectations": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "constant deadline pressure": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "poor employee experience": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "resentment toward management": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "stressful meetings": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "lack of accountability": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "team communication issues": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "negative employee sentiment": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "burnout warning signs": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "loss of motivation": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee fatigue syndrome": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "workplace pressure": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "professional exhaustion": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "frustration with coworkers": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "resentment toward leadership": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "lack of feedback": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "lack of career mobility": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "low workplace morale": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "disconnected teams": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee stress management": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "exhausted workforce": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "frustrated professional": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "negative work atmosphere": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "leadership inconsistency": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "management distrust": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career instability": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "professional dissatisfaction": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "feeling unsupported": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "unrecognized contributions": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "workplace disengagement": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "toxic team dynamics": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "constant stress": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "professional uncertainty": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "resentment about workload": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "lack of collaboration": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "poor team chemistry": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee dissatisfaction survey": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "professional stress": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "organizational frustration": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "workplace burnout culture": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "emotionally drained employee": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "poor employee retention": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "frustrating workplace policies": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career disappointment": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "understaffed department": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "job performance pressure": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "burned out manager": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "lack of mentorship": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "difficult workplace relationships": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "negative team culture": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "management communication problems": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "workplace tension": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "lack of trust at work": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional fatigue": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "workplace discouragement": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "low employee confidence": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "team morale decline": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "unhealthy workplace": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career frustration signals": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "withdrawn employee": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "workplace unhappiness": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "low workplace engagement": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "resentment over scheduling": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "poor organizational culture": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "workplace emotional exhaustion": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "difficult office environment": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "constant workplace conflict": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "job unhappiness": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee mental strain": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "low employee satisfaction": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career disengagement": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "management credibility issues": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "unmotivated workforce": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career stress": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "negative employee feedback": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "high-pressure environment": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "stressful corporate culture": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "burnout-related absenteeism": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "employee withdrawal signs": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "decreased productivity": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "low motivation at work": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "resentment toward company": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "employee frustration indicators": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "team burnout": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "professional discouragement": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "loss of workplace motivation": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "frustrated workforce": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "career fulfillment concerns": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional disengagement": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "low employee trust": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "unhappy corporate culture": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace burnout indicators": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "emotionally exhausted employee": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "burnout risk employee": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "workplace instability": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "employee morale decline": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "professional conflict": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "negative management style": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee disengagement indicators": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "difficult workplace culture": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career dissatisfaction indicators": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "workplace stress indicators": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "resentment over recognition": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "leadership frustration": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "team disconnect": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "poor employee communication": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "unhealthy company culture": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "negative professional outlook": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "frustrated office staff": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "professional burnout recovery": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "emotionally overwhelmed employee": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee stress indicators": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "resentment over workload": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "workplace negativity indicators": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career uncertainty concerns": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "employee frustration patterns": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "organizational burnout": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "professional dissatisfaction indicators": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "lack of workplace support": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "low employee morale indicators": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "resentment over promotions": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "workplace disengagement signs": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career frustration patterns": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee emotional fatigue": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "workplace pressure indicators": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "job dissatisfaction signals": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee burnout patterns": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "organizational stress": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "professional morale concerns": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "negative workplace interactions": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "employee resentment indicators": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "leadership communication issues": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "low team engagement": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "stress-related productivity decline": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace mental fatigue": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career motivation loss": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee emotional strain": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "burnout-prone workplace": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "workplace culture concerns": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "frustrated leadership team": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "professional uncertainty indicators": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "job fulfillment concerns": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee morale problems": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "toxic organizational culture": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career growth frustration": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "professional support concerns": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "organizational communication breakdown": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "team stress indicators": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "employee wellbeing concerns": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace emotional strain": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional motivation decline": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "stressful organizational dynamics": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "workplace frustration indicators": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "negative employee morale": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "organizational dissatisfaction": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "employee confidence decline": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "professional burnout indicators": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career disengagement signs": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "workplace exhaustion": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "employee support concerns": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "low organizational trust": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career progression concerns": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "burnout-related turnover": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "employee retention concerns": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "workplace culture dissatisfaction": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "professional stress indicators": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "job-related emotional fatigue": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "employee morale challenges": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career instability concerns": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "organizational stress indicators": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "professional disengagement signs": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee satisfaction decline": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "leadership trust issues": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "workplace conflict indicators": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee wellbeing decline": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "team motivation decline": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career growth limitations": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "professional burnout symptoms": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "actively job searching": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "seeking opportunities": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "applying for jobs": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "interview preparation": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "resume update": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career change": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "looking for work": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "searching for remote work": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "healthcare jobs": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "RN opportunities": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "medical assistant jobs": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "entry level healthcare": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "hiring now": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employment opportunities": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "networking opportunities": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "seeking employment": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "new graduate nurse": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "internship opportunity": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "updated LinkedIn profile": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional networking": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "recruiter outreach": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career growth opportunities": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "open networking": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional development": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career aspirations": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "leadership ambitions": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare networking": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "job application submitted": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "recent graduate": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "nursing school graduate": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare certification": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "internship completed": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "externship experience": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "first healthcare job": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "student nurse": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "entry-level RN": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "career readiness": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "clinical rotations": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "flexible schedule": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "supportive leadership": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee benefits": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare benefits": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "mentorship opportunities": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "inclusive workplace": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "interested in healthcare careers": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "seeking better opportunities": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "exploring new roles": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career goals": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "passionate about patient care": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "healthcare professional": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "future nurse leader": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "motivated employee": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "dependable worker": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "team-oriented professional": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "job fair": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "hiring event": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "networking event": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "resume workshop": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "interview tips": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career coaching": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employment search": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "recruiter connection": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "onboarding experience": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "job acceptance": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "highly motivated": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career driven": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "compassionate caregiver": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "patient focused": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "collaborative worker": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "dependable employee": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "reliable attendance": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "eager to learn": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "leadership potential": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "positive attitude": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "healthcare careers": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "hospital hiring": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "clinical opportunities": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "nursing opportunities": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "patient care jobs": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "allied health careers": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "medical receptionist jobs": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "healthcare administration": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "nursing assistant jobs": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare internships": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "best place to work": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee spotlight": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare culture": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "mission driven work": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "supportive workplace": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "employee success stories": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "growth opportunities": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare mission": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "patient centered care": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "values driven organization": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "ambitious professional": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "career focused": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "seeking mentorship": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "eager for advancement": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "lifelong learner": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "committed professional": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "self motivated": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "proactive candidate": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "adaptable employee": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "resilient worker": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "leaving current role": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "seeking career advancement": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "looking for better culture": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "burnout recovery job search": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "searching for flexibility": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "exploring healthcare careers": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "returning to workforce": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "relocating for work": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "transitioning careers": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "changing industries": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "healthcare networking group": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "professional association": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "career webinar": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "certification training": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "leadership conference": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "nursing conference": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare seminar": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "online learning": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career mentorship": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "top employer": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "hiring immediately": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "healthcare recruitment": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "talent acquisition": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "employer branding": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "candidate experience": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "onboarding process": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career opportunities": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "workplace flexibility": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "interview scheduled": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "professional references": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "healthcare recruiter": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "accepted new role": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "future healthcare leader": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "patient advocacy": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "compassionate care": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "collaborative culture": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "career fulfillment": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "meaningful work": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "looking for a supportive team": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "seeking better work-life balance": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "ready for career growth": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "passionate about helping others": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "interested in leadership opportunities": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare professional networking": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "searching for meaningful employment": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "dedicated patient care professional": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "motivated healthcare worker": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "excited for new opportunities": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "looking for advancement": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "healthcare career goals": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "committed to patient care": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "searching for flexible scheduling": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "positive workplace culture": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "employee-centered organization": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "collaborative healthcare environment": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "strong leadership support": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "interested in mentorship": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "healthcare innovation": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "retention risk candidate": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "passive job seeker": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "active applicant": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "candidate pipeline": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "social recruiting": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employment branding": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "workforce engagement": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "staffing pipeline": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "talent sourcing": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "candidate outreach": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "healthcare staffing solutions": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional growth mindset": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "high-potential candidate": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "workplace engagement indicators": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "employee referral": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "candidate screening": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "workforce planning": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "onboarding readiness": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "hiring pipeline": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "candidate matching": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "employee fit assessment": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "healthcare workforce trends": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "retention forecasting": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "workforce analytics": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "social sentiment analysis": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "behavioral hiring indicators": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "engagement scoring": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "recruitment funnel": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "employee lifecycle": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "workforce retention metrics": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "actively interviewing": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "searching for healthcare opportunities": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "ready for a new challenge": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "professional career transition": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "exploring healthcare employers": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career mobility": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "remote healthcare opportunities": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "hybrid healthcare jobs": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "entry-level medical careers": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career advancement opportunities": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "professional networking event": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "building professional connections": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "career exploration": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "new career path": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "future career goals": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "professional resume update": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "resume refresh": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "LinkedIn networking": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "job market exploration": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career opportunities near me": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "hospital career fair": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "medical career fair": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "nursing networking": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career support": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "new opportunity search": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "professional brand building": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career portfolio": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "online professional profile": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "updating certifications": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career readiness training": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "clinical training completed": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "licensed healthcare professional": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "newly licensed nurse": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "new certification earned": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "BLS certified": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "ACLS certified": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "CPR certified": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare continuing education": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "continuing nursing education": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "medical terminology training": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "electronic health records experience": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "Epic EMR experience": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "Cerner EMR experience": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "patient care experience": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "clinical support experience": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "administrative healthcare experience": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "front desk medical experience": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare office support": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "medical scheduling experience": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "insurance verification experience": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "patient registration experience": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "medical billing experience": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare customer service": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "patient advocate": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare coordinator": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "care management experience": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "patient-focused mindset": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "service-oriented professional": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "people-first culture": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "mission-focused employer": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "community healthcare": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare outreach": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "employee engagement": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career mentorship opportunities": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "leadership mentoring": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "supportive management team": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "positive leadership culture": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "high-performing team": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career progression": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "growth-oriented company": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional skill development": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "healthcare talent community": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career networking group": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "job search support": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "professional references available": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "available for interviews": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "open availability": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "actively networking": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "motivated to relocate": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "healthcare relocation opportunities": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "committed healthcare worker": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "career-focused healthcare professional": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "dedicated employee": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "results-driven candidate": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "patient-centered professional": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "empathetic caregiver": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "team collaboration skills": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "critical thinking skills": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "problem-solving mindset": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "adaptable healthcare worker": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "organized professional": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "detail-oriented healthcare worker": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "time management skills": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "multitasking professional": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "dependable healthcare employee": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "punctual employee": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "strong attendance record": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional communication skills": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "strong interpersonal skills": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "compassionate healthcare provider": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career-minded professional": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "driven healthcare candidate": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "future healthcare executive": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "leadership development goals": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "career ladder opportunities": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "professional mentorship": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "career coaching opportunities": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "entry-level opportunities": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "new grad opportunities": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "healthcare residency program": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "nurse residency program": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "clinical fellowship": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "medical internship": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "healthcare externship": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career launch opportunity": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career acceleration": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "upward mobility": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional achievement": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career success": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "future-focused professional": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "innovation-driven workplace": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "digital healthcare experience": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "telehealth experience": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "virtual care experience": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare technology skills": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "data-driven healthcare": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "clinical documentation": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "patient satisfaction focus": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "quality patient care": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "safe patient care": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "patient experience improvement": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare excellence": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "professional accountability": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "high integrity candidate": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "ethical healthcare worker": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "collaborative healthcare team": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "inclusive healthcare workplace": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "diverse workplace culture": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "employee resource groups": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "workplace belonging": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career empowerment": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional confidence": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare career mobility": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career fulfillment goals": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career purpose": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "mission-aligned employment": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "purpose-driven work": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "making a difference": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "helping patients": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "community impact": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "servant leadership": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "human-centered care": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "patient advocacy skills": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "supportive coworkers": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "positive employee experience": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional enthusiasm": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career optimism": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "future opportunities": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "motivated applicant": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "engaged candidate": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "talent community member": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "candidate relationship management": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "social recruiting campaign": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "candidate engagement strategy": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "digital recruiting": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "mobile job applications": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "easy apply jobs": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "LinkedIn Easy Apply": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "healthcare hiring trends": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "competitive healthcare market": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "in-demand healthcare roles": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "high-demand nursing jobs": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "urgent hiring needs": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "talent shortage": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "workforce shortages": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "clinical staffing support": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare workforce development": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "new employee orientation": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee onboarding process": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career onboarding": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "training and development": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "employee learning opportunities": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "professional certifications": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "advanced nursing certifications": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "specialty nursing interests": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career specialization": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "medical career specialization": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "future nurse practitioner": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "advanced practice nursing goals": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "leadership aspirations": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "executive healthcare leadership": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare administration goals": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "future healthcare manager": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "supervisory career goals": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "coaching and mentoring": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "workplace learning culture": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career development planning": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "goal-oriented professional": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "high achiever": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "performance-driven candidate": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "achievement-focused employee": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "self-starter mentality": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "entrepreneurial mindset": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career ambition": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "positive professional reputation": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "professional online presence": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "personal branding": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "industry networking": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "thought leadership": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "career influencer": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "social engagement": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "workplace advocacy": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "professional networking opportunities": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "recruitment marketing": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career event participation": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "job seeker community": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "industry engagement": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "candidate pipeline development": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "professional association membership": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career fair attendee": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "professional volunteer work": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "community volunteer": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "healthcare volunteer experience": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "public health interest": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "community wellness focus": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "wellness advocate": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "fitness and wellness interest": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "mental health advocacy": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "employee wellness focus": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career resilience": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "adaptability in healthcare": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "thriving under pressure": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "fast-paced work environment": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "multidisciplinary team experience": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "cross-functional collaboration": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "continuous improvement mindset": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "quality improvement interest": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "patient outcome focus": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "evidence-based practice": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "clinical excellence": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "healthcare innovation mindset": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "change management adaptability": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "growth mindset": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career transformation": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "professional transition": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career pivot": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career re-entry": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "returning healthcare worker": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "experienced healthcare professional": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "seasoned clinician": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "mid-career transition": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "entry-to-mid level healthcare": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "senior healthcare experience": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "executive presence": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "confident communicator": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "presentation skills": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "public speaking experience": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "relationship building": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "stakeholder engagement": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "client service mindset": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "candidate sourcing": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "recruitment branding": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "career exploration tools": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "online job networking": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "talent engagement": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "future employer interest": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "desired workplace culture": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "career satisfaction goals": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "motivated healthcare applicant": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "workplace flexibility needs": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "family-friendly workplace": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "employee wellbeing programs": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "supportive healthcare environment": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "recognition-driven culture": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "rewarding healthcare career": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional fulfillment": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "meaningful patient interactions": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "dedication to healthcare": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "passion for caregiving": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "team success mindset": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "collaborative leadership": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "employee career pathways": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career mobility options": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "healthcare workforce engagement": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "professional support system": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "employee appreciation culture": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "continuous learning environment": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "innovative healthcare systems": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "career enrichment": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "professional growth opportunities": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "high-retention employer": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "employee-first culture": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "leadership accessibility": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      },
+      "transparent communication culture": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "positive employee morale": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career confidence": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "future-ready workforce": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "next-generation healthcare worker": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "digital-native healthcare professional": {
+        "risk_score": null,
+        "final_score": 8,
+        "risk_level": "Low Risk"
+      },
+      "emerging healthcare talent": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "talent mobility": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "career scalability": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "personal development goals": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "professional purpose": {
+        "risk_score": null,
+        "final_score": 7,
+        "risk_level": "Low Risk"
+      },
+      "career clarity": {
+        "risk_score": null,
+        "final_score": 2,
+        "risk_level": "High Risk"
+      },
+      "motivated learner": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "patient-centered mission": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "future-focused career": {
+        "risk_score": null,
+        "final_score": 6,
+        "risk_level": "Medium Risk"
+      },
+      "career sustainability": {
+        "risk_score": null,
+        "final_score": 3,
+        "risk_level": "High Risk"
+      },
+      "professional adaptability": {
+        "risk_score": null,
+        "final_score": 4,
+        "risk_level": "Medium Risk"
+      },
+      "career networking strategy": {
+        "risk_score": null,
+        "final_score": 5,
+        "risk_level": "Medium Risk"
+      }
+    }
+  }

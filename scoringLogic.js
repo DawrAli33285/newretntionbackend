@@ -1,5 +1,6 @@
 const axios = require('axios');
 const keywordData = require('./risk_keywords.json');
+const prehireKeywordData = require('D:/documentations/retention/backendtwo/backendtwo/prehirekeywords.json');
 const XLSX = require('xlsx');
 const path = require('path');
 const {cloudinaryUpload}=require('./util/cloudinary')
@@ -509,12 +510,57 @@ console.log(`[LINKEDIN] data.length: ${data.length}`);
 
 if (data.length === 0) break;
 
+const cutoffDate60 = new Date();
+cutoffDate60.setDate(cutoffDate60.getDate() - 60);
+console.log(`[LINKEDIN] 📅 Cutoff date (60 days ago): ${cutoffDate60.toISOString()}`);
+console.log(`[LINKEDIN] 📅 Current date: ${new Date().toISOString()}`);
+
+// Helper: get the effective date for a post (reposted date for reshares, posted otherwise)
+const getEffectiveDate = (post) => {
+  if (post.reshared && post.reposted) return new Date(post.reposted);
+  if (post.posted) return new Date(post.posted);
+  return null;
+};
+
+// Stats counters
+let filterStats = { noContent: 0, tooOld: 0, kept: 0, reshareKept: 0 };
+
 const pagePosts = data
-.filter(post => post?.text || post?.resharedPost?.text)
-.map(post => ({
-text: post.text || post.resharedPost?.text,
-network: 'linkedin'
-}));
+  .filter(post => {
+    const hasContent = post?.text || post?.resharedPost?.text || post?.resharer_comment;
+    if (!hasContent) {
+      filterStats.noContent++;
+      console.log(`[LINKEDIN] ❌ FILTERED (no content) — urn:${post?.urn || 'N/A'}`);
+      return false;
+    }
+    const effectiveDate = getEffectiveDate(post);
+    if (effectiveDate && effectiveDate < cutoffDate60) {
+      filterStats.tooOld++;
+      const daysOld = Math.floor((Date.now() - effectiveDate.getTime()) / (1000 * 60 * 60 * 24));
+      console.log(`[LINKEDIN] ❌ FILTERED (too old: ${daysOld} days) — posted:${post.posted}, reposted:${post.reposted || 'N/A'}, reshared:${post.reshared || false}`);
+      return false;
+    }
+    filterStats.kept++;
+    if (post.reshared) filterStats.reshareKept++;
+    const daysOld = effectiveDate ? Math.floor((Date.now() - effectiveDate.getTime()) / (1000 * 60 * 60 * 24)) : 'unknown';
+    console.log(`[LINKEDIN] ✅ KEPT (${daysOld} days old, reshared:${post.reshared || false}) — preview: "${(post.text || post.resharer_comment || '').slice(0, 70)}..."`);
+    return true;
+  })
+  .map(post => {
+    // Combine resharer_comment (what user wrote) + original text (what they reshared)
+    const parts = [];
+    if (post.resharer_comment) parts.push(post.resharer_comment);
+    if (post.text) parts.push(post.text);
+    else if (post.resharedPost?.text) parts.push(post.resharedPost.text);
+    return {
+      text: parts.join(' \n '),
+      network: 'linkedin',
+      reshared: post.reshared || false,
+      poster_linkedin_url: post.poster_linkedin_url || null
+    };
+  });
+
+console.log(`[LINKEDIN] 📊 Filter stats for this page → kept: ${filterStats.kept} (reshares: ${filterStats.reshareKept}), tooOld: ${filterStats.tooOld}, noContent: ${filterStats.noContent}`);
 
 linkedinPosts.push(...pagePosts);
 pageCount++;
@@ -524,12 +570,45 @@ console.log("LINKELDINPOSTS")
 console.log(linkedinPosts)
 console.log(`[LINKEDIN] Page ${pageCount} | This page: ${pagePosts.length} posts | Total so far: ${linkedinPosts.length} | Has more: ${paging?.pagination_token && data.length === paging.count ? 'YES' : 'NO'}`);
 
-if (paging?.pagination_token && data.length > 0) {
-pagination_token = paging.pagination_token;
-start = start + paging.count;
-} else {
-break;
+// Check if the oldest post on this page is already beyond 60 days
+// Find the truly oldest post on this page using effective date
+// (don't rely on array order — reshares can mix dates)
+// Check if the oldest post on this page is already beyond 60 days
+// Find the truly oldest post on this page using effective date
+// (don't rely on array order — reshares can mix dates)
+const datedPosts = data
+  .map(p => ({ post: p, date: getEffectiveDate(p) }))
+  .filter(x => x.date);
+
+console.log(`[LINKEDIN] 🔎 Pagination check: ${datedPosts.length}/${data.length} posts have a usable date`);
+
+if (datedPosts.length > 0) {
+  const oldest = datedPosts.reduce((min, curr) =>
+    curr.date < min.date ? curr : min
+  );
+  const newest = datedPosts.reduce((max, curr) =>
+    curr.date > max.date ? curr : max
+  );
+  const oldestDays = Math.floor((Date.now() - oldest.date.getTime()) / (1000 * 60 * 60 * 24));
+  const newestDays = Math.floor((Date.now() - newest.date.getTime()) / (1000 * 60 * 60 * 24));
+  console.log(`[LINKEDIN] 🔎 Page date range → newest: ${newest.date.toISOString()} (${newestDays}d ago), oldest: ${oldest.date.toISOString()} (${oldestDays}d ago)`);
+
+  if (oldest.date < cutoffDate60) {
+    console.log(`[LINKEDIN] 🛑 Oldest post on this page (${oldest.date.toISOString()}, ${oldestDays}d) is beyond 60 days — stopping pagination`);
+    break;
+  } else {
+    console.log(`[LINKEDIN] ➡️  Oldest post (${oldestDays}d) is still within 60 days — continuing to next page`);
+  }
 }
+
+
+if (paging?.pagination_token && data.length > 0) {
+  pagination_token = paging.pagination_token;
+  start = start + paging.count;
+} else {
+  break;
+}
+
 
 } while (true);
 
@@ -550,7 +629,7 @@ method: 'GET',
 url: 'https://twitter241.p.rapidapi.com/user',
 params: { username: socialMedia.twitter_username },
 headers: {
-'x-rapidapi-key': '0b3e816b4bmsh5fb872b56e6e57cp1bfa08jsn3b9970e67894',
+'x-rapidapi-key': '21be0fdbd5mshf654a48f4e51715p1e08cajsnc4a7345c330b',
 'x-rapidapi-host': 'twitter241.p.rapidapi.com'
 }
 };
@@ -589,7 +668,7 @@ method: 'GET',
 url: 'https://twitter241.p.rapidapi.com/user-tweets',
 params,
 headers: {
-'x-rapidapi-key': '0b3e816b4bmsh5fb872b56e6e57cp1bfa08jsn3b9970e67894',
+'x-rapidapi-key': '21be0fdbd5mshf654a48f4e51715p1e08cajsnc4a7345c330b',
 'x-rapidapi-host': 'twitter241.p.rapidapi.com'
 }
 };
@@ -618,17 +697,61 @@ const instructions = twitterPostResponse.data.result.timeline.instructions;
 const entries = instructions
 .find(i => i.type === "TimelineAddEntries")?.entries || [];
 
-const pagePosts = entries
-.filter(entry => {
-if (!entry.entryId?.startsWith("tweet-")) return false;
-// Guard against malformed/promoted/tombstoned tweet entries
-const legacy = entry.content?.itemContent?.tweet_results?.result?.legacy;
-return !!legacy?.full_text;
-})
-.map(entry => ({
-text: entry.content.itemContent.tweet_results.result.legacy.full_text,
-network: 'twitter'
-}));
+const twitterCutoff = new Date();
+twitterCutoff.setDate(twitterCutoff.getDate() - 60);
+
+// Helper: extract all tweet legacy objects from entries (handles tweets + conversation modules)
+const extractLegacies = (entries) => {
+  const legacies = [];
+  for (const entry of entries) {
+    // Case 1: direct tweet entry
+    if (entry.entryId?.startsWith("tweet-")) {
+      const legacy = entry.content?.itemContent?.tweet_results?.result?.legacy;
+      if (legacy?.full_text) legacies.push(legacy);
+    }
+    // Case 2: homeConversation / profile-conversation module with nested items
+    else if (entry.content?.entryType === "TimelineTimelineModule" && Array.isArray(entry.content?.items)) {
+      for (const item of entry.content.items) {
+        const legacy = item.item?.itemContent?.tweet_results?.result?.legacy;
+        if (legacy?.full_text) legacies.push(legacy);
+      }
+    }
+  }
+  return legacies;
+};
+
+const allLegacies = extractLegacies(entries);
+console.log(`[TWITTER] 📅 Cutoff date (60 days ago): ${twitterCutoff.toISOString()}`);
+console.log(`[TWITTER] 🔎 Extracted ${allLegacies.length} tweet legacies from ${entries.length} entries`);
+
+let twFilterStats = { noDate: 0, tooOld: 0, kept: 0 };
+
+const pagePosts = allLegacies
+  .filter(legacy => {
+    if (!legacy.created_at) {
+      twFilterStats.noDate++;
+      twFilterStats.kept++;
+      console.log(`[TWITTER] ⚠️  KEPT (no date) — preview: "${legacy.full_text?.slice(0, 70)}..."`);
+      return true; // keep if no date (can't verify, don't drop)
+    }
+    const tweetDate = new Date(legacy.created_at);
+    const daysOld = Math.floor((Date.now() - tweetDate.getTime()) / (1000 * 60 * 60 * 24));
+    if (tweetDate < twitterCutoff) {
+      twFilterStats.tooOld++;
+      console.log(`[TWITTER] ❌ FILTERED (too old: ${daysOld} days) — created_at:${legacy.created_at}`);
+      return false;
+    }
+    twFilterStats.kept++;
+    console.log(`[TWITTER] ✅ KEPT (${daysOld} days old) — preview: "${legacy.full_text?.slice(0, 70)}..."`);
+    return true;
+  })
+  .map(legacy => ({
+    text: legacy.full_text,
+    network: 'twitter'
+  }));
+
+console.log(`[TWITTER] 📊 Filter stats for this page → kept: ${twFilterStats.kept} (noDate: ${twFilterStats.noDate}), tooOld: ${twFilterStats.tooOld}`);
+
 
 if (pagePosts.length === 0) break;
 const uniquePagePosts = pagePosts.filter(p => !seenTexts.has(p.text));
@@ -652,12 +775,41 @@ console.log(`[TWITTER] Page ${pageCount} | This page: ${pagePosts.length} posts 
 
 // Stop if cursor hasn't changed (prevents infinite loop of repeated posts)
 if (!newCursor || newCursor === cursor) {
-console.log(`[TWITTER] ⛔ Cursor unchanged or null — stopping pagination`);
-break;
+  console.log(`[TWITTER] ⛔ Cursor unchanged or null — stopping pagination`);
+  break;
 }
 
-cursor = newCursor;
+// Stop paginating if the oldest tweet on this page is beyond 60 days
+// Stop paginating if the oldest tweet on this page is beyond 60 days
+// Sort by date to find the actual oldest (API order isn't guaranteed strict desc with pinned tweets)
+// Stop paginating if the oldest tweet on this page is beyond 60 days
+// Sort by date to find the actual oldest (API order isn't guaranteed strict desc with pinned tweets)
+const datedLegacies = allLegacies.filter(l => l.created_at);
+console.log(`[TWITTER] 🔎 Pagination check: ${datedLegacies.length}/${allLegacies.length} tweets have a usable date`);
 
+if (datedLegacies.length > 0) {
+  const oldestLegacy = datedLegacies.reduce((oldest, curr) =>
+    new Date(curr.created_at) < new Date(oldest.created_at) ? curr : oldest
+  );
+  const newestLegacy = datedLegacies.reduce((newest, curr) =>
+    new Date(curr.created_at) > new Date(newest.created_at) ? curr : newest
+  );
+  const oldestTweetDate = new Date(oldestLegacy.created_at);
+  const newestTweetDate = new Date(newestLegacy.created_at);
+  const oldestDays = Math.floor((Date.now() - oldestTweetDate.getTime()) / (1000 * 60 * 60 * 24));
+  const newestDays = Math.floor((Date.now() - newestTweetDate.getTime()) / (1000 * 60 * 60 * 24));
+  console.log(`[TWITTER] 🔎 Page date range → newest: ${newestLegacy.created_at} (${newestDays}d ago), oldest: ${oldestLegacy.created_at} (${oldestDays}d ago)`);
+
+  if (oldestTweetDate < twitterCutoff) {
+    console.log(`[TWITTER] 🛑 Oldest tweet on this page (${oldestLegacy.created_at}, ${oldestDays}d) is beyond 60 days — stopping pagination`);
+    break;
+  } else {
+    console.log(`[TWITTER] ➡️  Oldest tweet (${oldestDays}d) is still within 60 days — continuing to next page`);
+  }
+}
+
+
+cursor = newCursor;
 
 } while (cursor);
 
@@ -708,11 +860,20 @@ const profileId = facebookResponse.data.profile.profile_id;
 const facebookPosts = [];
 let cursor = null;
 let pageCount = 0;
-
 do {
-const params = { profile_id: profileId };
-if (cursor) params.cursor = cursor;
-
+  const now = new Date();
+  const startDate = new Date(now);
+  startDate.setDate(now.getDate() - 60);
+  const formatDate = (d) => d.toISOString().split('T')[0];
+  
+  const params = { 
+    profile_id: profileId,
+    start_date: formatDate(startDate),
+    end_date: formatDate(now)
+  };
+  if (cursor) params.cursor = cursor;
+  console.log(`[FACEBOOK] 📅 Requesting posts in date range: ${formatDate(startDate)} → ${formatDate(now)} (60-day window)`);
+  console.log(`[FACEBOOK] 📅 Cursor: ${cursor ? cursor.slice(0, 40) + '...' : 'none (first page)'}`);
 const facebookPostOptions = {
 method: 'GET',
 url: 'https://facebook-scraper3.p.rapidapi.com/profile/posts',
@@ -744,12 +905,43 @@ throw retryErr;
 if (!facebookPostResponse) throw new Error('Facebook posts rate limit — max retries exceeded');
 const results = facebookPostResponse.data.results || [];
 
-if (results.length === 0) break;
+console.log(`[FACEBOOK] 🔎 API returned ${results.length} posts for this page`);
 
+if (results.length === 0) {
+  console.log(`[FACEBOOK] 🛑 Zero results — stopping pagination`);
+  break;
+}
+
+// Verify date filter is being honored by the API
+const cutoffDate60 = new Date();
+cutoffDate60.setDate(cutoffDate60.getDate() - 60);
+let fbDateStats = { withinWindow: 0, outsideWindow: 0, noDate: 0 };
+for (const post of results) {
+  const postDate = post.timestamp ? new Date(post.timestamp * 1000) :
+                   post.creation_time ? new Date(post.creation_time * 1000) :
+                   post.posted_on ? new Date(post.posted_on) : null;
+  if (!postDate) fbDateStats.noDate++;
+  else if (postDate < cutoffDate60) fbDateStats.outsideWindow++;
+  else fbDateStats.withinWindow++;
+}
+console.log(`[FACEBOOK] 📊 Date sanity check → withinWindow: ${fbDateStats.withinWindow}, outsideWindow: ${fbDateStats.outsideWindow}, noDate: ${fbDateStats.noDate}`);
+if (fbDateStats.outsideWindow > 0) {
+  console.warn(`[FACEBOOK] ⚠️  WARNING: ${fbDateStats.outsideWindow} posts are outside the 60-day window despite start_date/end_date params — API may not be honoring filter`);
+}
+
+let fbFilterStats = { noMessage: 0, kept: 0 };
 const pagePosts = results
-.filter(post => post.message)
-.map(post => ({ text: post.message, network: 'facebook' }));
+  .filter(post => {
+    if (!post.message) {
+      fbFilterStats.noMessage++;
+      return false;
+    }
+    fbFilterStats.kept++;
+    return true;
+  })
+  .map(post => ({ text: post.message, network: 'facebook' }));
 
+console.log(`[FACEBOOK] 📊 Filter stats for this page → kept: ${fbFilterStats.kept}, noMessage (skipped): ${fbFilterStats.noMessage}`);
 facebookPosts.push(...pagePosts);
 console.log(facebookPosts)
 console.log("FACEBOOKPOSTS")
@@ -1026,121 +1218,121 @@ continue;
 }
 
 // PDL API call
-console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
-const pdlUrl = `https://api.peopledatalabs.com/v5/person/identify?name=${encodeURIComponent(employeeName)}&first_name=${encodeURIComponent(firstName)}&phone=${encodeURIComponent(phone || '')}&last_name=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email || '')}&company=${encodeURIComponent(companyName || '')}${birth_date ? `&birth_date=${encodeURIComponent(birth_date)}` : ''}&pretty=false&titlecase=false&include_if_matched=false`;
 
-console.log(`[EMP ${empIndex + 1}] PDL URL: ${pdlUrl}`);
+//pdl recover
+// const pdlUrl = `https://api.peopledatalabs.com/v5/person/identify?name=${encodeURIComponent(employeeName)}&first_name=${encodeURIComponent(firstName)}&phone=${encodeURIComponent(phone || '')}&last_name=${encodeURIComponent(lastName)}&email=${encodeURIComponent(email || '')}&company=${encodeURIComponent(companyName || '')}${birth_date ? `&birth_date=${encodeURIComponent(birth_date)}` : ''}&pretty=false&titlecase=false&include_if_matched=false`;
 
-const refinedPhone = phone ? "+" + phone.replace(/\D/g, "") : '';
+// console.log(`[EMP ${empIndex + 1}] PDL URL: ${pdlUrl}`);
 
-const options = {
-method: 'GET',
-url: pdlUrl,
-headers: {
-accept: 'application/json',
-'Content-Type': 'application/json',
-'X-API-Key': '96daa17b289fb6f8c7bce95a15303c8d29b3e8cf4415e8247a8753008de5331b'
-}
-};
+// const refinedPhone = phone ? "+" + phone.replace(/\D/g, "") : '';
 
-console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
-await sleep(1200);
-let data;
-try {
-data = await axios.request(options);
-console.log("pdl DATA")
-console.log(JSON.stringify(data.data)) // only the response body, not the full Axios object
-console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
-} catch (pdlError) {
-const status = pdlError.response?.status;
-const message = pdlError.response?.data?.error?.message || pdlError.message;
+// const options = {
+// method: 'GET',
+// url: pdlUrl,
+// headers: {
+// accept: 'application/json',
+// 'Content-Type': 'application/json',
+// 'X-API-Key': '96daa17b289fb6f8c7bce95a15303c8d29b3e8cf4415e8247a8753008de5331b'
+// }
+// };
 
-console.log(`[EMP ${empIndex + 1}] ❌ PDL API error — status: ${status}, message: ${message}`);
-
-// Save to Airtable Incomplete Records
-await saveIncompleteRecordToAirtable(emp, {
-status: status,
-message: message
-}, inputFileName, emp.isPreHire);
-console.log(`[ENRICHED] isPreHire: ${emp.isPreHire}, status: ${status}, email: ${emp['E-mail Address']}`);
-console.log(`[ENRICHED] Will save enriched? ${emp.isPreHire ? 'YES - pre-hire path' : 'NO - not pre-hire'}`);
-
-
-if (status === 402) {
-console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota exceeded. Aborting.`);
-break;
-}
-if (status === 429) {
-console.log(`[EMP ${empIndex + 1}] ⏳ Rate limit — skipping and continuing.`);
-const defaultResult = createDefaultResult(emp);
-results.push(defaultResult);
-continue;
-}
-const defaultResult = createDefaultResult(emp);
-results.push(defaultResult);
-try {
-if (emp.isPreHire) {
-await PreHireRetentionData.create(defaultResult);
-} else {
-await RetentionData.create(defaultResult);
-}
-} catch (dbError) {
-if (dbError.code === 11000) {
-console.log(`Duplicate email skipped: ${dbError.message}`);
-} else {
-console.log(`Error saving default result: ${dbError.message}`);
-}
-
-}
-continue;
-
-
-}
-// await sleep(1000);
+// console.log(`[EMP ${empIndex + 1}] 🔍 Calling PDL API...`);
+// await sleep(1200);
+// let data;
+// try {
+// data = await axios.request(options);
+// console.log("pdl DATA")
+// console.log(JSON.stringify(data.data)) // only the response body, not the full Axios object
 // console.log(`[EMP ${empIndex + 1}] ✅ PDL Response status: ${data.status}`);
-// console.log(`[EMP ${empIndex + 1}] PDL matches count: ${data?.data?.matches?.length || 0}`);
+// } catch (pdlError) {
+// const status = pdlError.response?.status;
+// const message = pdlError.response?.data?.error?.message || pdlError.message;
 
-// const enrichedProfile = getEnrichedProfile(email);
-// console.log(`[EMP ${empIndex + 1}] 🗂 enrichedData lookup for "${email}":`, enrichedProfile);
+// console.log(`[EMP ${empIndex + 1}] ❌ PDL API error — status: ${status}, message: ${message}`);
 
-// if (!enrichedProfile) {
-// console.log(`[EMP ${empIndex + 1}] ❌ SKIP - No enrichedData entry found for email`);
+// // Save to Airtable Incomplete Records
 // await saveIncompleteRecordToAirtable(emp, {
-// noSocialMedia: true,
-// message: 'No entry in enrichedData for this email'
+// status: status,
+// message: message
 // }, inputFileName, emp.isPreHire);
+// console.log(`[ENRICHED] isPreHire: ${emp.isPreHire}, status: ${status}, email: ${emp['E-mail Address']}`);
+// console.log(`[ENRICHED] Will save enriched? ${emp.isPreHire ? 'YES - pre-hire path' : 'NO - not pre-hire'}`);
+
+
+// if (status === 402) {
+// console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota exceeded. Aborting.`);
+// break;
+// }
+// if (status === 429) {
+// console.log(`[EMP ${empIndex + 1}] ⏳ Rate limit — skipping and continuing.`);
+// const defaultResult = createDefaultResult(emp);
+// results.push(defaultResult);
 // continue;
 // }
-
-
-
-// const matchData = {
-// linkedin_url: enrichedProfile.linkedin_url || null,
-// linkedin_username: enrichedProfile.linkedin_username || null,
-// twitter_url: enrichedProfile.twitter_url || null,
-// twitter_username: enrichedProfile.twitter_username || null,
-// facebook_url: enrichedProfile.facebook_url || null,
-// facebook_username: enrichedProfile.facebook_username || null,
-// job_title: null,
-// profiles: (
-// enrichedProfile.linkedin_url ||
-// enrichedProfile.twitter_url ||
-// enrichedProfile.facebook_url
-// ) ? true : null, // keeps the existing `!matchData?.profiles` guard working
-// };
-
-// // Fake a PDL-style data object for the saveEnrichedSocialMediaToAirtable call later
-// const data = {
-// data: {
-// matches: [{
-// match_score: enrichedProfile.pdl_match_confidence || 0,
-// data: matchData
-// }]
+// const defaultResult = createDefaultResult(emp);
+// results.push(defaultResult);
+// try {
+// if (emp.isPreHire) {
+// await PreHireRetentionData.create(defaultResult);
+// } else {
+// await RetentionData.create(defaultResult);
 // }
-// };
+// } catch (dbError) {
+// if (dbError.code === 11000) {
+// console.log(`Duplicate email skipped: ${dbError.message}`);
+// } else {
+// console.log(`Error saving default result: ${dbError.message}`);
+// }
+
+// }
+// continue;
 
 
-const matchData = data?.data?.matches[0]?.data;
+// }
+
+console.log(`[EMP ${empIndex + 1}] 🔍 Using enrichedData (PDL disabled)...`);
+
+await sleep(1000);
+
+const enrichedProfile = getEnrichedProfile(email);
+console.log(`[EMP ${empIndex + 1}] 🗂 enrichedData lookup for "${email}":`, enrichedProfile);
+if (!enrichedProfile) {
+console.log(`[EMP ${empIndex + 1}] ❌ SKIP - No enrichedData entry found for email`);
+await saveIncompleteRecordToAirtable(emp, {
+noSocialMedia: true,
+message: 'No entry in enrichedData for this email'
+}, inputFileName, emp.isPreHire);
+continue;
+}
+
+
+
+const matchData = {
+linkedin_url: enrichedProfile.linkedin_url || null,
+linkedin_username: enrichedProfile.linkedin_username || null,
+twitter_url: enrichedProfile.twitter_url || null,
+twitter_username: enrichedProfile.twitter_username || null,
+facebook_url: enrichedProfile.facebook_url || null,
+facebook_username: enrichedProfile.facebook_username || null,
+job_title: null,
+profiles: (
+enrichedProfile.linkedin_url ||
+enrichedProfile.twitter_url ||
+enrichedProfile.facebook_url
+) ? true : null, // keeps the existing `!matchData?.profiles` guard working
+};
+
+// Fake a PDL-style data object for the saveEnrichedSocialMediaToAirtable call later
+let data = {
+  data: {
+  matches: [{
+  match_score: enrichedProfile.pdl_match_confidence || 0,
+  data: matchData
+  }]
+  }
+  };
+//pdl recover
+// const matchData = data?.data?.matches[0]?.data;
 if (matchData) {
 console.log(`[EMP ${empIndex + 1}] PDL match found:`);
 console.log(` - linkedin_url: ${matchData.linkedin_url || 'NOT FOUND'}`);
@@ -1210,7 +1402,8 @@ const categoryScores = {};
 let categoriesCount = 0;
 
 
-for (const [category, keywordMap] of Object.entries(keywordData)) {
+const activeKeywordData = emp.isPreHire ? prehireKeywordData : keywordData;
+for (const [category, keywordMap] of Object.entries(activeKeywordData)) {
 let categoryScore = 0;
 
 
