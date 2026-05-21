@@ -629,7 +629,7 @@ method: 'GET',
 url: 'https://twitter241.p.rapidapi.com/user',
 params: { username: socialMedia.twitter_username },
 headers: {
-'x-rapidapi-key': '21be0fdbd5mshf654a48f4e51715p1e08cajsnc4a7345c330b',
+'x-rapidapi-key': '0b3e816b4bmsh5fb872b56e6e57cp1bfa08jsn3b9970e67894',
 'x-rapidapi-host': 'twitter241.p.rapidapi.com'
 }
 };
@@ -668,7 +668,7 @@ method: 'GET',
 url: 'https://twitter241.p.rapidapi.com/user-tweets',
 params,
 headers: {
-'x-rapidapi-key': '21be0fdbd5mshf654a48f4e51715p1e08cajsnc4a7345c330b',
+'x-rapidapi-key': '0b3e816b4bmsh5fb872b56e6e57cp1bfa08jsn3b9970e67894',
 'x-rapidapi-host': 'twitter241.p.rapidapi.com'
 }
 };
