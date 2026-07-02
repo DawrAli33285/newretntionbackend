@@ -1403,6 +1403,12 @@ let categoriesCount = 0;
 
 
 const activeKeywordData = emp.isPreHire ? prehireKeywordData : keywordData;
+
+console.log(`[EMP ${empIndex + 1}] 🔑 isPreHire: ${emp.isPreHire} | Using keyword set: ${emp.isPreHire ? 'prehireKeywordData' : 'keywordData'}`);
+console.log(`[EMP ${empIndex + 1}] 🔑 Categories in active set: ${Object.keys(activeKeywordData).join(', ')}`);
+console.log(`[EMP ${empIndex + 1}] 🔑 Full activeKeywordData:`, JSON.stringify(activeKeywordData, null, 2));
+
+
 for (const [category, keywordMap] of Object.entries(activeKeywordData)) {
 let categoryScore = 0;
 
@@ -1410,29 +1416,51 @@ let categoryScore = 0;
 let keywordsMatched = 0;
 let weightedSum = 0;
 
-for (const [phrase, weight] of Object.entries(keywordMap)) {
-let totalCount = 0;
-for (const post of allPosts) {
-// Only skip if it's a reshare FROM a company page, not the employee's own post
-const isCompanyReshare = post.reshared === true &&
-(post.text?.toLowerCase().includes('prognosticare') &&
-post.poster_linkedin_url?.includes('/company/'));
-if (isCompanyReshare) continue;
-const cleanedText = cleanText(post.text);
-const escapedPhrase = phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const matches = (cleanedText.match(new RegExp(`\\b${escapedPhrase}\\b`, 'gi')) || []).length;
+for (const [phrase, weightData] of Object.entries(keywordMap)) {
+  // weightData is an object like { risk_score, final_score, risk_level } — extract a numeric weight
+  const weight = (typeof weightData === 'number')
+  ? weightData
+  : (weightData?.risk_score ?? weightData?.final_score ?? 0);
 
-totalCount += matches;
-}
-if (totalCount > 0) {
-weightedSum += totalCount * weight;
-keywordsMatched += totalCount;
-}
-}
+  if (typeof weight !== 'number' || Number.isNaN(weight)) {
+    console.warn(`[KEYWORD WEIGHT] ⚠️ Non-numeric weight for phrase "${phrase}" in category "${category}" — weightData:`, JSON.stringify(weightData));
+  }
+  
+  let totalCount = 0;
+  for (const post of allPosts) {
+  // Only skip if it's a reshare FROM a company page, not the employee's own post
+  const isCompanyReshare = post.reshared === true &&
+  (post.text?.toLowerCase().includes('prognosticare') &&
+  post.poster_linkedin_url?.includes('/company/'));
+  if (isCompanyReshare) continue;
+  const cleanedText = cleanText(post.text);
+  // Strip punctuation from the phrase itself to match cleanText()'s stripped output,
+  // then collapse whitespace so multi-word phrases still match correctly
+  const cleanedPhrase = phrase
+  .toLowerCase()
+  .replace(/[^\w\s]/gi, '')
+  .replace(/\s+/g, ' ')
+  .trim();
+  if (!cleanedPhrase) continue;
+  const escapedPhrase = cleanedPhrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const matches = (cleanedText.match(new RegExp(`\\b${escapedPhrase}\\b`, 'gi')) || []).length;
+  
+  totalCount += matches;
+  }
+  if (totalCount > 0) {
+    console.log(`[KEYWORD MATCH] category:"${category}" phrase:"${phrase}" weight:${weight} count:${totalCount}`);
+    weightedSum += totalCount * weight;
+    keywordsMatched += totalCount;
+  }
+  }
 
 // Normalize to 0-10 scale
 const rawScore = keywordsMatched > 0 ? weightedSum / keywordsMatched : 0;
 const normalizedScore = Math.min(parseFloat(rawScore.toFixed(2)), 10);
+
+if (Number.isNaN(normalizedScore)) {
+  console.error(`[CATEGORY SCORE] ❌ NaN produced for category "${category}" — weightedSum:${weightedSum}, keywordsMatched:${keywordsMatched}`);
+}
 
 const keyMap = {
 'WorkLifeBalance': 'work life',
@@ -1442,12 +1470,17 @@ const keyMap = {
 };
 
 const frontendKey = keyMap[category] || category.toLowerCase();
+console.log(`[CATEGORY SCORE] category:"${category}" → frontendKey:"${frontendKey}" rawScore:${rawScore} normalizedScore:${normalizedScore} keywordsMatched:${keywordsMatched}`);
+if (category === 'General') {
+  console.warn(`[CATEGORY SCORE] ⚠️ "General" category computed a score but its output is discarded — no downstream field reads categoryScores['general']`);
+}
 categoryScores[frontendKey] = normalizedScore;
 totalCategoryScore += normalizedScore;
 validCategories++;
 
 }
 
+console.log(`[FINAL categoryScores]`, JSON.stringify(categoryScores));
 
 const nonZeroScores = Object.values(categoryScores).filter(s => s > 0);
 
