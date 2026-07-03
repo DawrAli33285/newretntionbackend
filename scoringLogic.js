@@ -1,6 +1,13 @@
 const axios = require('axios');
 const keywordData = require('./risk_keywords.json');
 const prehireKeywordData = require('./prehirekeywords.json');
+
+// ── ADD THIS ──
+console.log('\n[STARTUP] risk_keywords.json categories:', Object.keys(keywordData));
+console.log('[STARTUP] prehirekeywords.json categories:', Object.keys(prehireKeywordData));
+console.log('[STARTUP] Are they the same object reference?', keywordData === prehireKeywordData);
+console.log('[STARTUP] prehirekeywords.json full contents:\n', JSON.stringify(prehireKeywordData, null, 2));
+
 const XLSX = require('xlsx');
 const path = require('path');
 const {cloudinaryUpload}=require('./util/cloudinary')
@@ -420,10 +427,12 @@ async function generateOutputFile(results, outputFileName) {
   const outputData = results.map((emp, index) => ({
     'Employee Number': index + 1,
     'Employee Name': emp.name,
-    'Work Life Balance': emp.categoryScores['family & work-life balance'] || 0,
-    'Communication': emp.categoryScores['communication & leadership'] || 0,
-    'Financial': emp.categoryScores['money & compensation'] || 0,
-    'Schedule': emp.categoryScores['schedule & workload'] || 0,
+    'Work Life Balance': emp.categoryScores['work life'] || 0,
+    'Communication': emp.categoryScores['family'] || 0,
+    'Financial': emp.categoryScores['finances'] || 0,
+    'Schedule': emp.categoryScores['schedule'] || 0,
+    'Job Satisfaction': emp.categoryScores['job satisfaction'] || 0,
+    'General': emp.categoryScores['general'] || 0,
     'Final Score': emp.overallScore || 0,
     'Improvement Area': '',
     'Risk Level': determineRiskLevel(emp.overallScore),
@@ -1157,6 +1166,18 @@ continue;
 
 console.log(`[EMP ${empIndex + 1}] 👤 Name: ${employeeName}`);
 
+
+
+const activeKeywordDataPreview = emp.isPreHire ? prehireKeywordData : keywordData;
+console.log(`[EMP ${empIndex + 1}] 🔑 PRE-PDL keyword set check → isPreHire: ${emp.isPreHire}`);
+console.log(`[EMP ${empIndex + 1}] 🔑 PRE-PDL will use: ${emp.isPreHire ? 'prehireKeywordData' : 'keywordData'}`);
+console.log(`[EMP ${empIndex + 1}] 🔑 PRE-PDL categories available: ${Object.keys(activeKeywordDataPreview).join(', ')}`);
+console.log(`[EMP ${empIndex + 1}] 🔑 PRE-PDL sample keywords (first category):`, 
+  JSON.stringify(activeKeywordDataPreview[Object.keys(activeKeywordDataPreview)[0]], null, 2)
+);
+
+
+
 let splitName = employeeName?.includes(',') ?
 employeeName.split(',') :
 employeeName.split(' ');
@@ -1478,11 +1499,14 @@ if (Number.isNaN(normalizedScore)) {
 }
 
 const keyMap = {
-'WorkLifeBalance': 'work life',
-'Communication': 'family',
-'Financial': 'finances',
-'Schedule': 'schedule'
+  'WorkLifeBalance': 'work life',
+  'Communication': 'family',
+  'Financial': 'finances',
+  'Schedule': 'schedule',
+  'JobSatisfaction': 'job satisfaction',
+  'General': 'general'
 };
+
 
 const frontendKey = keyMap[category] || category.toLowerCase();
 console.log(`[CATEGORY SCORE] category:"${category}" → frontendKey:"${frontendKey}" rawScore:${rawScore} normalizedScore:${normalizedScore} keywordsMatched:${keywordsMatched}`);
@@ -1497,7 +1521,8 @@ validCategories++;
 
 console.log(`[FINAL categoryScores]`, JSON.stringify(categoryScores));
 
-const nonZeroScores = Object.values(categoryScores).filter(s => s > 0);
+const { general, ...scoresForAverage } = categoryScores;
+const nonZeroScores = Object.values(scoresForAverage).filter(s => s > 0);
 
 const overallScore = nonZeroScores.length > 0
 ? parseFloat((nonZeroScores.reduce((a, b) => a + b, 0) / nonZeroScores.length).toFixed(2))
@@ -1701,12 +1726,12 @@ possibleImprovedScore: 0,
 
 // Nested category scores
 categoryScores: {
-'schedule & workload': 0,
-'money & compensation': 0,
+'schedule': 0,
+'finances': 0,
 'job satisfaction': 0,
-'family & work-life balance': 0,
-'communication & leadership': 0,
-'lack of rest': 0
+'work life': 0,
+'family': 0,
+'general': 0
 },
 
 // Additional fields that might be added conditionally
@@ -1773,6 +1798,8 @@ const fields = {
 'Family Category Score': employeeData.categoryScores['family'] || 0,
 'Finances Category Score': employeeData.categoryScores['finances'] || 0,
 'Schedule Category Score': employeeData.categoryScores['schedule'] || 0,
+'Job Satisfaction Category Score': employeeData.categoryScores['job satisfaction'] || 0,
+'General Category Score': employeeData.categoryScores['general'] || 0,
 'Overall Score': employeeData.overallScore || 0,
 'Risk Level': determineRiskLevel(employeeData.overallScore),
 'Category of Concern': determineCategoryOfConcern(employeeData.categoryScores),
@@ -1811,7 +1838,10 @@ const wlScore = parseFloat(employeeData.categoryScores?.['work life'] ?? 0);
 const famScore = parseFloat(employeeData.categoryScores?.['family'] ?? 0);
 const finScore = parseFloat(employeeData.categoryScores?.['finances'] ?? 0);
 const schedScore = parseFloat(employeeData.categoryScores?.['schedule'] ?? 0);
+const jobSatScore = parseFloat(employeeData.categoryScores?.['job satisfaction'] ?? 0);
+const generalScore = parseFloat(employeeData.categoryScores?.['general'] ?? 0);
 const overall = parseFloat(employeeData.overallScore ?? 0);
+
 
 console.log(`[AIRTABLE PREHIRE] Saving scores for ${employeeData.email}:`);
 console.log(` work life: ${wlScore}, family: ${famScore}, finances: ${finScore}, schedule: ${schedScore}, overall: ${overall}`);
@@ -1834,6 +1864,12 @@ const fields = {
 'Retention Score': employeeData.retentionScore || 0,
 'Right Fit Candidate': employeeData.rightFitCandidate || false,
 'Processed Date': new Date().toISOString().split('T')[0],
+'Work Life Category Score': wlScore,
+'Family Category Score': famScore,
+'Finances Category Score': finScore,
+'Schedule Category Score': schedScore,
+'Job Satisfaction Category Score': jobSatScore,
+'General Category Score': generalScore,
 };
 
 const existing = await table.select({
