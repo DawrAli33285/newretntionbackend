@@ -1,6 +1,6 @@
 const axios = require('axios');
 const keywordData = require('./risk_keywords.json');
-const prehireKeywordData = require('D:/documentations/retention/backendtwo/backendtwo/prehirekeywords.json');
+const prehireKeywordData = require('./prehirekeywords.json');
 const XLSX = require('xlsx');
 const path = require('path');
 const {cloudinaryUpload}=require('./util/cloudinary')
@@ -1260,9 +1260,24 @@ console.log(`[ENRICHED] Will save enriched? ${emp.isPreHire ? 'YES - pre-hire pa
 
 
 if (status === 402) {
-console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota exceeded. Aborting.`);
-break;
-}
+  console.log(`[EMP ${empIndex + 1}] 🚫 PDL quota exceeded. Aborting.`);
+  const defaultResult = createDefaultResult(emp);
+  results.push(defaultResult);
+  try {
+  if (emp.isPreHire) {
+  await PreHireRetentionData.create(defaultResult);
+  } else {
+  await RetentionData.create(defaultResult);
+  }
+  } catch (dbError) {
+  if (dbError.code === 11000) {
+  console.log(`Duplicate email skipped: ${dbError.message}`);
+  } else {
+  console.log(`Error saving default result: ${dbError.message}`);
+  }
+  }
+ continue;
+  }
 if (status === 429) {
 console.log(`[EMP ${empIndex + 1}] ⏳ Rate limit — skipping and continuing.`);
 const defaultResult = createDefaultResult(emp);
