@@ -2194,6 +2194,11 @@ console.error(`❌ Airtable error (Enriched) for ${email}:`, error.message);
 }
 
 
+function randomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
 async function processPreHireCandidates(candidates, user, inputFileName, recordCount) {
 console.log("PREHIRE YES");
 
@@ -2201,25 +2206,25 @@ console.log("PREHIRE YES");
 // await savePreHireFileDataToAirtableInBatch(candidates);
 
 const mappedCandidates = candidates.map(emp => ({
-'Employee Name (Last Suffix, First MI)': emp['Candidate (Last, Suffix First MI)'] || '',
-'E-mail Address': emp['Email Address'] || '',
-'Home Phone (Formatted)': emp['Primary Phone'] || '',
-'Address Line 1 + Address Line 2': `${emp['Address 1'] || ''} ${emp['City'] || ''} ${emp['State/Province Code'] || ''} ${emp['Zip/Postal Code'] || ''}`.trim(),
-'Organization': emp['Department Name'] || '',
-'Department': emp['Department Name'] || '',
-'Job Class': emp['Opportunity Title'] || emp['Source Job'] || '',
-'Job Code': emp['Source Job Code'] || '',
-'Date of Birth': '',
-'Hire Date': '',
-'Term Date': '',
-'Finance Score (1-10)': 1,
-'Schedule Score (1-10)': 1,
-'Work Life Balance Score (1-10)': 1,
-'Family Score (1-10)': 1,
-'Distance (Miles)': 0,
-'Division': '',
-'Salary Range': '',
-isPreHire: true,
+  'Employee Name (Last Suffix, First MI)': emp['Candidate (Last, Suffix First MI)'] || '',
+  'E-mail Address': emp['Email Address'] || '',
+  'Home Phone (Formatted)': emp['Primary Phone'] || '',
+  'Address Line 1 + Address Line 2': `${emp['Address 1'] || ''} ${emp['City'] || ''} ${emp['State/Province Code'] || ''} ${emp['Zip/Postal Code'] || ''}`.trim(),
+  'Organization': emp['Department Name'] || '',
+  'Department': emp['Department Name'] || '',
+  'Job Class': emp['Opportunity Title'] || emp['Source Job'] || '',
+  'Job Code': emp['Source Job Code'] || '',
+  'Date of Birth': '',
+  'Hire Date': '',
+  'Term Date': '',
+  'Finance Score (1-10)': randomBetween(1, 10),
+  'Schedule Score (1-10)': randomBetween(1, 10),
+  'Work Life Balance Score (1-10)': randomBetween(1, 10),
+  'Family Score (1-10)': randomBetween(1, 10),
+  'Distance (Miles)': randomBetween(1, 60),
+  'Division': '',
+  'Salary Range': '',
+  isPreHire: true,
 }));
 
 return processEmployees(mappedCandidates, user, inputFileName, recordCount);
