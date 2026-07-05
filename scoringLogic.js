@@ -2,11 +2,6 @@ const axios = require('axios');
 const keywordData = require('./risk_keywords.json');
 const prehireKeywordData = require('./prehirekeywords.json');
 
-// ── ADD THIS ──
-console.log('\n[STARTUP] risk_keywords.json categories:', Object.keys(keywordData));
-console.log('[STARTUP] prehirekeywords.json categories:', Object.keys(prehireKeywordData));
-console.log('[STARTUP] Are they the same object reference?', keywordData === prehireKeywordData);
-console.log('[STARTUP] prehirekeywords.json full contents:\n', JSON.stringify(prehireKeywordData, null, 2));
 
 const XLSX = require('xlsx');
 const path = require('path');
@@ -466,6 +461,8 @@ try {
 const allPosts = [];
 
 // LinkedIn posts
+console.log("SOCIAL MEDIA")
+console.log(socialMedia)
 if (socialMedia.linkedin_url) {
 try {
 const linkedinPosts = [];
@@ -834,37 +831,45 @@ console.error('[TWITTER] ❌ Error:', error.message);
 // Facebook posts
 if (socialMedia.facebook_username) {
 try {
-
-const facebookOptions = {
-method: 'GET',
-url: 'https://facebook-scraper3.p.rapidapi.com/profile/details_url',
-params: { url: socialMedia.facebook_url || `https://facebook.com/${socialMedia.facebook_username}` },
-headers: {
-'x-rapidapi-key': '0b3e816b4bmsh5fb872b56e6e57cp1bfa08jsn3b9970e67894',
-'x-rapidapi-host': 'facebook-scraper3.p.rapidapi.com'
-}
-};
-
-let facebookResponse;
-let retries = 0;
-while (retries < 5) {
-try {
-facebookResponse = await axios.request(facebookOptions);
-break;
-} catch (retryErr) {
-if (retryErr.response?.status === 429) {
-retries++;
-const waitTime = Math.min(15000 * Math.pow(2, retries), 120000);
-console.log(`[FACEBOOK] ⏳ 429 Rate limit — retry ${retries}/5, waiting ${waitTime/1000}s...`);
-
-} else {
-throw retryErr;
-}
-}
-}
-if (!facebookResponse) throw new Error('Facebook rate limit — max retries exceeded');
-const profileId = facebookResponse.data.profile.profile_id;
-
+  const rawFacebookUrl = socialMedia.facebook_url || `https://facebook.com/${socialMedia.facebook_username}`;
+  const normalizedFacebookUrl = rawFacebookUrl.startsWith('http') ? rawFacebookUrl : `https://${rawFacebookUrl}`;
+  console.log(`[FACEBOOK] 🔗 Normalized profile URL: ${normalizedFacebookUrl}`);
+  
+  const facebookOptions = {
+  method: 'GET',
+  url: 'https://facebook-scraper3.p.rapidapi.com/profile/details_url',
+  params: { url: normalizedFacebookUrl },
+  headers: {
+  'x-rapidapi-key': '0b3e816b4bmsh5fb872b56e6e57cp1bfa08jsn3b9970e67894',
+  'x-rapidapi-host': 'facebook-scraper3.p.rapidapi.com'
+  }
+  };
+  
+  let facebookResponse;
+  let retries = 0;
+  while (retries < 5) {
+  try {
+  facebookResponse = await axios.request(facebookOptions);
+  break;
+  } catch (retryErr) {
+  if (retryErr.response?.status === 429) {
+  retries++;
+  const waitTime = Math.min(15000 * Math.pow(2, retries), 120000);
+  console.log(`[FACEBOOK] ⏳ 429 Rate limit — retry ${retries}/5, waiting ${waitTime/1000}s...`);
+  
+  } else {
+  throw retryErr;
+  }
+  }
+  }
+  if (!facebookResponse) throw new Error('Facebook rate limit — max retries exceeded');
+  
+  console.log(`[FACEBOOK] 📥 details_url response:`, JSON.stringify(facebookResponse.data));
+  const profileId = facebookResponse.data?.profile?.profile_id;
+  if (!profileId) {
+    throw new Error(`Facebook profile_id not found for url: ${normalizedFacebookUrl} — response: ${JSON.stringify(facebookResponse.data)}`);
+  }
+  console.log(`[FACEBOOK] ✅ Resolved profile_id: ${profileId}`);
 
 const facebookPosts = [];
 let cursor = null;
@@ -979,8 +984,7 @@ console.log('[FACEBOOK] 💤 Cooling down for 3 minutes before next employee...'
 }
 }
 
-console.log("ALL POSTS")
-console.log(allPosts)
+
 return { posts: allPosts, rapidApiErrors };
 } catch (error) {
 console.error('[SCRAPER] ❌ Overall Error:', error.message);
@@ -1169,12 +1173,6 @@ console.log(`[EMP ${empIndex + 1}] 👤 Name: ${employeeName}`);
 
 
 const activeKeywordDataPreview = emp.isPreHire ? prehireKeywordData : keywordData;
-console.log(`[EMP ${empIndex + 1}] 🔑 PRE-PDL keyword set check → isPreHire: ${emp.isPreHire}`);
-console.log(`[EMP ${empIndex + 1}] 🔑 PRE-PDL will use: ${emp.isPreHire ? 'prehireKeywordData' : 'keywordData'}`);
-console.log(`[EMP ${empIndex + 1}] 🔑 PRE-PDL categories available: ${Object.keys(activeKeywordDataPreview).join(', ')}`);
-console.log(`[EMP ${empIndex + 1}] 🔑 PRE-PDL sample keywords (first category):`, 
-  JSON.stringify(activeKeywordDataPreview[Object.keys(activeKeywordDataPreview)[0]], null, 2)
-);
 
 
 
@@ -1441,9 +1439,6 @@ let categoriesCount = 0;
 
 const activeKeywordData = emp.isPreHire ? prehireKeywordData : keywordData;
 
-console.log(`[EMP ${empIndex + 1}] 🔑 isPreHire: ${emp.isPreHire} | Using keyword set: ${emp.isPreHire ? 'prehireKeywordData' : 'keywordData'}`);
-console.log(`[EMP ${empIndex + 1}] 🔑 Categories in active set: ${Object.keys(activeKeywordData).join(', ')}`);
-console.log(`[EMP ${empIndex + 1}] 🔑 Full activeKeywordData:`, JSON.stringify(activeKeywordData, null, 2));
 
 
 for (const [category, keywordMap] of Object.entries(activeKeywordData)) {
@@ -1454,6 +1449,7 @@ let keywordsMatched = 0;
 let weightedSum = 0;
 
 for (const [phrase, weightData] of Object.entries(keywordMap)) {
+  
   // weightData is an object like { risk_score, final_score, risk_level } — extract a numeric weight
   const weight = (typeof weightData === 'number')
   ? weightData
