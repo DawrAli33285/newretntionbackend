@@ -363,12 +363,19 @@ return base
 .reduce((a, b) => a + b, 0);
 }
 
-function determineRiskLevel(overallScore) {
-// Lower scores = Higher risk (more negative keywords found)
-if (overallScore <= 3) return 'High';
-if (overallScore <= 6) return 'Medium';
-return 'Low';
-}
+function determineRiskLevel(overallScore, hasData) {
+  // If no keywords matched anywhere (no data/no signal), don't call it High Risk
+  if (!hasData) return 'Insufficient Data';
+  // Lower scores = Higher risk (more negative keywords found)
+  if (overallScore <= 3) return 'High';
+  if (overallScore <= 6) return 'Medium';
+  return 'Low';
+  }
+
+  function hasMatchedData(categoryScores) {
+    if (!categoryScores) return false;
+    return Object.values(categoryScores).some(score => score > 0);
+    }
 
 function sleep(ms) {
 return new Promise(resolve => setTimeout(resolve, ms));
@@ -421,7 +428,65 @@ return highest[0];
 async function generateOutputFile(results, outputFileName) {
   const outputData = results.map((emp, index) => ({
     'Employee Number': index + 1,
+
+    // ── Identity / contact (original file fields) ──
     'Employee Name': emp.name,
+    'Email': emp.email,
+    'Alternate Email': emp.alternateEmail,
+    'Phone': emp.phone,
+    'Address': emp.address,
+    'City, State Zip': emp.cityStateZip,
+    'City': emp.city,
+    'State': emp.state,
+    'Zip': emp.zip,
+
+    // ── Employment dates (original file fields) ──
+    'Original Hire': emp.originalHire,
+    'Last Hire Date': emp.last_hire_date,
+    'Hire Date': emp.hireDate,
+    'Job Start': emp.job_start,
+    'Seniority Date': emp.seniorityDate,
+    'Term Date': emp.termDate,
+    'Termination Reason': emp.termination_reason,
+    'Employment Status': emp.employement_status,
+    'Date of Birth': emp.date_of_birth,
+
+    // ── Job / org (original file fields) ──
+    'Job Title': emp.job_title,
+    'Job Code': emp.jobCode,
+    'Source Job': emp.sourceJob,
+    'Opportunity Title': emp.opportunityTitle,
+    'Department': emp.department,
+    'Department Number': emp.departmentNumber,
+    'Facility': emp.facility,
+    'Organization': emp.organization,
+    'Division': emp.division,
+    'Salary Range': emp.salaryRange,
+
+    // ── Input scores (original file fields) ──
+    'Finance Score (1-10)': emp.financeScore,
+    'Schedule Score (1-10)': emp.scheduleScore,
+    'Work Life Balance Score (1-10)': emp.wlbScore,
+    'Family Score (1-10)': emp.familyScore,
+
+    // ── Points breakdown (already computed on emp) ──
+    'Age Points': emp.agePoints,
+    'Distance Points': emp.distancePoints,
+    'Tenure Points': emp.tenurePoints,
+    'Turnover Points': emp.turnoverPoints,
+    'Finance Points': emp.financePoints,
+    'Schedule Points': emp.schedulePoints,
+    'WLB Points': emp.wlbPoints,
+    'Family Points': emp.familyPoints,
+    'Retention Score': emp.retentionScore,
+    'Right Fit Candidate': emp.rightFitCandidate,
+
+    // ── Social profiles matched ──
+    'LinkedIn URL': emp.socialData?.linkedin_url || '',
+    'Twitter URL': emp.socialData?.twitter_url || '',
+    'Facebook URL': emp.socialData?.facebook_url || '',
+
+    // ── Existing computed risk-analysis columns ──
     'Work Life Balance': emp.categoryScores['work life'] || 0,
     'Communication': emp.categoryScores['family'] || 0,
     'Financial': emp.categoryScores['finances'] || 0,
@@ -430,11 +495,10 @@ async function generateOutputFile(results, outputFileName) {
     'General': emp.categoryScores['general'] || 0,
     'Final Score': emp.overallScore || 0,
     'Improvement Area': '',
-    'Risk Level': determineRiskLevel(emp.overallScore),
+    'Risk Level': determineRiskLevel(emp.overallScore, hasMatchedData(emp.categoryScores)),
     'Possible Improvement': calculatePossibleImprovement(emp.categoryScores),
     'Category of Concern': determineCategoryOfConcern(emp.categoryScores)
   }));
-
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.json_to_sheet(outputData);
   XLSX.utils.book_append_sheet(wb, ws, 'Employee Risk Analysis');
@@ -1560,28 +1624,40 @@ const retentionScore = agePoints + distancePoints + tenurePoints + turnoverPoint
 const rightFitCandidate = calculateRightFit(retentionScore);
 
 let employeeData = {
-name: emp['Employee Name (Last Suffix, First MI)'] || 'N/A',
-email: emp['E-mail Address'] || 'N/A',
-last_hire_date: emp['Last Hire Date'] || emp['Hire Date'] || 'N/A',
-job_start: emp['Job Start'] || 'N/A',
-termination_date: termDate || 'N/A',
-retentionScore,
-rightFitCandidate,
-termination_reason: emp['Termination Reason'] || 'N/A',
-employement_status: emp['Employment Status'] || 'N/A',
-date_of_birth: birth_date && birth_date !== 'N/A' ? birth_date : null,
-job_title: matchData?.job_title || emp['Job Title'] || emp['Job Class'] || 'N/A',
-department: emp['Department'] || 'N/A',
-facility: (emp['Facility'] || emp['Entity'] || emp['Subsidiary'] || 'N/A'),
-organization: emp['Organization'] || 'N/A',
-division: emp['Division'] || 'N/A',
-hireDate: hireDate && hireDate !== 'N/A' ? hireDate : null,
-termDate: termDate && termDate !== 'N/A' ? termDate : null,
-salaryRange: emp['Salary Range'] || 'N/A',
-categoryScores: categoryScores || {},
-overallScore: overallScore || 0,
-phone: phone || 'N/A',
-financeScore, scheduleScore, wlbScore, familyScore,
+  name: emp['Employee Name (Last Suffix, First MI)'] || 'N/A',
+  email: emp['E-mail Address'] || 'N/A',
+  alternateEmail: emp['Alternate Email'] || 'N/A',
+  address: emp['Address Line 1 + Address Line 2'] || emp['Address 1'] || 'N/A',
+  cityStateZip: emp['City, State Zip Code (Formatted)'] || 'N/A',
+  city: emp['City'] || 'N/A',
+  state: emp['State/Province Code'] || 'N/A',
+  zip: emp['Zip/Postal Code'] || 'N/A',
+  last_hire_date: emp['Last Hire Date'] || emp['Hire Date'] || 'N/A',
+  job_start: emp['Job Start'] || 'N/A',
+  originalHire: emp['Original Hire'] || 'N/A',
+  seniorityDate: emp['Seniority Date'] || 'N/A',
+  termination_date: termDate || 'N/A',
+  retentionScore,
+  rightFitCandidate,
+  termination_reason: emp['Termination Reason'] || 'N/A',
+  employement_status: emp['Employment Status'] || 'N/A',
+  date_of_birth: birth_date && birth_date !== 'N/A' ? birth_date : null,
+  job_title: matchData?.job_title || emp['Job Title'] || emp['Job Class'] || 'N/A',
+  jobCode: emp['Job Code'] || 'N/A',
+  sourceJob: emp['Source Job'] || 'N/A',
+  opportunityTitle: emp['Opportunity Title'] || 'N/A',
+  department: emp['Department'] || emp['Department Name'] || 'N/A',
+  departmentNumber: emp['Department Number'] || 'N/A',
+  facility: (emp['Facility'] || emp['Entity'] || emp['Subsidiary'] || 'N/A'),
+  organization: emp['Organization'] || 'N/A',
+  division: emp['Division'] || 'N/A',
+  hireDate: hireDate && hireDate !== 'N/A' ? hireDate : null,
+  termDate: termDate && termDate !== 'N/A' ? termDate : null,
+  salaryRange: emp['Salary Range'] || 'N/A',
+  categoryScores: categoryScores || {},
+  overallScore: overallScore || 0,
+  phone: phone || 'N/A',
+  financeScore, scheduleScore, wlbScore, familyScore,
 // Points breakdown
 agePoints, distancePoints, tenurePoints, turnoverPoints,
 financePoints, schedulePoints, wlbPoints, familyPoints,
@@ -1685,56 +1761,92 @@ return {results,passcode};
 }
 
 function createDefaultResult(emp) {
-return {
-name: emp['Employee Name (Last Suffix, First MI)'] || 'N/A',
-email: emp['E-mail Address'] || 'N/A',
-last_hire_date: emp['Last Hire Date'] || 'N/A',
-job_start: emp['Job Start'] || 'N/A',
-termination_date: emp['Termination Date'] || 'N/A',
-termination_reason: emp['Termination Reason'] || 'N/A',
-employement_status: emp['Employment Status'] || 'N/A',
-date_of_birth: emp['Date of Birth'] || 'N/A',
-job_title: emp['Job Title'] || 'N/A',
-department: emp['Department'] || 'N/A',
-facility: (emp['Facility'] || emp['Entity'] || emp['Subsidiary'] || 'N/A'),
-phone: emp['Home Phone (Formatted)'] || emp['Phone'] || emp['Mobile'] || 'N/A',
+  const hireDate = emp['Hire Date'] || emp['Last Hire Date'] || null;
+  const termDate = emp['Term Date'] || emp['Termination Date'] || null;
+  const birthDate = emp['Date of Birth'] || null;
 
-// Engagement scores (flat structure)
-'schedule & workload': 0,
-'money & compensation': 0,
-'job satisfaction': 0,
-'family & work-life balance': 0,
-'communication & leadership': 0,
-'lack of rest': 0,
+  const categoryScores = {
+    'work life': 0,
+    'finances': 0,
+    'schedule': 0,
+    'job satisfaction': 0,
+    'family': 0,
+    'general': 0
+  };
 
-// Scores and risk assessment
-totalScore: 0,
-socialData: {
-linkedin_url: null,
-linkedin_username: null,
-twitter_url: null,
-twitter_username: null,
-facebook_url: null,
-facebook_username: null,
-},
-overallScore: 0,
-riskLevel: 'Low',
-possibleImprovedScore: 0,
+  const employeeData = {
+    name: emp['Employee Name (Last Suffix, First MI)'] || 'N/A',
+    email: emp['E-mail Address'] || 'N/A',
+    alternateEmail: emp['Alternate Email'] || 'N/A',
+    address: emp['Address Line 1 + Address Line 2'] || emp['Address 1'] || 'N/A',
+    cityStateZip: emp['City, State Zip Code (Formatted)'] || 'N/A',
+    city: emp['City'] || 'N/A',
+    state: emp['State/Province Code'] || 'N/A',
+    zip: emp['Zip/Postal Code'] || 'N/A',
 
-// Nested category scores
-categoryScores: {
-'schedule': 0,
-'finances': 0,
-'job satisfaction': 0,
-'work life': 0,
-'family': 0,
-'general': 0
-},
+    originalHire: emp['Original Hire'] || 'N/A',
+    last_hire_date: emp['Last Hire Date'] || emp['Hire Date'] || 'N/A',
+    hireDate: hireDate,
+    job_start: emp['Job Start'] || 'N/A',
+    seniorityDate: emp['Seniority Date'] || 'N/A',
+    termDate: termDate,
+    termination_date: termDate || 'N/A',
+    termination_reason: emp['Termination Reason'] || 'N/A',
+    employement_status: emp['Employment Status'] || 'N/A',
+    date_of_birth: birthDate,
 
-// Additional fields that might be added conditionally
-...(emp['Original Hire'] && { original_hire: emp['Original Hire'] }),
-...(emp['Seniority Date'] && { seniority_date: emp['Seniority Date'] })
-};
+    job_title: emp['Job Title'] || emp['Job Class'] || 'N/A',
+    jobCode: emp['Job Code'] || 'N/A',
+    sourceJob: emp['Source Job'] || 'N/A',
+    opportunityTitle: emp['Opportunity Title'] || 'N/A',
+    department: emp['Department'] || emp['Department Name'] || 'N/A',
+    departmentNumber: emp['Department Number'] || 'N/A',
+    facility: (emp['Facility'] || emp['Entity'] || emp['Subsidiary'] || 'N/A'),
+    organization: emp['Organization'] || 'N/A',
+    division: emp['Division'] || 'N/A',
+    salaryRange: emp['Salary Range'] || 'N/A',
+
+    phone: emp['Home Phone (Formatted)'] || emp['Phone'] || emp['Mobile'] || 'N/A',
+
+    financeScore: parseFloat(emp['Finance Score (1-10)']) || 0,
+    scheduleScore: parseFloat(emp['Schedule Score (1-10)']) || 0,
+    wlbScore: parseFloat(emp['Work Life Balance Score (1-10)']) || 0,
+    familyScore: parseFloat(emp['Family Score (1-10)']) || 0,
+
+    // Points breakdown — all 0 since we never scored this employee
+    agePoints: 0,
+    distancePoints: 0,
+    tenurePoints: 0,
+    turnoverPoints: 0,
+    financePoints: 0,
+    schedulePoints: 0,
+    wlbPoints: 0,
+    familyPoints: 0,
+
+    retentionScore: 0,
+    rightFitCandidate: false,
+
+    socialData: {
+      linkedin_url: null,
+      linkedin_username: null,
+      twitter_url: null,
+      twitter_username: null,
+      facebook_url: null,
+      facebook_username: null,
+    },
+
+    categoryScores,
+    overallScore: 0,
+  };
+
+  // Match the conditional startDateKey logic used in the success path
+  if (emp['Original Hire']) {
+    employeeData.original_hire = emp['Original Hire'];
+  } else if (emp['Seniority Date']) {
+    employeeData.seniority_date = emp['Seniority Date'];
+  }
+
+  return employeeData;
 }
 
 function getLast90Days() {
@@ -1798,7 +1910,7 @@ const fields = {
 'Job Satisfaction Category Score': employeeData.categoryScores['job satisfaction'] || 0,
 'General Category Score': employeeData.categoryScores['general'] || 0,
 'Overall Score': employeeData.overallScore || 0,
-'Risk Level': determineRiskLevel(employeeData.overallScore),
+'Risk Level': determineRiskLevel(employeeData.overallScore, hasMatchedData(employeeData.categoryScores)),
 'Category of Concern': determineCategoryOfConcern(employeeData.categoryScores),
 'Processed Date': new Date().toISOString().split('T')[0],
 };
@@ -1856,7 +1968,7 @@ const fields = {
 'Finances Category Score': finScore,
 'Schedule Category Score': schedScore,
 'Overall Score': overall,
-'Risk Level': determineRiskLevel(employeeData.overallScore),
+'Risk Level': determineRiskLevel(employeeData.overallScore, hasMatchedData(employeeData.categoryScores)),
 'Category of Concern': determineCategoryOfConcern(employeeData.categoryScores),
 'Retention Score': employeeData.retentionScore || 0,
 'Right Fit Candidate': employeeData.rightFitCandidate || false,
