@@ -112,18 +112,32 @@ app.post('/api/enrich', upload.single('employeeFile'), middleware, async (req, r
 
     if (fileExt === 'csv') {
       fs.createReadStream(filePath)
-        .pipe(csv())
-        .on('data', (row) => employees.push(row))
-        .on('end', async () => {
+      .pipe(csv())
+      .on('data', (row) => employees.push(row))
+      .on('end', async () => {
+        try {
           const { results, passcode } = isPreHire
             ? await scoring.processPreHireCandidates(employees, req.user, inputFileName, recordCount)
             : await scoring.processEmployees(employees, req.user, inputFileName, recordCount);
           cleanup(filePath);
           if (results.length === 0) {
-            return res.status(400).json({ error: 'All records in this file are duplicates. No new records were processed.' });
+            return res.status(400).json({ error: 'Something went wrong please try again' });
           }
           return res.json({ results: mapResults(results), passcode });
-        });
+        } catch (error) {
+          cleanup(filePath);
+          console.error('Error processing CSV file:', error);
+          if (error.name === 'PreHireValidationError') {
+            return res.status(400).json({ error: error.message });
+          }
+          return res.status(500).json({ error: 'Error processing file' });
+        }
+      })
+      .on('error', (error) => {
+        cleanup(filePath);
+        console.error('Error reading CSV stream:', error);
+        return res.status(500).json({ error: 'Error reading file' });
+      });
     } else if (fileExt === 'xlsx') {
       const workbook = xlsx.readFile(filePath);
       const sheetName = workbook.SheetNames[0];
