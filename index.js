@@ -25,7 +25,10 @@ const upload = multer({ dest: '/tmp/public/files/uploads' });
 app.use(express.json());
 app.use(cors())
 
+
 mongoose.connect('mongodb+srv://dawar:dawar@cluster0.svmizih.mongodb.net/');
+
+// mongoose.connect('mongodb+srv://dawar:dawar@cluster0.svmizih.mongodb.net/');
 // mongoose.connect('mongodb://127.0.0.1/ret');
 
   // mongoose.connect('mongodb+srv://dawar:dawar@cluster0.51eap22.mongodb.net');
@@ -126,13 +129,13 @@ app.post('/api/enrich', upload.single('employeeFile'), middleware, async (req, r
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       const data = xlsx.utils.sheet_to_json(worksheet);
-
+    
       const { results, passcode } = isPreHire
         ? await scoring.processPreHireCandidates(data, req.user._id, inputFileName, recordCount)
         : await scoring.processEmployees(data, req.user._id, inputFileName, recordCount);
       cleanup(filePath);
       if (results.length === 0) {
-        return res.status(400).json({ error: 'All records in this file are duplicates. No new records were processed.' });
+        return res.status(400).json({ error: 'Something went wrong please try again' });
       }
       return res.json({ results: mapResults(results), passcode });
     } else {
@@ -142,8 +145,11 @@ app.post('/api/enrich', upload.single('employeeFile'), middleware, async (req, r
     
   } catch (error) {
     cleanup(filePath);
-    console.error('Error processing file:', error);
-    res.status(500).json({ error: 'Error processing file' });
+  console.error('Error processing file:', error);
+  if (error.name === 'PreHireValidationError') {
+    return res.status(400).json({ error: error.message });
+  }
+  res.status(500).json({ error: 'Error processing file' });
   }
 });
 app.listen(5000, () => console.log('Server running on port 5000'));

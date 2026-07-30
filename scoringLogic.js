@@ -2201,11 +2201,41 @@ function randomBetween(min, max) {
 }
 
 
+const PREHIRE_REQUIRED_COLUMNS = [
+  'Candidate (Last, Suffix First MI)',
+  'Email Address',
+];
+
+class PreHireValidationError extends Error {
+  constructor(missingColumns) {
+    super(`Invalid pre-hire file format. Missing required column(s): ${missingColumns.join(', ')}`);
+    this.name = 'PreHireValidationError';
+    this.missingColumns = missingColumns;
+  }
+}
+
+function validatePreHireColumns(candidates) {
+  if (!candidates || candidates.length === 0) {
+    throw new PreHireValidationError(['(file is empty)']);
+  }
+
+  // Union of keys across the first several rows, in case some rows have blanks
+  const sampleRows = candidates.slice(0, 20);
+  const presentKeys = new Set();
+  for (const row of sampleRows) {
+    Object.keys(row).forEach(k => presentKeys.add(k.trim()));
+  }
+
+  const missing = PREHIRE_REQUIRED_COLUMNS.filter(col => !presentKeys.has(col));
+  if (missing.length > 0) {
+    throw new PreHireValidationError(missing);
+  }
+}
+
 async function processPreHireCandidates(candidates, user, inputFileName, recordCount) {
 console.log("PREHIRE YES");
 
-// ─── Save original pre-hire data to Airtable BEFORE mapping ───────
-// await savePreHireFileDataToAirtableInBatch(candidates);
+validatePreHireColumns(candidates);
 
 const mappedCandidates = candidates.map(emp => ({
   'Employee Name (Last Suffix, First MI)': emp['Candidate (Last, Suffix First MI)'] || '',
@@ -2233,5 +2263,5 @@ return processEmployees(mappedCandidates, user, inputFileName, recordCount);
 }
 
 
+module.exports = { processEmployees, processPreHireCandidates, fetchAllSocialMediaPosts, keywordData, cleanText, PreHireValidationError };
 
-module.exports = { processEmployees, processPreHireCandidates, fetchAllSocialMediaPosts, keywordData, cleanText };
